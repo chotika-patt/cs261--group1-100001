@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เข้าสู่ระบบ</title>
+  <link rel="stylesheet" href="/src/main/resources/static/css/styles.css">
+  <link rel="stylesheet" href="/src/main/resources/static/css/login-regis.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+  <nav class="nav-bottom">
+    <ul class="menu">
+      <li><a href="index.html"><img class="logo" src="/assets/img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo"></a></li>
+      <li><a href="index.html">หน้าหลัก</a></li>
+      <li><a href="#">หมวดหมู่สินค้า</a></li>
+      <li><a href="#">เช็คสถานะ</a></li>
+      <li><a href="#">ติดต่อเรา</a></li>
+      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+    </ul>
+  </nav>
+  <div class="login-page">
+  <div class="login-container">
+    <div class="login-box">
+      <a class="exit-btn" href="index.html" class="close-login"><i class="fa-solid fa-x"></i></a>
+      <h1>เข้าสู่ระบบ</h1>
+      <form action="/login" method="post">
+        <label class="login-label" for="email">ชื่อผู้ใช้</label>
+        <input type="text" id="email" name="email" class="login-input" placeholder="ใส่ชื่อผู้ใช้ของคุณ" required>
+
+        <label class="login-label" for="password">อีเมล</label>
+        <input type="password" id="password" name="password" class="login-input" placeholder="อีเมล" required>
+
+        <p class="login-forgot-password">ลืมรหัสผ่าน</p>
+
+        <button class="login-submit-btn" type="submit">เข้าสู่ระบบ</button><br>
+        <a class ="regis" href="register.html">ลงทะเบียนเข้าใช้งาน</a></p>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

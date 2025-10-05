@@ -1,0 +1,148 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f7f7f7;
+  overflow-x: hidden;
+}
+
+.nav-top {
+  background-color: #1D1D1F;
+  padding: 10px 20px;
+}
+.right-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.btn {
+  text-decoration: none;
+  padding: 6px 12px;
+  background-color: #FFD140;
+  color: #000;
+  border-radius: 10px;
+}
+.nav-top .fa-cart-shopping {
+  font-size: 20px;
+  color: #fff;
+  margin-top: 5px;
+}
+.nav-bottom {
+  background-color: #1D1D1F;
+  padding: 10px 0;
+}
+.menu {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin: 0;
+  padding: 0;
+}
+.menu a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 14px;
+}
+
+/* Cart */
+.cart-container {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #f7f7f7;
+  text-align: center;
+}
+.cart-container h1 {
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+.cart-container .subtitle {
+  font-size: 14px;
+  color: #555;
+}
+.pay-btn-top {
+  margin: 20px 0;
+  padding: 10px 20px;
+  width: 200px;
+  border: none;
+  border-radius: 6px;
+  background-color: #C32032;
+  cursor: pointer;
+  font-size: 16px;
+  color: #ffffff;
+  
+}
+.pay-btn {
+  margin: 20px 0;
+  padding: 10px 20px;
+  width: 900px;
+  border: none;
+  border-radius: 6px;
+  background-color: #C32032;
+  cursor: pointer;
+  font-size: 16px;
+  color: #ffffff;
+
+}
+.cart-item {
+  display: flex;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 20px;
+  text-align: left;
+}
+.cart-image {
+  flex: 0 0 150px;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  font-size: 14px;
+  border-right: 1px solid #ddd;
+}
+.cart-details {
+  flex: 1;
+  padding: 20px;
+}
+.cart-details .row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+.cart-details .price {
+  font-weight: bold;
+}
+.summary {
+  margin-top: 20px;
+  padding: 15px;
+  background: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.summary .row {
+  display: flex;
+  justify-content: space-between;
+}
+.summary .small {
+  color: #666;
+  font-size: 12px;
+  margin-top: 5px;
+}
+.total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 16px;
+  margin: 20px 0;
+}
+.total .amount {
+  font-size: 20px;
+}
+.installment {
+  font-size: 12px;
+  color: #555;
+  opacity: 0.5;
+  text-align: end;
+}

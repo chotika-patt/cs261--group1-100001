@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ลงทะเบียน</title>
+<link rel="stylesheet" href="/src/main/resources/static/css/styles.css">
+<link rel="stylesheet" href="/src/main/resources/static/css/login-regis.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<nav class="nav-bottom">
+<ul class="menu">
+<li><a href="index.html"><img class="logo" src="/assets/img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo"></a></li>
+<li><a href="index.html">หน้าหลัก</a></li>
+<li><a href="#">หมวดหมู่สินค้า</a></li>
+<li><a href="#">เช็คสถานะ</a></li>
+<li><a href="#">ติดต่อเรา</a></li>
+<li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+</ul>
+</nav>
+
+<div class="login-page">
+<div class="login-container">
+<div class="login-box">
+<a class="exit-btn" href="index.html"><i class="fa-solid fa-x"></i></a>
+<h1>ลงทะเบียน</h1>
+
+<!-- Toggle Switch -->
+<div class="user-type-toggle">
+<div class="toggle-slider" id="toggleSlider"></div>
+<button type="button" class="toggle-btn active" id="buyerBtn" onclick="switchForm('buyer')">ผู้ซื้อ</button>
+<button type="button" class="toggle-btn" id="sellerBtn" onclick="switchForm('seller')">ผู้ขาย</button>
+</div>
+
+<div class="form-container">
+<!-- ฟอร์มผู้ซื้อ -->
+<form class="register-form active" id="buyerForm" action="/register/buyer" method="post">
+<label class="login-label" for="buyer-username">ชื่อผู้ใช้</label>
+<input type="text" id="buyer-username" name="username" class="login-input" placeholder="ใส่ชื่อผู้ใช้ของคุณ" required>
+
+<label class="login-label" for="buyer-email">อีเมล</label>
+<input type="email" id="buyer-email" name="email" class="login-input" placeholder="อีเมลของคุณ" required>
+
+<label class="login-label" for="buyer-password">รหัสผ่าน</label>
+<input type="password" id="buyer-password" name="password" class="login-input" placeholder="รหัสผ่านของคุณ" required>
+
+<label class="login-label" for="buyer-confirm-password">ยืนยันรหัสผ่าน</label>
+<input type="password" id="buyer-confirm-password" name="confirm_password" class="login-input" placeholder="ยืนยันรหัสผ่านของคุณ" required>
+
+<button type="submit" class="login-submit-btn">ยืนยันการลงทะเบียน</button>
+</form>
+
+<!-- ฟอร์มผู้ขาย -->
+<form class="register-form" id="sellerForm" action="/register/seller" method="post">
+<label class="login-label" for="seller-username">ชื่อผู้ใช้</label>
+<input type="text" id="seller-username" name="username" class="login-input" placeholder="ใส่ชื่อผู้ใช้ของคุณ" required>
+
+<label class="login-label" for="seller-email">อีเมล</label>
+<input type="email" id="seller-email" name="email" class="login-input" placeholder="อีเมลของคุณ" required>
+
+<label class="login-label" for="seller-password">รหัสผ่าน</label>
+<input type="password" id="seller-password" name="password" class="login-input" placeholder="รหัสผ่านของคุณ" required>
+
+<label class="login-label" for="seller-confirm-password">ยืนยันรหัสผ่าน</label>
+<input type="password" id="seller-confirm-password" name="confirm_password" class="login-input" placeholder="ยืนยันรหัสผ่านของคุณ" required>
+
+<button type="submit" class="login-submit-btn">ยืนยันการลงทะเบียน</button>
+</form>
+</div>
+
+<p class="login-link">มีบัญชีอยู่แล้ว? <a href="login.html">เข้าสู่ระบบ</a></p>
+</div>
+</div>
+</div>
+
+<script>
+function switchForm(type) {
+    const buyerForm = document.getElementById('buyerForm');
+    const sellerForm = document.getElementById('sellerForm');
+    const buyerBtn = document.getElementById('buyerBtn');
+    const sellerBtn = document.getElementById('sellerBtn');
+    const toggleSlider = document.getElementById('toggleSlider');
+
+    if (type === 'buyer') {
+        buyerForm.classList.add('active');
+        sellerForm.classList.remove('active');
+        buyerBtn.classList.add('active');
+        sellerBtn.classList.remove('active');
+        toggleSlider.classList.remove('seller');
+    } else {
+        sellerForm.classList.add('active');
+        buyerForm.classList.remove('active');
+        sellerBtn.classList.add('active');
+        buyerBtn.classList.remove('active');
+        toggleSlider.classList.add('seller');
+    }
+}
+</script>
+</body>
+</html>

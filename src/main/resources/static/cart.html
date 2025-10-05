@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ตะกร้าสินค้า</title>
+  <link rel="stylesheet" href="/src/main/resources/static/css/styles.css">
+  <link rel="stylesheet" href="/src/main/resources/static/css/cart.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+  <nav class="nav-top">
+    <div class="right-buttons">
+      <a href="login.html" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
+      <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+      
+    </div>
+  </nav>
+
+  <nav class="nav-bottom">
+    <ul class="menu">
+    <li><a href="index.html"><img class="logo" src="/src/main/resources/static/img/Emblem_of_Thammasat_University.svg.png" alt=""></a></li>
+      <li><a href="index.html">หน้าหลัก</a></li>
+      <li><a href="#">หมวดหมู่สินค้า</a></li>
+      <li><a href="#">เช็คสถานะ</a></li>
+      <li><a href="#">ติดต่อเรา</a></li>
+    </ul>
+  </nav>
+   <div class="search-dropdown" id="search-dropdown">
+    <div class="search-content">
+      <div class="search-bar-container">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="ค้นหาใน TU Store">
+      </div>
+      <div class="quick-links">
+        <p>ลิงก์ด่วน</p>
+        <ul>
+          <li><a href="#">+ ค้นหาร้านค้า</a></li>
+          <li><a href="#">+ อุปกรณ์เสริม</a></li>
+          <li><a href="#">+ เสื้อและเครื่องแต่งกาย</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Cart -->
+  <main class="cart-container">
+    <h1>นี่คือรายการที่อยู่ในตะกร้าของคุณ</h1>
+    <p class="subtitle">รับบริการรับประกันคุณภาพทุกคำสั่งซื้อ</p>
+    <button class="pay-btn-top">ชำระเงิน</button>
+
+    <div class="cart-item">
+      <div class="cart-image">รูป</div>
+      <div class="cart-details">
+        <div class="row">
+          <span>ชื่อสินค้า</span>
+          <span class="price">ราคา</span>
+        </div>
+        <div class="row">รายละเอียด</div>
+        <div class="row">
+          <span>คาดการณ์วันที่จะจัดส่ง <small>(จัดส่ง 2-3 วัน)</small></span>
+          <span class="delivery">รับสินค้าด้วยตัวเอง</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="row">
+        <span>ยอดรวม</span>
+        <span>฿729.0</span>
+      </div>
+      <div class="row small">ค่าจัดส่ง <span>ฟรี</span></div>
+    </div>
+
+    <div class="total">
+      <span>ยอดชำระเงินของคุณ</span>
+      <span class="amount">฿729.0</span>
+    </div>
+    <a href="#"><p class="installment">฿729.0/เดือน เป็นเวลา 10 เดือน ดอกเบี้ย 0%</p></a>
+
+    <button class="pay-btn">ชำระเงิน</button>
+  </main>
+<script>
+  const searchIcon = document.getElementById('search-icon');
+  const searchDropdown = document.getElementById('search-dropdown');
+
+  searchIcon.addEventListener('click', (event) => {
+    event.preventDefault(); 
+    // Toggle class ที่ body เพื่อควบคุม effect blur
+    document.body.classList.toggle('search-active'); 
+    
+    // Toggle class ที่แถบค้นหาเพื่อเปิด/ปิด
+    searchDropdown.classList.toggle('open');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  overflow-x: hidden; 
+}
+
+/* --- ADDED ---: โค้ดสำหรับสร้าง Liquid Glass Effect Overlay */
+body.search-active::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1); /* พื้นหลังโปร่งแสงเล็กน้อย */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 999; /* Z-index ต้องน้อยกว่า Navbar (1000) */
+  pointer-events: none; /* ทำให้คลิกทะลุได้ */
+  opacity: 1;
+  transition: opacity 0.4s ease-out;
+}
+/* ทำให้ effect หายไปตอนไม่ได้ active */
+body::after {
+  opacity: 0;
+}
+/* --- END ADDED SECTION --- */
+
+/* ก้อนแรก */
+.nav-top {
+  background-color: #1D1D1F;
+  padding: 10px 20px;
+}
+
+.right-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn {
+  text-decoration: none;
+  padding: 6px 12px;
+  background-color: #FFD140;
+  color: rgb(0, 0, 0);
+  border-radius: 10px;
+}
+
+.btn:hover {
+  background-color: #555;
+}
+
+/* ก้อนที่สอง */
+.logo {
+  height: 20px; 
+  vertical-align: middle; 
+  margin-right: 1
+}
+.nav-bottom {
+  background: rgba(29, 29, 31, 0.7); /* ปรับให้โปร่งแสงขึ้นเล็กน้อย */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 10px 0;
+  width: 100%;
+  position: sticky; 
+  top: 0;
+  z-index: 1000;
+}
+
+.menu {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  margin: 0;
+  padding: 0;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: normal;
+  font-size: small;
+}
+
+.menu a:hover {
+  color: #C32032;
+}
+
+main {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.nav-top .fa-cart-shopping {
+  font-size: 22px;       
+  color: #ffffff;            
+  margin-left: 10px;  
+  margin-top: 8px;  
+  vertical-align: middle; 
+  transition: color 0.3s; 
+}
+
+.nav-top .fa-cart-shopping:hover {
+  color: #c00; 
+}
+
+.box-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.box {
+  display: flex;
+  justify-content: center;  
+  align-items: center;      
+  flex-direction: column;   
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
+  height: 300px;            
+  text-align: center;
+}
+
+.box h1 {
+  font-size: 36px;     
+  font-weight: 700;
+  margin: 10px 0;
+}
+
+.box h1 span {
+  font-size: 0.9em;    
+  font-weight: 500;    
+  margin-left: 10px;   
+  color: #333;
+}
+
+.banner {
+  width: 100%;
+  max-width: 520px;
+  height: auto;        
+  border-radius: 10px; 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.category-con {
+  margin-top: 50px;
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: center;
+  gap: 30px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
+}
+
+.category-item {
+  flex: 1 1 150px; 
+  max-width: 200px;
+  text-align: center;
+}
+
+.category-box {
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.category-box img {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+  object-fit: contain;
+}
+.category-box img:hover {
+  transform: scale(1.5);
+  transition: transform 0.3s ease;
+}
+.category-box:hover {
+  transform: scale(1.05 );
+  background-color: #e0e0e0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.category-item h3 {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.next-session {
+  margin-top: 50px;
+  text-align: center;
+  height: 100px;
+}
+
+.next {
+  margin-top: 50px;
+  text-align: center;
+  height: 100px;
+}
+
+.next-session::before {
+  content: "";
+  display: block;
+  width: 90%;           
+  max-width: 1200px;    
+  height: 2px;         
+  background-color: #ccc;
+  margin: 0 auto 20px auto;
+}
+
+.product-section {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.product-section h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  justify-content: center;
+}
+
+.product-card {
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  height: 250px; 
+}
+
+.product-image {
+  background-color: #dcdcdc;
+  flex: 1;  
+}
+
+.product-info {
+  height: 40px; 
+  background-color: #fff;
+}
+.footer-content {
+  background-color: #1D1D1F;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+  margin-top: 40px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .box-container {
+    grid-template-columns: 1fr;
+  }
+
+  .menu {
+    gap: 30px;
+  }
+
+  .category-con {
+    gap: 20px;
+  }
+
+  .banner {
+    max-width: 100%;
+  }
+}
+
+/* ======== CSS สำหรับแถบค้นหา (แก้ไข) ======== */
+.search-dropdown {
+  background-color: #f8f8f8;
+  padding: 0 20px;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+  /* --- ADDED ---: ทำให้ลอยอยู่เหนือ effect */
+  position: relative;
+  z-index: 1000;
+  /* --- END ADDED SECTION --- */
+}
+
+.search-dropdown.open {
+  max-height: 300px;
+  padding: 30px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.search-dropdown .search-content {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.search-dropdown .search-bar-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 5px 15px;
+}
+
+.search-dropdown .search-bar-container .fa-magnifying-glass {
+  font-size: 18px;
+  color: #888;
+}
+
+.search-dropdown .search-bar-container input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 10px;
+  font-size: 18px;
+  background-color: transparent;
+}
+
+.search-dropdown .quick-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.search-dropdown .quick-links p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.search-dropdown .quick-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 15px;
+}
+
+.search-dropdown .quick-links ul li {
+  margin: 0;
+}
+
+.search-dropdown .quick-links ul a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+
+.search-dropdown .quick-links ul a:hover {
+  color: #C32032;
+}
