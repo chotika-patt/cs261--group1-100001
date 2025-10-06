@@ -1,4 +1,4 @@
-document.getElementById("DOMContentLoaded", () = -> {
+document.getElementById("DOMContentLoaded", () => {
     const buyerForm = document.getElementById("buyerForm");
     const sellerForm = document.getElementById("sellerForm");
 
@@ -8,7 +8,7 @@ document.getElementById("DOMContentLoaded", () = -> {
         const form = role === "Client" ? buyerForm : sellerForm;
 
         const username = form.querySelector("input[name=username]").value.trim();
-        const email = form.querySelector("input[name=email]").value.trim;
+        const email = form.querySelector("input[name=email]").value.trim();
         const password = form.querySelector("input[name=password]").value;
         const passwordConfirm = form.querySelector("input[name=passwordConfirm]").value;
 
@@ -19,7 +19,7 @@ document.getElementById("DOMContentLoaded", () = -> {
 
         if (password !== passwordConfirm) {
             alert("Please make sure that the password match");
-            return:
+            return;
         }
 
         if (password.length < 6) {
@@ -27,7 +27,7 @@ document.getElementById("DOMContentLoaded", () = -> {
             return;
         }
 
-        if (!email.includes(@)) {
+        if (!email.includes("@")) {
             alert("Please enter a valid email");
             return;
         }
@@ -37,10 +37,10 @@ document.getElementById("DOMContentLoaded", () = -> {
             email: email,
             password: password,
             role: role,
-        }
+        };
 
         try {
-            const response = await fetch("api/register", {
+            const response = await fetch("/api/register", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(payload)
@@ -53,10 +53,10 @@ document.getElementById("DOMContentLoaded", () = -> {
                 window.location.href = "login.html";
             } else {
                 alert(msg);
-            } catch (error) {
-                console.error("Error:", error);
-                alert("An Error Occured! Please register again.");
             }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An Error Occured! Please register again.");
         }
     }
 
