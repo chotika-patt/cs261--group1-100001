@@ -21,8 +21,7 @@ public class UserService {
         return true;
     }
     public boolean login(User user) {
-        return users.containsKey(user.getUsername()) &&
-                users.get(user.getUsername()).equals(user.getPassword());
+        return users.containsKey(user.getUsername()) &&users.get(user.getUsername()).equals(user.getPassword());
     }
 
     public String register(String username, String password, String email, String role) {
@@ -44,7 +43,7 @@ public class UserService {
         String hashedPassword = passwordEncoder.encode(password);
 
         User newUser = new User(username, email, hashedPassword, role);
-        users.put(username, newUser);
+        users.put(username,hashedPassword);
 
         return role + " registered successfully.";
     }

@@ -132,12 +132,10 @@
 <script>
   const searchIcon = document.getElementById('search-icon');
   const searchDropdown = document.getElementById('search-dropdown');
-
   searchIcon.addEventListener('click', (event) => {
     event.preventDefault(); 
     // Toggle class ที่ body เพื่อควบคุม effect blur
     document.body.classList.toggle('search-active'); 
-    
     // Toggle class ที่แถบค้นหาเพื่อเปิด/ปิด
     searchDropdown.classList.toggle('open');
   });

@@ -12,18 +12,16 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     @Autowired
     private UserService userService;
-
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
-        boolean success = userService.register(user);
-        if (!success) {
-            return ResponseEntity.badRequest().body("Username already exists");
+    @PostMapping("/login/buyer")
+    public ResponseEntity<String> loginBuyer(@RequestBody User user) {
+        boolean valid = userService.login(user);
+        if (!valid) {
+            return ResponseEntity.status(401).body("Invalid username or password");
         }
-        return ResponseEntity.ok("User registered successfully");
+        return ResponseEntity.ok("Login successful");
     }
-
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    @PostMapping("/login/seller")
+    public ResponseEntity<String> loginSeller(@RequestBody User user) {
         boolean valid = userService.login(user);
         if (!valid) {
             return ResponseEntity.status(401).body("Invalid username or password");
