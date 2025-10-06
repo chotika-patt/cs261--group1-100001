@@ -13,15 +13,6 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
-        boolean success = userService.register(user);
-        if (!success) {
-            return ResponseEntity.badRequest().body("Username already exists");
-        }
-        return ResponseEntity.ok("User registered successfully");
-    }
-
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User user) {
         boolean valid = userService.login(user);

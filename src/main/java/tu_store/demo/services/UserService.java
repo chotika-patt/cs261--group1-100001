@@ -10,23 +10,16 @@ import java.util.Map;
 @Service
 public class UserService {
     // DB แบบ ยังไม่ใส่ sql เอาจริงต้องเชื่อมและใส่ใน repositories
-    private final Map<String,String> users = new HashMap<>();
+    private final Map<String, User> users = new HashMap<>();
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public boolean register(User user){
-        if(users.containsKey(user.getUsername())){
-            return false;
-        }
-        users.put(user.getUsername(),user.getPassword());
-        return true;
-    }
     public boolean login(User user) {
         return users.containsKey(user.getUsername()) &&
                 users.get(user.getUsername()).equals(user.getPassword());
     }
 
     public String register(String username, String password, String email, String role) {
-        username = username.trim();
+        username = username.trim().toLowerCase();
         email = email.trim();
 
         if (users.containsKey(username)){

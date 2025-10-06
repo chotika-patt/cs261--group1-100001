@@ -2,28 +2,44 @@ package tu_store.demo.models;
 
 public class User {
     private String username;
+    private String email;
     private String password;
-    private String passwordConfirm;
     private String role;
 
-    public User(){
-    }
-    public User(String username,String password){
+    public User(String username, String email, String password, String role) {
         this.username = username;
+        this.email = email;
         this.password = password;
-        this.passwordConfirm = passwordConfirm;
         this.role = role;
     }
 
-    public void setUsername(String username) { this.username = username; }
-    public String getUsername(){return this.username;}
+    public User() {}
 
-    public void setPassword(String password) { this.password = password; }
-    public String getPassword(){return this.password;}
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getUsername(){
+        return username;
+    }
 
-    public void setPasswordConfirm(String passwordConfirm) { this.passwordConfirm = passwordConfirm; }
-    public String getPasswordConfirm(){return this.passwordConfirm;}
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getEmail(){
+        return email;
+    }
 
-    public void setRole(String role) { this.role = role; }
-    public String getRoleassword(){return this.role;}
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public String getPassword(){
+        return password;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+    public String getRole(){
+        return role;
+    }
 }
