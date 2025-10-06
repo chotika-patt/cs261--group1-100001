@@ -10,8 +10,8 @@ import java.util.Map;
 @Service
 public class UserService {
     // DB แบบ ยังไม่ใส่ sql เอาจริงต้องเชื่อมและใส่ใน repositories
-    private static final Map<String,String> users = new HashMap<>();
-    private static BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final Map<String,String> users = new HashMap<>();
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public boolean register(User user){
         if(users.containsKey(user.getUsername())){
@@ -25,7 +25,10 @@ public class UserService {
                 users.get(user.getUsername()).equals(user.getPassword());
     }
 
-    public static String register(String username, String password) {
+    public String register(String username, String password, String email, String role) {
+        username = username.trim();
+        email = email.trim();
+
         if (users.containsKey(username)){
             return "Username has already been used.";
         }
@@ -34,11 +37,15 @@ public class UserService {
             return "Password must be at least 6 characters.";
         }
 
+        if (!email.contains("@")) {
+            return "Invalid email address.";
+        }
+
         String hashedPassword = passwordEncoder.encode(password);
 
-        User newUser = new User(username, hashedPassword);
-        users.put(username, String.valueOf(newUser));
+        User newUser = new User(username, email, hashedPassword, role);
+        users.put(username, newUser);
 
-        return "User registered successfully.";
+        return role + " registered successfully.";
     }
 }
