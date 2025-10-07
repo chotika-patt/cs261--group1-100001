@@ -43,6 +43,9 @@
 <label class="login-label" for="buyer-email">อีเมล</label>
 <input type="email" id="buyer-email" name="email" class="login-input" placeholder="อีเมลของคุณ" required>
 
+<label class="login-label" for="buyer-phone">หมายเลขโทรศัพท์</label>
+<input type="tel" id="buyer-phone" name="phone" class="login-input" placeholder="หมายเลขโทรศัพท์ของคุณ" required>
+
 <label class="login-label" for="buyer-password">รหัสผ่าน</label>
 <input type="password" id="buyer-password" name="password" class="login-input" placeholder="รหัสผ่านของคุณ" required>
 
@@ -52,6 +55,7 @@
 <button type="submit" class="login-submit-btn">ยืนยันการลงทะเบียน</button>
 </form>
 
+<div class="seller-form-box">
 <!-- ฟอร์มผู้ขาย -->
 <form class="register-form" id="sellerForm" action="/register/seller" method="post">
 <label class="login-label" for="seller-username">ชื่อผู้ใช้</label>
@@ -65,6 +69,21 @@
 
 <label class="login-label" for="seller-confirm-password">ยืนยันรหัสผ่าน</label>
 <input type="password" id="seller-confirm-password" name="confirm_password" class="login-input" placeholder="ยืนยันรหัสผ่านของคุณ" required>
+
+<label class="login-label" for="seller-phone">หมายเลขโทรศัพท์</label>
+<input type="tel" id="seller-phone" name="phone" class="login-input" placeholder="หมายเลขโทรศัพท์ของคุณ" required>
+
+<label class="login-label" for="student-ID">รหัสนักศึกษา</label>
+<input type="text" id="student-ID" name="student_ID" class="login-input" placeholder="ใส่รหัสนักศึกษาของคุณ" required>
+
+<label class="login-label" for="role">บทบาท</label>
+<select id="role" name="role" class="login-input" required>
+<option value="student">นักศึกษา</option>
+<option value="staff">เจ้าหน้าที่</option>
+</select>
+
+<label class="login-label" for="application-document">เอกสารยื่นคำร้อง</label>
+<input type="file" id="application-document" name="application_document" class="login-input" required>
 
 <button type="submit" class="login-submit-btn">ยืนยันการลงทะเบียน</button>
 </form>
