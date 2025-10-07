@@ -1,14 +1,14 @@
 package tu_store.demo.models;
 
-import jakarta.persistence.*;  // สำหรับ Entity, Id, Column
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity                     // บอกว่า class นี้แทนตารางในฐานข้อมูล
-@Table(name = "Users")      // ตั้งชื่อตารางให้ตรงกับใน SQL
+@Entity
+@Table(name = "Users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)   // Auto increment (IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_id;
 
     @Column(nullable = false, unique = true, length = 100)
@@ -20,69 +20,61 @@ public class User {
     @Column(nullable = false, length = 255)
     private String password;
 
-    @Column(length = 50)
-    private String role;
+    @Column(length = 20, nullable = true)
+    private String phone;
+
+    @Column(length = 20, nullable = true)
+    private String student_code;  // เฉพาะ seller
+
+    @Column(length = 255, nullable = true)
+    private String verify_document;  // path หรือ URL ของไฟล์ยืนยัน (.jpg / .pdf)
+
+    @Column(nullable = false, length = 20)
+    private String role;  // client, seller, admin
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now(); // default timestamp
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    // ---------- Constructors ----------
+    // ----- Constructors -----
     public User() {}
 
-    public User(String username, String email, String password, String role) {
+    public User(String username, String email, String password, String phone,
+                String student_code, String verify_document, String role) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.phone = phone;
+        this.student_code = student_code;
+        this.verify_document = verify_document;
         this.role = role;
     }
 
-    // ---------- Getters & Setters ----------
-    public Long getUser_id() {
-        return user_id;
-    }
+    // ----- Getters & Setters -----
+    public Long getUser_id() { return user_id; }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public String getUsername() {
-        return username;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public String getStudent_code() { return student_code; }
+    public void setStudent_code(String student_code) { this.student_code = student_code; }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getVerify_document() { return verify_document; }
+    public void setVerify_document(String verify_document) { this.verify_document = verify_document; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
+
 

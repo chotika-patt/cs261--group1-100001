@@ -19,26 +19,28 @@ public class UserService {
     }
 
     public String register(String username, String password, String email, String role) {
-        username = username.trim().toLowerCase();
-        email = email.trim();
+    username = username.trim().toLowerCase();
+    email = email.trim();
 
-        if (users.containsKey(username)){
-            return "Username has already been used.";
-        }
-
-        if (password.length() < 6){
-            return "Password must be at least 6 characters.";
-        }
-
-        if (!email.contains("@")) {
-            return "Invalid email address.";
-        }
-
-        String hashedPassword = passwordEncoder.encode(password);
-
-        User newUser = new User(username, email, hashedPassword, role);
-        users.put(username, newUser);
-
-        return role + " registered successfully.";
+    if (users.containsKey(username)){
+        return "Username has already been used.";
     }
+
+    if (password.length() < 6){
+        return "Password must be at least 6 characters.";
+    }
+
+    if (!email.contains("@")) {
+        return "Invalid email address.";
+    }
+
+    String hashedPassword = passwordEncoder.encode(password);
+
+    // ใส่ค่า null ให้ฟิลด์เฉพาะ seller/client ที่ยังไม่มีข้อมูล
+    User newUser = new User(username, email, hashedPassword, null, null, null, role);
+
+    users.put(username, newUser);
+    return role + " registered successfully.";
+}
+
 }
