@@ -18,15 +18,15 @@ public class UserController {
     }
 
     @PostMapping("/register/buyer")
-    public String registerBuyer(@RequestParam String username, @RequestParam String email, @RequestParam String password, @RequestParam String passwordConfirm) {
-        return userService.register(username, email, password, passwordConfirm, "Client");
+    public String registerBuyer(@RequestBody User user) {
+        user.setRole("Client");
+        return userService.register(user);
     }
-
     @PostMapping("/register/seller")
-    public String registerSeller(@RequestParam String username, @RequestParam String email, @RequestParam String password, @RequestParam String passwordConfirm) {
-        return userService.register(username, email, password, passwordConfirm, "Seller");
+    public String registerSeller(@RequestBody User user) {
+        user.setRole("Seller");
+        return userService.register(user);
     }
-    
     @PostMapping("/login/buyer")
     public ResponseEntity<String> loginBuyer(@RequestBody User user) {
         boolean valid = userService.login(user);

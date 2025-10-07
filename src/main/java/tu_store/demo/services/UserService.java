@@ -20,29 +20,27 @@ public class UserService {
         User storedUser = users.get(user.getUsername());
         return passwordEncoder.matches(user.getPassword(), storedUser.getPassword());
     }
-    public String register(String username, String password, String email, String role) {
-    username = username.trim().toLowerCase();
-    email = email.trim();
+    public String register(User user) {
+        String username = user.getUsername().trim().toLowerCase();
+        String email = user.getEmail().trim();
+        if (users.containsKey(username)){
+            return "Username has already been used.";
+        }
 
-    if (users.containsKey(username)){
-        return "Username has already been used.";
+        if (user.getPassword().length() < 6){
+            return "Password must be at least 6 characters.";
+        }
+
+        if (!user.getEmail().contains("@")) {
+            return "Invalid email address.";
+        }
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+
+        // ใส่ค่า null ให้ฟิลด์เฉพาะ seller/client ที่ยังไม่มีข้อมูล
+        User newUser = new User(username, email, hashedPassword, null, null, null, user.getRole());
+        users.put(username, newUser);
+
+        return user.getRole() + " registered successfully.";
     }
-
-    if (password.length() < 6){
-        return "Password must be at least 6 characters.";
-    }
-
-    if (!email.contains("@")) {
-        return "Invalid email address.";
-    }
-
-    String hashedPassword = passwordEncoder.encode(password);
-
-    // ใส่ค่า null ให้ฟิลด์เฉพาะ seller/client ที่ยังไม่มีข้อมูล
-    User newUser = new User(username, email, hashedPassword, null, null, null, role);
-
-    users.put(username, newUser);
-    return role + " registered successfully.";
-}
 
 }
