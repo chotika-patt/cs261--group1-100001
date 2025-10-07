@@ -18,12 +18,16 @@ public class UserService {
                 users.get(user.getUsername()).equals(user.getPassword());
     }
 
-    public String register(String username, String password, String email, String role) {
+    public String register(String username, String email, String password, String passwordConfirm, String role) {
         username = username.trim().toLowerCase();
         email = email.trim();
 
         if (users.containsKey(username)){
             return "Username has already been used.";
+        }
+
+        if (!password.equals(passwordConfirm)) {
+            return "Passwords do not match.";
         }
 
         if (password.length() < 6){

@@ -13,12 +13,12 @@ public class UserController {
     }
 
     @PostMapping("/register/buyer")
-    public String registerBuyer(@RequestParam String username, @RequestParam String password, @RequestParam String passwordConfirm) {
-        return userService.register(username, password, passwordConfirm, "Client");
+    public String registerBuyer(@RequestParam String username, @RequestParam String email, @RequestParam String password, @RequestParam String passwordConfirm) {
+        return userService.register(username, email, password, passwordConfirm, "Client");
     }
 
     @PostMapping("/register/seller")
-    public String registerSeller(@RequestParam String username, @RequestParam String password, @RequestParam String passwordConfirm) {
-        return userService.register(username, password, passwordConfirm, "Seller");
+    public String registerSeller(@RequestParam String username, @RequestParam String email, @RequestParam String password, @RequestParam String passwordConfirm) {
+        return userService.register(username, email, password, passwordConfirm, "Seller");
     }
 }
