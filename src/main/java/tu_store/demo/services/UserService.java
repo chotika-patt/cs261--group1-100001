@@ -14,10 +14,12 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public boolean login(User user) {
-        return users.containsKey(user.getUsername()) &&
-                users.get(user.getUsername()).equals(user.getPassword());
+        if(!users.containsKey(user.getUsername())){
+            return false;
+        }
+        User storedUser = users.get(user.getUsername());
+        return passwordEncoder.matches(user.getPassword(), storedUser.getPassword());
     }
-
     public String register(String username, String password, String email, String role) {
         username = username.trim().toLowerCase();
         email = email.trim();

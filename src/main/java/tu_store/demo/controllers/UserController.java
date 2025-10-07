@@ -36,7 +36,7 @@ public class UserController {
         return ResponseEntity.ok("Login successful");
     }
     @PostMapping("/login/seller")
-    public ResponseEntity<String> loginSeller(@RequestBody User user) {
+    public ResponseEntity<String> loginSeller(@RequestBody() User user) {
         boolean valid = userService.login(user);
         if (!valid) {
             return ResponseEntity.status(401).body("Invalid username or password");

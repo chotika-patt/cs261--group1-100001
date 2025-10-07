@@ -12,4 +12,5 @@ public class HomeController {
     public String getMethodName(@RequestParam(name = "name") String nameParam,@RequestParam(name = "age") int ageParam) {
         return "name : " + nameParam + " " + ageParam;
     }
+
 }
