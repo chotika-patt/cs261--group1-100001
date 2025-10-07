@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpSession;
 import tu_store.demo.models.User;
 import tu_store.demo.services.UserService;
 
@@ -28,7 +29,9 @@ public class UserController {
         return userService.register(user);
     }
     @PostMapping("/login/buyer")
-    public ResponseEntity<String> loginBuyer(@RequestBody User user) {
+    public ResponseEntity<String> loginBuyer(HttpSession sessions,@RequestBody User user) {
+        sessions.setAttribute("username", user.getUsername());
+        sessions.setAttribute("role", user.getRole());
         boolean valid = userService.login(user);
         if (!valid) {
             return ResponseEntity.status(401).body("Invalid username or password");
@@ -36,7 +39,9 @@ public class UserController {
         return ResponseEntity.ok("Login successful");
     }
     @PostMapping("/login/seller")
-    public ResponseEntity<String> loginSeller(@RequestBody() User user) {
+    public ResponseEntity<String> loginSeller(HttpSession sessions,@RequestBody() User user) {
+        sessions.setAttribute("username", user.getUsername());
+        sessions.setAttribute("role", user.getRole());
         boolean valid = userService.login(user);
         if (!valid) {
             return ResponseEntity.status(401).body("Invalid username or password");
