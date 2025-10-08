@@ -153,7 +153,7 @@
 </script>
 
 <style>
-    /* ======= สไตล์ Navbar ======= */
+    /*สไตล์ Navbar*/
     body {
       margin: 0;
       font-family: 'Prompt', sans-serif;
@@ -174,7 +174,7 @@
   gap: 18px;
 }
 
-    /* ======= ปุ่มชื่อบัญชีผู้ใช้ ======= */
+    /*  ปุ่มชื่อบัญชีผู้ใช้  */
     .user-btn {
   background: none;
   border: none;
@@ -351,38 +351,71 @@
           </div>
           <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
         </div>
-      </div>
-
       <a href="cart.html" class="cart-icon">
         <i class="fa-solid fa-cart-shopping"></i>
       </a>
     </div>
+    <div class="logout-modal" id="logout-modal">
+  <div class="modal-content">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <p>คุณต้องการออกจากระบบหรือไม่</p>
+    <div class="modal-buttons">
+      <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+      <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+    </div>
+    <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+  </div>
+</div>
   </nav>
 
   <script>
-    const userBtn = document.getElementById('user-btn');
-    const dropdown = document.getElementById('user-dropdown');
-    const closeBtn = document.getElementById('close-dropdown');
-    const logoutBtn = document.getElementById('logout-btn');
+  //  Dropdown 
+  const userBtn = document.getElementById('user-btn');
+  const dropdown = document.getElementById('user-dropdown');
+  const closeBtn = document.getElementById('close-dropdown');
+  const logoutBtn = document.getElementById('logout-btn');
 
-    userBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdown.classList.toggle('active');
-    });
+  const logoutModal = document.getElementById('logout-modal');
+  const cancelLogout = document.getElementById('cancel-logout');
+  const confirmLogout = document.getElementById('confirm-logout');
+  const closeModal = document.getElementById('close-modal');
 
-    closeBtn.addEventListener('click', () => {
+  // เปิด/ปิด dropdown
+  userBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown.classList.toggle('active');
+  });
+
+  closeBtn.addEventListener('click', () => {
+    dropdown.classList.remove('active');
+  });
+
+  // คลิกนอก dropdown เพื่อปิด
+  window.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target) && !userBtn.contains(e.target)) {
       dropdown.classList.remove('active');
-    });
+    }
+  });
 
-    logoutBtn.addEventListener('click', () => {
-      window.location.href = 'index.html';
-    });
+  //Popup Logout
+  logoutBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    dropdown.classList.remove('active'); // ปิด dropdown ก่อน
+    logoutModal.classList.add('active'); // แสดง popup
+  });
 
-    window.addEventListener('click', (e) => {
-      if (!dropdown.contains(e.target) && !userBtn.contains(e.target)) {
-        dropdown.classList.remove('active');
-      }
-    });
-  </script>
+  cancelLogout.addEventListener('click', () => {
+    logoutModal.classList.remove('active');
+  });
+
+  closeModal.addEventListener('click', () => {
+    logoutModal.classList.remove('active');
+  });
+
+  confirmLogout.addEventListener('click', () => {
+    window.location.href = 'index.html';
+  });
+</script>
+
 </body>
 </html>
