@@ -27,9 +27,6 @@ public class UserService {
         if(dbUser == null) return false;
 
         return passwordEncoder.matches(user.getPassword(), dbUser.getPassword());
-        
-        // return users.containsKey(user.getUsername()) &&
-        //         users.get(user.getUsername()).equals(user.getPassword());
     }
 
     public String register(User httpUser) {
@@ -54,11 +51,11 @@ public class UserService {
         
         String hashedPassword = passwordEncoder.encode(password);
 
-        if(role == "Client"){
+        if(role.equals("Client")){
             User newUser = new User(username, email, hashedPassword, httpUser.getPhone(), null, null, role);
             userRepository.save(newUser);
         }
-        else if(role == "Seller"){
+        else if(role.equals("Seller")){
             User newUser = new User(username, email, hashedPassword, httpUser.getPhone(), httpUser.getStudent_code(), httpUser.getVerify_document(), role);
             userRepository.save(newUser);
         }
@@ -68,27 +65,4 @@ public class UserService {
 
         return role + " registered successfully.";
     }
-    // public String register(String username, String password, String email, String role) {
-    //     username = username.trim().toLowerCase();
-    //     email = email.trim();
-
-    //     if (users.containsKey(username)){
-    //         return "Username has already been used.";
-    //     }
-
-    //     if (password.length() < 6){
-    //         return "Password must be at least 6 characters.";
-    //     }
-
-    //     if (!email.contains("@")) {
-    //         return "Invalid email address.";
-    //     }
-
-    //     String hashedPassword = passwordEncoder.encode(password);
-
-    //     User newUser = new User(username, email, hashedPassword, role);
-    //     users.put(username, newUser);
-
-    //     return role + " registered successfully.";
-    // }
 }
