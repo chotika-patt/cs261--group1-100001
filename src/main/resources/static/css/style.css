@@ -1,0 +1,56 @@
+.nav-top {
+  background-color: #1a1a1a;
+  color: #fff;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.right-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ปุ่มชื่อบัญชีผู้ใช้ */
+.user-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ไอคอนวงกลมสีเหลือง */
+.user-icon {
+  background-color: #f7c948;
+  color: #1a1a1a;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.user-btn:hover .user-icon {
+  background-color: #ffd84d;
+}
+
+/* ไอคอนตะกร้า */
+.cart-icon {
+  color: white;
+  font-size: 18px;
+  transition: color 0.2s;
+}
+
+.cart-icon:hover {
+  color: #f7c948;
+}
