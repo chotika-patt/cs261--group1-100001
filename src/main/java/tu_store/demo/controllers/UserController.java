@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
 import tu_store.demo.models.User;
+import tu_store.demo.models.UserRole;
 import tu_store.demo.services.UserService;
 
 @RestController
@@ -20,12 +21,12 @@ public class UserController {
 
     @PostMapping("/register/buyer")
     public String registerBuyer(@RequestBody User user) {
-        user.setRole("Client");
+        user.setRole(UserRole.CLIENT);
         return userService.register(user);
     }
     @PostMapping("/register/seller")
     public String registerSeller(@RequestBody User user) {
-        user.setRole("Seller");
+        user.setRole(UserRole.SELLER);
         return userService.register(user);
     }
     @PostMapping("/login/buyer")

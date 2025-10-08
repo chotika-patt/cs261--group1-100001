@@ -29,8 +29,9 @@ public class User {
     @Column(length = 255, nullable = true)
     private String verify_document;  // path หรือ URL ของไฟล์ยืนยัน (.jpg / .pdf)
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private String role;  // client, seller, admin
+    private UserRole role;  // client, seller, admin
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -39,7 +40,7 @@ public class User {
     public User() {}
 
     public User(String username, String email, String password, String phone,
-                String student_code, String verify_document, String role) {
+                String student_code, String verify_document, UserRole role) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -70,8 +71,8 @@ public class User {
     public String getVerify_document() { return verify_document; }
     public void setVerify_document(String verify_document) { this.verify_document = verify_document; }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public UserRole getRole() { return role; }
+    public void setRole(UserRole role) { this.role = role; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

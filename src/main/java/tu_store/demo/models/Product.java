@@ -60,7 +60,7 @@ public class Product {
     }
 
     public void setSeller(User seller) {
-        if(seller != null && seller.getRole().equals("Seller")){
+        if(seller != null && seller.getRole() == UserRole.SELLER){
             this.seller = seller;
         }
     }

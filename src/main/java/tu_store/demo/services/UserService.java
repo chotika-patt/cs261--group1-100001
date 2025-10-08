@@ -3,6 +3,7 @@ package tu_store.demo.services;
 import org.springframework.stereotype.Service;
 
 import tu_store.demo.models.User;
+import tu_store.demo.models.UserRole;
 import tu_store.demo.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class UserService {
         String username = httpUser.getUsername().trim().toLowerCase();
         String email = httpUser.getEmail().trim();
         String password = httpUser.getPassword();
-        String role = httpUser.getRole();
+        UserRole role = httpUser.getRole();
 
         User user = userRepository.findFirstByUsername(username);
 
@@ -51,11 +52,11 @@ public class UserService {
         
         String hashedPassword = passwordEncoder.encode(password);
 
-        if(role.equals("Client")){
+        if(role == UserRole.CLIENT){
             User newUser = new User(username, email, hashedPassword, httpUser.getPhone(), null, null, role);
             userRepository.save(newUser);
         }
-        else if(role.equals("Seller")){
+        else if(role == UserRole.SELLER){
             User newUser = new User(username, email, hashedPassword, httpUser.getPhone(), httpUser.getStudent_code(), httpUser.getVerify_document(), role);
             userRepository.save(newUser);
         }
