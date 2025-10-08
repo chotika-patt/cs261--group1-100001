@@ -458,3 +458,168 @@ main {
   font-size: 18px;
   cursor: pointer;
 }
+
+ body {
+      margin: 0;
+      font-family: 'Prompt', sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .nav-top {
+      background-color: #1a1a1a; /* พื้นหลังดำ */
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 10px 20px;
+    }
+
+    .right-buttons {
+  display: flex;
+  align-items: center;     /* จัดให้อยู่แนวกลางแนวตั้ง */
+  gap: 18px;
+}
+
+    /*  ปุ่มชื่อบัญชีผู้ใช้  */
+    .user-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  display: flex;
+  align-items: center;     /* จัดแนวกลางเหมือนกัน */
+  gap: 10px;
+  cursor: pointer;
+  padding: 0;
+}
+.user-text {
+  line-height: 1;          /* ลดความสูงตัวอักษรให้ตรงกลาง */
+}
+
+    .user-btn:hover {
+      opacity: 0.85;
+    }
+
+    /* วงกลมไอคอนเหลือง  */
+    .user-icon {
+  background-color: #f7c948;
+  color: #1a1a1a;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+   .user-btn:hover .user-icon {
+  background-color: #ffd84d;
+}
+
+    /* ======= ไอคอนตะกร้า ======= */
+    .cart-icon {
+      color: white;
+      font-size: 20px;
+      transition: 0.2s;
+    }
+   
+
+    .cart-icon:hover {
+      color: #f7c948;
+    }
+     .dropdown {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background-color: #fff;
+  width: 300px;
+  border-radius: 14px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  padding: 24px 0 20px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000; /* เพิ่มบรรทัดนี้ให้ dropdown อยู่บนสุด */
+}
+
+    .dropdown.active {
+      display: flex;
+    }
+
+    .dropdown .close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      font-size: 18px;
+      color: #555;
+      cursor: pointer;
+    }
+
+    .dropdown .avatar {
+      background-color: #f7c948;
+      color: #fff;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .dropdown h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin: 6px 0 10px;
+      text-align: center;
+      border-bottom: 1px solid #ccc;
+      width: 80%;
+      padding-bottom: 8px;
+    }
+
+    .info {
+      width: 80%;
+      margin-top: 6px;
+      color: #1a1a1a;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    .info p {
+      margin: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logout-btn {
+      margin-top: 16px;
+      background-color: #f7c948;
+      border: none;
+      color: #000;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 10px 30px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .logout-btn:hover {
+      background-color: #ffd84d;
+    }
+
+    .nav-top {
+  position: relative; /* สร้าง context ให้ dropdown อยู่ในขอบเขต nav */
+  z-index: 10; /* ตั้งไว้พอประมาณ */
+}
+
+.dropdown {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  z-index: 9999; /* ดัน dropdown ให้อยู่หน้าสุดแน่นอน */
+}
