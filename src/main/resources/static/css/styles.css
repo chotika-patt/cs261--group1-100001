@@ -459,26 +459,6 @@ main {
   cursor: pointer;
 }
 
- body {
-      margin: 0;
-      font-family: 'Prompt', sans-serif;
-      background-color: #f4f4f4;
-    }
-
-    .nav-top {
-      background-color: #1a1a1a; /* พื้นหลังดำ */
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      padding: 10px 20px;
-    }
-
-    .right-buttons {
-  display: flex;
-  align-items: center;     /* จัดให้อยู่แนวกลางแนวตั้ง */
-  gap: 18px;
-}
-
     /*  ปุ่มชื่อบัญชีผู้ใช้  */
     .user-btn {
   background: none;
@@ -612,15 +592,6 @@ main {
       background-color: #ffd84d;
     }
 
-    /* Navbar ด้านล่าง */
-.nav-bottom {
-  background-color: #1a1a1a;
-  color: #fff;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 10px 20px;
-}
 
 /*  Dropdown Profile  */
 .dropdown {
