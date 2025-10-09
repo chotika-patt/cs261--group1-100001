@@ -31,14 +31,14 @@ public class UserService {
     }
 
     public String register(User httpUser) {
-        String username = httpUser.getUsername().trim().toLowerCase();
+        String username = httpUser.getUsername().trim();
         String email = httpUser.getEmail().trim();
         String password = httpUser.getPassword();
         String phone = httpUser.getPhone();
         String studentID = httpUser.getStudentID();
         UserRole role = httpUser.getRole();
 
-        User user = userRepository.findFirstByUsername(username);
+        User user = userRepository.findFirstByUsernameIgnoreCase(username);
 
         if (user != null){
             return "Username has already been used.";
