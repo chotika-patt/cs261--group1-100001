@@ -518,7 +518,7 @@ main {
   background-color: #ffd84d;
 }
 
-    /* ======= ไอคอนตะกร้า ======= */
+    /* ไอคอนตะกร้า */
     .cart-icon {
       color: white;
       font-size: 20px;
@@ -612,14 +612,28 @@ main {
       background-color: #ffd84d;
     }
 
-    .nav-top {
-  position: relative; /* สร้าง context ให้ dropdown อยู่ในขอบเขต nav */
-  z-index: 10; /* ตั้งไว้พอประมาณ */
+    /* Navbar ด้านล่าง */
+.nav-bottom {
+  background-color: #1a1a1a;
+  color: #fff;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 20px;
 }
 
+/*  Dropdown Profile  */
 .dropdown {
-  position: absolute;
-  top: 60px;
+  position: fixed;
+  top: 70px;
   right: 20px;
-  z-index: 9999; /* ดัน dropdown ให้อยู่หน้าสุดแน่นอน */
+  background-color: #fff;
+  width: 300px;
+  border-radius: 14px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25);
+  padding: 24px 0 20px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  z-index: 99999; /* ดันให้อยู่บน nav-top และ nav-bottom ทั้งหมด */
 }

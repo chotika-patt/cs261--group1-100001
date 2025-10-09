@@ -1,346 +1,22 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TU Store</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-</head>
-<body>
-  
-  <nav class="nav-top">
-  <div class="right-buttons">
-    <div class="user-menu">
-      <button id="user-btn" class="user-btn">
-        <span class="user-text">ชื่อบัญชีผู้ใช้</span>
-        <div class="user-icon">
-          <i class="fa-solid fa-user"></i>
-        </div>
-      </button>
-    </div>
-    <a href="cart.html" class="cart-icon">
-      <i class="fa-solid fa-cart-shopping"></i>
-    </a>
-  </div>
-</nav>
-
-
-
-  <nav class="nav-bottom">
-    <ul class="menu">
-      <li><a href="index.html"><img class="logo" src="img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo"></a></li>
-      <li><a href="#">หน้าหลัก</a></li>
-      <li><a href="#">หมวดหมู่สินค้า</a></li>
-      <li><a href="#">เช็คสถานะ</a></li>
-      <li><a href="#">ติดต่อเรา</a></li>
-      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-    </ul>
-  </nav>
-
-  <div class="search-dropdown" id="search-dropdown">
-    <div class="search-content">
-      <div class="search-bar-container">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="ค้นหาใน TU Store">
-      </div>
-      <div class="quick-links">
-        <p>ลิงก์ด่วน</p>
-        <ul>
-          <li><a href="#">+ ค้นหาร้านค้า</a></li>
-          <li><a href="#">+ อุปกรณ์เสริม</a></li>
-          <li><a href="#">+ เสื้อและเครื่องแต่งกาย</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
- <main>
-  <div class="box-container">
-    <div class="box">
-      <h1>รวมร้านค้า <span>ในนาม ม.ธรรมศาสตร์</span></h1>
-      <h1>ครบ จบ ในที่เดียว</h1>
-    </div>
-    <div class="box">
-      <img class="banner" src="img/thammasat Identity.jpg" alt="Thammasat Banner">
-    </div>
-  </div> <div class="next"></div>
-
-  <div class="category-con">
-    <div class="category-item">
-      <div class="category-box">
-        <a href="product_detail.html"><img src="img/jersey.png" alt="Category Shirt"></a>
-      </div>
-      <h3>เสื้อ</h3>
-    </div>
-    <div class="category-item">
-      <div class="category-box">
-        <img src="img/bag.png" alt="Category Bag">
-      </div>
-      <h3>กระเป๋า</h3>
-    </div>
-    <div class="category-item">
-      <div class="category-box">
-        <img src="img/uniform.png" alt="Category Uniform">
-      </div>
-      <h3>เครื่องแบบนักศึกษา</h3>
-    </div>
-    <div class="category-item">
-      <div class="category-box">
-        <img src="img/things.png" alt="Category General Use">
-      </div>
-      <h3>ของใช้ทั่วไป</h3>
-    </div>
-    <div class="category-item">
-      <div class="category-box">
-        <img src="img/arttoy.png" alt="Category Souvenir">
-      </div>
-      <h3>ของที่ระลึก</h3>
-    </div>
-  </div>
-
-  <div class="next-session"></div>
-
-  <div class="product-section">
-    <h1>รายการสินค้า</h1>
-    <br>
-    <div class="product-grid">
-      <div class="product-card">
-        <div class="product-image"></div>
-        <div class="product-info"></div>
-      </div>
-      <div class="product-card">
-        <div class="product-image"></div>
-        <div class="product-info"></div>
-      </div>
-      <div class="product-card">
-        <div class="product-image"></div>
-        <div class="product-info"></div>
-      </div>
-      <div class="product-card">
-        <div class="product-image"></div>
-        <div class="product-info"></div>
-      </div>
-      <div class="product-card">
-        <div class="product-image"></div>
-        <div class="product-info"></div>
-      </div>
-      <div class="product-card">
-        <div class="product-image"></div>
-        <div class="product-info"></div>
-      </div>
-    </div>
-  </div>
-</main>
-
-<footer>
-  <div class="footer-content">
-    <p>&copy; 2025 TU Store. All rights reserved.</p>
-    <p>ติดต่อเรา: <a href="mailto:info@tu-store.com">info@tu-store.com</a></p>
-  </div>
-</footer>
-
-<script>
-  const searchIcon = document.getElementById('search-icon');
-  const searchDropdown = document.getElementById('search-dropdown');
-  searchIcon.addEventListener('click', (event) => {
-    event.preventDefault(); 
-    // Toggle class ที่ body เพื่อควบคุม effect blur
-    document.body.classList.toggle('search-active'); 
-    // Toggle class ที่แถบค้นหาเพื่อเปิด/ปิด
-    searchDropdown.classList.toggle('open');
-  });
-</script>
-
-<style>
-    /*สไตล์ Navbar*/
-    body {
-      margin: 0;
-      font-family: 'Prompt', sans-serif;
-      background-color: #f4f4f4;
-    }
-
-    .nav-top {
-      background-color: #1a1a1a; /* พื้นหลังดำ */
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      padding: 10px 20px;
-    }
-
-    .right-buttons {
-  display: flex;
-  align-items: center;     /* จัดให้อยู่แนวกลางแนวตั้ง */
-  gap: 18px;
-}
-
-    /*  ปุ่มชื่อบัญชีผู้ใช้  */
-    .user-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-weight: 600;
-  font-size: 15px;
-  display: flex;
-  align-items: center;     /* จัดแนวกลางเหมือนกัน */
-  gap: 10px;
-  cursor: pointer;
-  padding: 0;
-}
-.user-text {
-  line-height: 1;          /* ลดความสูงตัวอักษรให้ตรงกลาง */
-}
-
-    .user-btn:hover {
-      opacity: 0.85;
-    }
-
-    /* วงกลมไอคอนเหลือง  */
-    .user-icon {
-  background-color: #f7c948;
-  color: #1a1a1a;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 15px;
-  transition: 0.2s;
-}
-
-   .user-btn:hover .user-icon {
-  background-color: #ffd84d;
-}
-
-    /* ======= ไอคอนตะกร้า ======= */
-    .cart-icon {
-      color: white;
-      font-size: 20px;
-      transition: 0.2s;
-    }
-   
-
-    .cart-icon:hover {
-      color: #f7c948;
-    }
-     .dropdown {
-  position: absolute;
-  top: 60px;
-  right: 20px;
-  background-color: #fff;
-  width: 300px;
-  border-radius: 14px;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-  padding: 24px 0 20px;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  z-index: 1000; /* เพิ่มบรรทัดนี้ให้ dropdown อยู่บนสุด */
-}
-
-    .dropdown.active {
-      display: flex;
-    }
-
-    .dropdown .close {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      font-size: 18px;
-      color: #555;
-      cursor: pointer;
-    }
-
-    .dropdown .avatar {
-      background-color: #f7c948;
-      color: #fff;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
-
-    .dropdown h4 {
-      font-size: 16px;
-      font-weight: 600;
-      color: #1a1a1a;
-      margin: 6px 0 10px;
-      text-align: center;
-      border-bottom: 1px solid #ccc;
-      width: 80%;
-      padding-bottom: 8px;
-    }
-
-    .info {
-      width: 80%;
-      margin-top: 6px;
-      color: #1a1a1a;
-      font-size: 14px;
-      text-align: left;
-    }
-
-    .info p {
-      margin: 8px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .logout-btn {
-      margin-top: 16px;
-      background-color: #f7c948;
-      border: none;
-      color: #000;
-      font-weight: 700;
-      border-radius: 10px;
-      padding: 10px 30px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .logout-btn:hover {
-      background-color: #ffd84d;
-    }
-  </style>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
 
 <body>
+  <!-- ======= Navbar บนสุด ======= -->
   <nav class="nav-top">
     <div class="right-buttons">
       <div class="user-menu">
         <button class="user-btn" id="user-btn">
           <span class="user-text">ชื่อบัญชีผู้ใช้</span>
-          <div class="user-icon">
-            <i class="fa-solid fa-user"></i>
-          </div>
+          <div class="user-icon"><i class="fa-solid fa-user"></i></div>
         </button>
-      </div>
-      <a href="cart.html" class="cart-icon">
-        <i class="fa-solid fa-cart-shopping"></i>
-      </a>
-    </div>
-  </nav>
-</body>
-</body>
-</html>
-
-<body>
-  <nav class="nav-top">
-    <div class="right-buttons">
-      <div class="user-menu">
-        <button class="user-btn" id="user-btn">
-          <span class="user-text">ชื่อบัญชีผู้ใช้</span>
-          <div class="user-icon">
-            <i class="fa-solid fa-user"></i>
-          </div>
-        </button>
-
-        <!-- dropdown -->
         <div class="dropdown" id="user-dropdown">
           <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
           <div class="avatar"><i class="fa-solid fa-user"></i></div>
@@ -351,71 +27,129 @@
           </div>
           <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
         </div>
-      <a href="cart.html" class="cart-icon">
-        <i class="fa-solid fa-cart-shopping"></i>
-      </a>
+      </div>
+      <a href="cart.html" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
-    <div class="logout-modal" id="logout-modal">
-  <div class="modal-content">
-    <i class="fa-solid fa-circle-exclamation"></i>
-    <p>คุณต้องการออกจากระบบหรือไม่</p>
-    <div class="modal-buttons">
-      <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
-      <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
-    </div>
-    <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
-  </div>
-</div>
   </nav>
 
+  <!-- ======= Navbar ล่าง ======= -->
+  <nav class="nav-bottom">
+    <ul class="menu">
+      <li>
+        <a href="index.html"><img class="logo" src="img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo" /></a>
+      </li>
+      <li><a href="#">หน้าหลัก</a></li>
+      <li><a href="#">หมวดหมู่สินค้า</a></li>
+      <li><a href="#">เช็คสถานะ</a></li>
+      <li><a href="#">ติดต่อเรา</a></li>
+      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+    </ul>
+  </nav>
+
+  <!-- ======= ส่วนหลักของหน้า ======= -->
+  <main>
+    <div class="box-container">
+      <div class="box">
+        <h1>รวมร้านค้า <span>ในนาม ม.ธรรมศาสตร์</span></h1>
+        <h1>ครบ จบ ในที่เดียว</h1>
+      </div>
+      <div class="box">
+        <img class="banner" src="img/thammasat Identity.jpg" alt="Thammasat Banner" />
+      </div>
+    </div>
+
+    <div class="category-con">
+      <div class="category-item">
+        <div class="category-box">
+          <a href="product_detail.html"><img src="img/jersey.png" alt="Category Shirt" /></a>
+        </div>
+        <h3>เสื้อ</h3>
+      </div>
+      <div class="category-item">
+        <div class="category-box"><img src="img/bag.png" alt="Category Bag" /></div>
+        <h3>กระเป๋า</h3>
+      </div>
+      <div class="category-item">
+        <div class="category-box"><img src="img/uniform.png" alt="Category Uniform" /></div>
+        <h3>เครื่องแบบนักศึกษา</h3>
+      </div>
+      <div class="category-item">
+        <div class="category-box"><img src="img/things.png" alt="Category General Use" /></div>
+        <h3>ของใช้ทั่วไป</h3>
+      </div>
+      <div class="category-item">
+        <div class="category-box"><img src="img/arttoy.png" alt="Category Souvenir" /></div>
+        <h3>ของที่ระลึก</h3>
+      </div>
+    </div>
+  </main>
+
+  <!-- ======= Footer ======= -->
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2025 TU Store. All rights reserved.</p>
+      <p>ติดต่อเรา: <a href="mailto:info@tu-store.com">info@tu-store.com</a></p>
+    </div>
+  </footer>
+
+  <!-- ======= Popup Logout ======= -->
+  <div class="logout-modal" id="logout-modal">
+    <div class="modal-content">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <p>คุณต้องการออกจากระบบหรือไม่</p>
+      <div class="modal-buttons">
+        <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+        <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+      </div>
+      <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+    </div>
+  </div>
+
+  <!-- ======= Script ======= -->
   <script>
-  //  Dropdown 
-  const userBtn = document.getElementById('user-btn');
-  const dropdown = document.getElementById('user-dropdown');
-  const closeBtn = document.getElementById('close-dropdown');
-  const logoutBtn = document.getElementById('logout-btn');
+    const userBtn = document.getElementById("user-btn");
+    const dropdown = document.getElementById("user-dropdown");
+    const closeBtn = document.getElementById("close-dropdown");
+    const logoutBtn = document.getElementById("logout-btn");
+    const logoutModal = document.getElementById("logout-modal");
+    const cancelLogout = document.getElementById("cancel-logout");
+    const confirmLogout = document.getElementById("confirm-logout");
+    const closeModal = document.getElementById("close-modal");
 
-  const logoutModal = document.getElementById('logout-modal');
-  const cancelLogout = document.getElementById('cancel-logout');
-  const confirmLogout = document.getElementById('confirm-logout');
-  const closeModal = document.getElementById('close-modal');
+    // เปิด/ปิด dropdown
+    userBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      dropdown.classList.toggle("active");
+    });
 
-  // เปิด/ปิด dropdown
-  userBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    dropdown.classList.toggle('active');
-  });
+    closeBtn.addEventListener("click", () => {
+      dropdown.classList.remove("active");
+    });
 
-  closeBtn.addEventListener('click', () => {
-    dropdown.classList.remove('active');
-  });
+    window.addEventListener("click", (e) => {
+      if (!dropdown.contains(e.target) && !userBtn.contains(e.target)) {
+        dropdown.classList.remove("active");
+      }
+    });
 
-  // คลิกนอก dropdown เพื่อปิด
-  window.addEventListener('click', (e) => {
-    if (!dropdown.contains(e.target) && !userBtn.contains(e.target)) {
-      dropdown.classList.remove('active');
-    }
-  });
+    // Popup Logout
+    logoutBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      dropdown.classList.remove("active");
+      logoutModal.classList.add("active");
+    });
 
-  //Popup Logout
-  logoutBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    dropdown.classList.remove('active'); // ปิด dropdown ก่อน
-    logoutModal.classList.add('active'); // แสดง popup
-  });
+    cancelLogout.addEventListener("click", () => {
+      logoutModal.classList.remove("active");
+    });
 
-  cancelLogout.addEventListener('click', () => {
-    logoutModal.classList.remove('active');
-  });
+    closeModal.addEventListener("click", () => {
+      logoutModal.classList.remove("active");
+    });
 
-  closeModal.addEventListener('click', () => {
-    logoutModal.classList.remove('active');
-  });
-
-  confirmLogout.addEventListener('click', () => {
-    window.location.href = 'index.html';
-  });
-</script>
-
+    confirmLogout.addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
+  </script>
 </body>
 </html>
