@@ -34,6 +34,8 @@ public class UserService {
         String username = httpUser.getUsername().trim().toLowerCase();
         String email = httpUser.getEmail().trim();
         String password = httpUser.getPassword();
+        String phone = httpUser.getPhone();
+        String studentID = httpUser.getStudentID();
         UserRole role = httpUser.getRole();
 
         User user = userRepository.findFirstByUsername(username);
@@ -49,15 +51,22 @@ public class UserService {
         if (!email.contains("@")) {
             return "Invalid email address.";
         }
+
+        if (phone.length() != 10){
+            return "Invalid phone number.";
+        }
         
         String hashedPassword = passwordEncoder.encode(password);
 
         if(role == UserRole.CLIENT){
-            User newUser = new User(username, email, hashedPassword, httpUser.getPhone(), null, null, role);
+            User newUser = new User(username, email, hashedPassword, phone, null, null, role);
             userRepository.save(newUser);
         }
         else if(role == UserRole.SELLER){
-            User newUser = new User(username, email, hashedPassword, httpUser.getPhone(), httpUser.getStudent_code(), httpUser.getVerify_document(), role);
+            if (studentID.length() != 10){
+                return "Invalid student ID.";
+            }
+            User newUser = new User(username, email, hashedPassword, phone, studentID, httpUser.getVerify_document(), role);
             userRepository.save(newUser);
         }
         else{

@@ -31,22 +31,28 @@ public class UserController {
     }
     @PostMapping("/login/buyer")
     public ResponseEntity<String> loginBuyer(HttpSession sessions,@RequestBody User user) {
-        sessions.setAttribute("username", user.getUsername());
-        sessions.setAttribute("role", user.getRole());
         boolean valid = userService.login(user);
         if (!valid) {
             return ResponseEntity.status(401).body("Invalid username or password");
         }
+        sessions.setAttribute("username", user.getUsername());
+        sessions.setAttribute("role", user.getRole());
         return ResponseEntity.ok("Login successful");
     }
     @PostMapping("/login/seller")
     public ResponseEntity<String> loginSeller(HttpSession sessions,@RequestBody() User user) {
-        sessions.setAttribute("username", user.getUsername());
-        sessions.setAttribute("role", user.getRole());
         boolean valid = userService.login(user);
         if (!valid) {
             return ResponseEntity.status(401).body("Invalid username or password");
         }
+        sessions.setAttribute("username", user.getUsername());
+        sessions.setAttribute("role", user.getRole());
         return ResponseEntity.ok("Login successful");
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok("Logout successful");
     }
 }
