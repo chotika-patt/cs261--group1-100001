@@ -24,7 +24,7 @@ public class User {
     private String phone;
 
     @Column(length = 20, nullable = true)
-    private String student_code;  // เฉพาะ seller
+    private String studentID;  // เฉพาะ seller
 
     @Column(length = 255, nullable = true)
     private String verify_document;  // path หรือ URL ของไฟล์ยืนยัน (.jpg / .pdf)
@@ -40,12 +40,12 @@ public class User {
     public User() {}
 
     public User(String username, String email, String password, String phone,
-                String student_code, String verify_document, UserRole role) {
+                String studentID, String verify_document, UserRole role) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.phone = phone;
-        this.student_code = student_code;
+        this.studentID = studentID;
         this.verify_document = verify_document;
         this.role = role;
     }
@@ -65,8 +65,8 @@ public class User {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    public String getStudent_code() { return student_code; }
-    public void setStudent_code(String student_code) { this.student_code = student_code; }
+    public String getStudentID() { return studentID; }
+    public void setStudentID(String studentID) { this.studentID = studentID; }
 
     public String getVerify_document() { return verify_document; }
     public void setVerify_document(String verify_document) { this.verify_document = verify_document; }

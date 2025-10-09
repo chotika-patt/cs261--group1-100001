@@ -6,6 +6,7 @@
   <title>TU Store</title>
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="script" href="/js/main.js" >
 </head>
 
 <body>
@@ -14,7 +15,7 @@
     <div class="right-buttons">
       <div class="user-menu">
         <button class="user-btn" id="user-btn">
-          <span class="user-text">ชื่อบัญชีผู้ใช้</span>
+          <span class="user-text"></span>
           <div class="user-icon"><i class="fa-solid fa-user"></i></div>
         </button>
         <div class="dropdown" id="user-dropdown">
@@ -39,12 +40,38 @@
         <a href="index.html"><img class="logo" src="img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo" /></a>
       </li>
       <li><a href="#">หน้าหลัก</a></li>
-      <li><a href="#">หมวดหมู่สินค้า</a></li>
+       <li class="dropdown-category">
+        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+         <div class="overlay"></div> <!-- สำหรับ liquid glass -->
+         <div class="dropdown-content">
+            <a href="#">เสื้อ</a>
+            <a href="#">กระเป๋า</a>
+            <a href="#">เครื่องแบบนักศึกษา</a>
+            <a href="#">ของใช้ทั่วไป</a>
+            <a href="#">ของที่ระลึก</a>
+        </div>
+        </li>
       <li><a href="#">เช็คสถานะ</a></li>
       <li><a href="#">ติดต่อเรา</a></li>
       <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
     </ul>
   </nav>
+  <div class="search-dropdown" id="search-dropdown">
+    <div class="search-content">
+      <div class="search-bar-container">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="ค้นหาใน TU Store">
+      </div>
+      <div class="quick-links">
+        <p>ลิงก์ด่วน</p>
+        <ul>
+          <li><a href="#">+ ค้นหาร้านค้า</a></li>
+          <li><a href="#">+ อุปกรณ์เสริม</a></li>
+          <li><a href="#">+ เสื้อและเครื่องแต่งกาย</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   <!-- ======= ส่วนหลักของหน้า ======= -->
   <main>
@@ -82,6 +109,62 @@
         <h3>ของที่ระลึก</h3>
       </div>
     </div>
+
+    <div class="next-session"></div>
+
+  <div class="product-section">
+      <div style="display: flex; align-items: baseline; justify-content: space-between;">
+    <h1 style="margin: 0;">รายการสินค้า</h1>
+    <p style="margin: 0; font-size: 16px; color: #666;"><a style="text-decoration: none; color: #666;" href="product.html">ดูทั้งหมด</a></p>
+  </div>
+  <br>
+    <div class="product-grid">
+       <div class="product-card">
+        <div class="product-image"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+  </div>
   </main>
 
   <!-- ======= Footer ======= -->
@@ -103,53 +186,87 @@
       </div>
       <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
     </div>
+    </div>
+
+
+<div class="logout-success" id="logout-success">
+  <div class="success-content">
+    <i class="fa-solid fa-circle-check"></i>
+    <p>ออกจากระบบสำเร็จแล้ว</p>
   </div>
+</div>
+<script>
+  const searchIcon = document.getElementById('search-icon');
+  const searchDropdown = document.getElementById('search-dropdown');
+  searchIcon.addEventListener('click', (event) => {
+    event.preventDefault(); 
+    // Toggle class ที่ body เพื่อควบคุม effect blur
+    document.body.classList.toggle('search-active'); 
+    // Toggle class ที่แถบค้นหาเพื่อเปิด/ปิด
+    searchDropdown.classList.toggle('open');
+  });
+</script>
 
-  <!-- ======= Script ======= -->
-  <script>
-    const userBtn = document.getElementById("user-btn");
-    const dropdown = document.getElementById("user-dropdown");
-    const closeBtn = document.getElementById("close-dropdown");
-    const logoutBtn = document.getElementById("logout-btn");
-    const logoutModal = document.getElementById("logout-modal");
-    const cancelLogout = document.getElementById("cancel-logout");
-    const confirmLogout = document.getElementById("confirm-logout");
-    const closeModal = document.getElementById("close-modal");
+ <script>
+  const userBtn = document.getElementById("user-btn");
+  const dropdown = document.getElementById("user-dropdown");
+  const closeBtn = document.getElementById("close-dropdown");
+  const logoutBtn = document.getElementById("logout-btn");
+  const logoutModal = document.getElementById("logout-modal");
+  const cancelLogout = document.getElementById("cancel-logout");
+  const confirmLogout = document.getElementById("confirm-logout");
+  const closeModal = document.getElementById("close-modal");
+  const logoutSuccess = document.getElementById("logout-success");
 
-    // เปิด/ปิด dropdown
-    userBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      dropdown.classList.toggle("active");
-    });
+  // เปิด/ปิด dropdown
+  userBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    dropdown.classList.toggle("active");
+  });
 
-    closeBtn.addEventListener("click", () => {
+  closeBtn.addEventListener("click", () => {
+    dropdown.classList.remove("active");
+  });
+
+  window.addEventListener("click", (e) => {
+    if (!dropdown.contains(e.target) && !userBtn.contains(e.target)) {
       dropdown.classList.remove("active");
-    });
+    }
+  });
 
-    window.addEventListener("click", (e) => {
-      if (!dropdown.contains(e.target) && !userBtn.contains(e.target)) {
-        dropdown.classList.remove("active");
-      }
-    });
+  // Popup Logout
+  logoutBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    dropdown.classList.remove("active");
+    logoutModal.classList.add("active");
+  });
 
-    // Popup Logout
-    logoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      dropdown.classList.remove("active");
-      logoutModal.classList.add("active");
-    });
+  cancelLogout.addEventListener("click", () => {
+    logoutModal.classList.remove("active");
+  });
 
-    cancelLogout.addEventListener("click", () => {
-      logoutModal.classList.remove("active");
-    });
+  closeModal.addEventListener("click", () => {
+    logoutModal.classList.remove("active");
+  });
 
-    closeModal.addEventListener("click", () => {
-      logoutModal.classList.remove("active");
-    });
+  // เมื่อกดยืนยันออกจากระบบ
+  confirmLogout.addEventListener("click", () => {
+    // ซ่อน popup ยืนยัน
+    logoutModal.classList.remove("active");
 
-    confirmLogout.addEventListener("click", () => {
+    // แสดง popup สำเร็จ
+    logoutSuccess.classList.add("active");
+
+    // ซ่อน popup สำเร็จหลัง 2.5 วินาที แล้ว redirect
+    setTimeout(() => {
+      logoutSuccess.classList.remove("active");
       window.location.href = "index.html";
-    });
-  </script>
+    }, 2500);
+  });
+</script>
+
+
+
+
 </body>
 </html>

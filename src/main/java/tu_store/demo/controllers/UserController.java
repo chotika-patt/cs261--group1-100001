@@ -9,6 +9,8 @@ import tu_store.demo.models.User;
 import tu_store.demo.models.UserRole;
 import tu_store.demo.services.UserService;
 
+
+
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -29,24 +31,23 @@ public class UserController {
         user.setRole(UserRole.SELLER);
         return userService.register(user);
     }
-    @PostMapping("/login/buyer")
-    public ResponseEntity<String> loginBuyer(HttpSession sessions,@RequestBody User user) {
-        sessions.setAttribute("username", user.getUsername());
-        sessions.setAttribute("role", user.getRole());
+    @PostMapping("/login")
+    public ResponseEntity<String> login(HttpSession sessions,@RequestBody User user) {
         boolean valid = userService.login(user);
         if (!valid) {
             return ResponseEntity.status(401).body("Invalid username or password");
         }
+        User dbUser = userService.findByUsername(user.getUsername());
+        sessions.setAttribute("username", dbUser.getUsername());
+        sessions.setAttribute("email", dbUser.getEmail());
+        sessions.setAttribute("phone", dbUser.getPhone());
+        sessions.setAttribute("role", dbUser.getRole());
         return ResponseEntity.ok("Login successful");
     }
-    @PostMapping("/login/seller")
-    public ResponseEntity<String> loginSeller(HttpSession sessions,@RequestBody() User user) {
-        sessions.setAttribute("username", user.getUsername());
-        sessions.setAttribute("role", user.getRole());
-        boolean valid = userService.login(user);
-        if (!valid) {
-            return ResponseEntity.status(401).body("Invalid username or password");
-        }
-        return ResponseEntity.ok("Login successful");
+    @GetMapping("/logout")
+    public String logOut(HttpSession session) {
+        session.invalidate();
+        return "redirect:/loginTemp";
     }
+  
 }

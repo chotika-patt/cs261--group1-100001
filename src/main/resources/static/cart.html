@@ -22,7 +22,17 @@
     <ul class="menu">
     <li><a href="index.html"><img class="logo" src="/img/Emblem_of_Thammasat_University.svg.png" alt=""></a></li>
       <li><a href="index.html">หน้าหลัก</a></li>
-      <li><a href="#">หมวดหมู่สินค้า</a></li>
+       <li class="dropdown-category">
+        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+         <div class="overlay"></div> <!-- สำหรับ liquid glass -->
+         <div class="dropdown-content">
+            <a href="#">เสื้อ</a>
+            <a href="#">กระเป๋า</a>
+            <a href="#">เครื่องแบบนักศึกษา</a>
+            <a href="#">ของใช้ทั่วไป</a>
+            <a href="#">ของที่ระลึก</a>
+        </div>
+        </li>
       <li><a href="#">เช็คสถานะ</a></li>
       <li><a href="#">ติดต่อเรา</a></li>
     </ul>
@@ -92,6 +102,24 @@
     
     // Toggle class ที่แถบค้นหาเพื่อเปิด/ปิด
     searchDropdown.classList.toggle('open');
+  });
+</script>
+<script>
+    // ===== แถบแดงหมวดหมู่สินค้าหน้า product เป็นแถบ dropdown =====
+  const toggle = document.querySelector('.dropdown-toggle');
+  const dropdown = document.querySelector('.dropdown-content');
+  const overlay = document.querySelector('.overlay');
+
+  toggle.addEventListener('click', function(e) {
+    e.preventDefault();
+    const isOpen = dropdown.style.display === 'block';
+    dropdown.style.display = isOpen ? 'none' : 'block';
+    overlay.style.display = isOpen ? 'none' : 'block';
+  });
+
+  overlay.addEventListener('click', function() {
+    dropdown.style.display = 'none';
+    overlay.style.display = 'none';
   });
 </script>
 </body>

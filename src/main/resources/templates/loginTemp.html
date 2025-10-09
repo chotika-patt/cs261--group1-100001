@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="th" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TU Store</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+
+<body>
+  <!-- ======= Navbar บนสุด ======= -->
+  <nav class="nav-top">
+    <div class="right-buttons">
+      <div class="user-menu">
+        <button class="user-btn" id="user-btn">
+          <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
+          <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+        </button>
+        <div class="dropdown" id="user-dropdown">
+          <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
+          <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
+          <div class="info">
+            <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username01@gmail.com</span></p>
+            <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">0601111111</span></p>
+          </div>
+          <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+        </div>
+      </div>
+      <a th:href="@{/cart}" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></a>
+    </div>
+  </nav>
+
+  <!-- ======= Navbar ล่าง ======= -->
+  <nav class="nav-bottom">
+    <ul class="menu">
+      <li>
+        <a th:href="@{/}"><img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo" /></a>
+      </li>
+      <li><a th:href="@{/}">หน้าหลัก</a></li>
+      <li><a th:href="@{/categories}">หมวดหมู่สินค้า</a></li>
+      <li><a th:href="@{/status}">เช็คสถานะ</a></li>
+      <li><a th:href="@{/contact}">ติดต่อเรา</a></li>
+      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+    </ul>
+  </nav>
+
+  <!-- ======= ส่วนหลักของหน้า ======= -->
+  <main>
+    <div class="box-container">
+      <div class="box">
+        <h1>รวมร้านค้า <span>ในนาม ม.ธรรมศาสตร์</span></h1>
+        <h1>ครบ จบ ในที่เดียว</h1>
+      </div>
+      <div class="box">
+        <img class="banner" th:src="@{/img/thammasat Identity.jpg}" alt="Thammasat Banner" />
+      </div>
+    </div>
+
+    <div class="category-con">
+      <div class="category-item" th:each="category : ${categories}">
+        <div class="category-box">
+          <a th:href="@{${category.link}}"><img th:src="@{${category.img}}" th:alt="${category.name}" /></a>
+        </div>
+        <h3 th:text="${category.name}">Category Name</h3>
+      </div>
+    </div>
+  </main>
+
+  <!-- ======= Footer ======= -->
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2025 TU Store. All rights reserved.</p>
+      <p>ติดต่อเรา: <a href="mailto:info@tu-store.com">info@tu-store.com</a></p>
+    </div>
+  </footer>
+
+  <!-- ======= Popup Logout ======= -->
+  <div class="logout-modal" id="logout-modal">
+    <div class="modal-content">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <p>คุณต้องการออกจากระบบหรือไม่</p>
+      <div class="modal-buttons">
+        <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+        <button id="confirm-logout" class="confirm-btn" 
+                th:onclick="|window.location.href='@{/logout}'|">ยืนยัน</button>
+      </div>
+      <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+    </div>
+  </div>
+
+  <!-- ======= Script ======= -->
+  <script th:src="@{/js/main.js}"></script>
+</body>
+</html>
+
