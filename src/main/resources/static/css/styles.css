@@ -637,3 +637,55 @@ main {
   align-items: center;
   z-index: 99999; /* ดันให้อยู่บน nav-top และ nav-bottom ทั้งหมด */
 }
+
+/* ===== Popup "ออกจากระบบสำเร็จแล้ว" ===== */
+.logout-success {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 99999;
+  justify-content: center;
+  align-items: center;
+}
+
+.logout-success.active {
+  display: flex;
+  animation: fadeInBg 0.3s ease;
+}
+
+.success-content {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  text-align: center;
+  padding: 40px 60px;
+  animation: scaleUp 0.3s ease;
+}
+
+.success-content i {
+  color: #ffd84d;
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.success-content p {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeInBg {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
