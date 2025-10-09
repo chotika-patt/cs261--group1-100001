@@ -3,12 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <title>Product Page</title>
 </head>
 <body>
-    <h1>Product Name</h1>
-    <p>Description of the product goes here.</p>
-    <p>Price: $XX.XX</p>
-    <button>Add to Cart</button>
+         <nav class="nav-top">
+    <div class="right-buttons">
+      <a href="login.html" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
+      <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+    </div>
+  </nav>
+
+  <nav class="nav-bottom">
+    <ul class="menu">
+      <li><a href="index.html"><img class="logo" src="img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo"></a></li>
+      <li><a href="#">หน้าหลัก</a></li>
+      <li class="dropdown-category">
+        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+         <div class="overlay"></div> <!-- สำหรับ liquid glass -->
+         <div class="dropdown-content">
+            <a href="#">เสื้อ</a>
+            <a href="#">กระเป๋า</a>
+            <a href="#">เครื่องแบบนักศึกษา</a>
+            <a href="#">ของใช้ทั่วไป</a>
+            <a href="#">ของที่ระลึก</a>
+        </div>
+        </li>
+      <li><a href="#">เช็คสถานะ</a></li>
+      <li><a href="#">ติดต่อเรา</a></li>
+      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+    </ul>
+  </nav>
+
+  <div class="search-dropdown" id="search-dropdown">
+    <div class="search-content">
+      <div class="search-bar-container">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="ค้นหาใน TU Store">
+      </div>
+      <div class="quick-links">
+        <p>ลิงก์ด่วน</p>
+        <ul>
+          <li><a href="#">+ ค้นหาร้านค้า</a></li>
+          <li><a href="#">+ อุปกรณ์เสริม</a></li>
+          <li><a href="#">+ เสื้อและเครื่องแต่งกาย</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+<!-- แถบหมวดหมู่สินค้า (Red Dropdown Bar) -->
+<div class="category-bar">
+  <div class="category-header" onclick="toggleCategoryDropdown()">
+    <a class="category-toggle"><span>หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></span>
+    </a>
+  </div>
+
+  <div class="category-dropdown">
+  <div class="category-con">
+    <div class="category-item">
+      <div class="category-box">
+        <a href="product_detail.html"><img src="img/jersey.png" alt="Category Shirt"></a>
+      </div>
+      <h3>เสื้อ</h3>
+    </div>
+    <div class="category-item">
+      <div class="category-box">
+        <img src="img/bag.png" alt="Category Bag">
+      </div>
+      <h3>กระเป๋า</h3>
+    </div>
+    <div class="category-item">
+      <div class="category-box">
+        <img src="img/uniform.png" alt="Category Uniform">
+      </div>
+      <h3>เครื่องแบบนักศึกษา</h3>
+    </div>
+    <div class="category-item">
+      <div class="category-box">
+        <img src="img/things.png" alt="Category General Use">
+      </div>
+      <h3>ของใช้ทั่วไป</h3>
+    </div>
+    <div class="category-item">
+      <div class="category-box">
+        <img src="img/arttoy.png" alt="Category Souvenir">
+      </div>
+      <h3>ของที่ระลึก</h3>
+    </div>
+  </div>
+  </div>
+</div>
+<div class="product-section">
+      <div style="display: flex; align-items: baseline; justify-content: space-between;">
+    <h1 style="margin: 0;">รายการสินค้า</h1>
+    
+  </div>
+    <br>
+    <div class="product-grid">
+      <div class="product-card">
+  <div class="product-image"></div>
+  <div class="product-info">
+    <span class="product-name">ชื่อสินค้า</span>
+    <span class="product-price">฿ 00.0</span>
+  </div>
+</div>
+      <div class="product-card">
+        <div class="product-image"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-image"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+  function toggleCategoryDropdown() {
+    const bar = document.querySelector('.category-bar');
+    const dropdown = document.querySelector('.category-dropdown');
+    dropdown.classList.toggle('show');
+    bar.classList.toggle('active');
+  }
+
+</script>
+
+<script>
+    // ===== แถบแดงหมวดหมู่สินค้าหน้า product เป็นแถบ dropdown =====
+  const toggle = document.querySelector('.dropdown-toggle');
+  const dropdown = document.querySelector('.dropdown-content');
+  const overlay = document.querySelector('.overlay');
+
+  toggle.addEventListener('click', function(e) {
+    e.preventDefault();
+    const isOpen = dropdown.style.display === 'block';
+    dropdown.style.display = isOpen ? 'none' : 'block';
+    overlay.style.display = isOpen ? 'none' : 'block';
+  });
+
+  overlay.addEventListener('click', function() {
+    dropdown.style.display = 'none';
+    overlay.style.display = 'none';
+  });
+</script>
+
+
 </body>
 </html>

@@ -40,7 +40,17 @@
         <a href="index.html"><img class="logo" src="img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo" /></a>
       </li>
       <li><a href="#">หน้าหลัก</a></li>
-      <li><a href="#">หมวดหมู่สินค้า</a></li>
+       <li class="dropdown-category">
+        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+         <div class="overlay"></div> <!-- สำหรับ liquid glass -->
+         <div class="dropdown-content">
+            <a href="#">เสื้อ</a>
+            <a href="#">กระเป๋า</a>
+            <a href="#">เครื่องแบบนักศึกษา</a>
+            <a href="#">ของใช้ทั่วไป</a>
+            <a href="#">ของที่ระลึก</a>
+        </div>
+        </li>
       <li><a href="#">เช็คสถานะ</a></li>
       <li><a href="#">ติดต่อเรา</a></li>
       <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
@@ -103,34 +113,57 @@
     <div class="next-session"></div>
 
   <div class="product-section">
-    <h1>รายการสินค้า</h1>
-    <br>
+      <div style="display: flex; align-items: baseline; justify-content: space-between;">
+    <h1 style="margin: 0;">รายการสินค้า</h1>
+    <p style="margin: 0; font-size: 16px; color: #666;"><a style="text-decoration: none; color: #666;" href="product.html">ดูทั้งหมด</a></p>
+  </div>
+  <br>
     <div class="product-grid">
-      <div class="product-card">
+       <div class="product-card">
         <div class="product-image"></div>
-        <div class="product-info"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
       </div>
       <div class="product-card">
         <div class="product-image"></div>
-        <div class="product-info"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
       </div>
       <div class="product-card">
         <div class="product-image"></div>
-        <div class="product-info"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
       </div>
       <div class="product-card">
         <div class="product-image"></div>
-        <div class="product-info"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
       </div>
       <div class="product-card">
         <div class="product-image"></div>
-        <div class="product-info"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
       </div>
       <div class="product-card">
         <div class="product-image"></div>
-        <div class="product-info"></div>
+        <div class="product-info">
+          <span class="product-name">ชื่อสินค้า</span>
+          <span class="product-price">฿ 00.0</span>
+        </div>
+      </div>
       </div>
     </div>
+  </div>
   </div>
   </main>
 
@@ -231,6 +264,7 @@
     }, 2500);
   });
 </script>
+
 
 
 
