@@ -1,3 +1,5 @@
+// Code นี้ ใช้กับ template loginTemp
+
 const userBtn = document.getElementById("user-btn");
     const dropdown = document.getElementById("user-dropdown");
     const closeBtn = document.getElementById("close-dropdown");
