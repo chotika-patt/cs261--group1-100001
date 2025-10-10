@@ -1,4 +1,4 @@
-// Code นี้ ใช้กับ template loginTemp
+// Code นี้ ใช้กับ template lo
 
 const userBtn = document.getElementById("user-btn");
     const dropdown = document.getElementById("user-dropdown");

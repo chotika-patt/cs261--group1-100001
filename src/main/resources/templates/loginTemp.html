@@ -6,6 +6,7 @@
   <title>TU Store</title>
   <link rel="stylesheet" th:href="@{/css/styles.css}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <script th:src="@{/js/main.js}" defer></script>
 </head>
 
 <body>
@@ -17,7 +18,8 @@
           <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
           <div class="user-icon"><i class="fa-solid fa-user"></i></div>
         </button>
-        <div class="dropdown" id="user-dropdown">
+
+        <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
           <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
           <div class="avatar"><i class="fa-solid fa-user"></i></div>
           <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
@@ -39,12 +41,35 @@
         <a th:href="@{/}"><img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo" /></a>
       </li>
       <li><a th:href="@{/}">หน้าหลัก</a></li>
-      <li><a th:href="@{/categories}">หมวดหมู่สินค้า</a></li>
-      <li><a th:href="@{/status}">เช็คสถานะ</a></li>
+      <li class="dropdown-category">
+        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+        <div class="overlay"></div>
+        <div class="dropdown-content">
+          <a th:each="cat : ${categories}" th:href="@{'/category/' + ${cat.id}}" th:text="${cat.name}">หมวดหมู่</a>
+        </div>
+      </li>
+      <li><a th:href="@{/order/status}">เช็คสถานะ</a></li>
       <li><a th:href="@{/contact}">ติดต่อเรา</a></li>
       <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
     </ul>
   </nav>
+
+  <div class="search-dropdown" id="search-dropdown">
+    <div class="search-content">
+      <div class="search-bar-container">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="ค้นหาใน TU Store">
+      </div>
+      <div class="quick-links">
+        <p>ลิงก์ด่วน</p>
+        <ul>
+          <li><a href="#">+ ค้นหาร้านค้า</a></li>
+          <li><a href="#">+ อุปกรณ์เสริม</a></li>
+          <li><a href="#">+ เสื้อและเครื่องแต่งกาย</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   <!-- ======= ส่วนหลักของหน้า ======= -->
   <main>
@@ -58,16 +83,41 @@
       </div>
     </div>
 
+    <!-- Categories -->
     <div class="category-con">
-      <div class="category-item" th:each="category : ${categories}">
+      <div class="category-item" th:each="cat : ${categories}">
         <div class="category-box">
-          <a th:href="@{${category.link}}"><img th:src="@{${category.img}}" th:alt="${category.name}" /></a>
+          <a th:href="@{'/product/' + ${cat.id}}">
+            <img th:src="@{/img/jersey.png}" th:alt="${cat.name}" />
+          </a>
         </div>
-        <h3 th:text="${category.name}">Category Name</h3>
+        <h3 th:text="${cat.name}">หมวดหมู่</h3>
+      </div>
+    </div>
+
+    <!-- Products -->
+    <div class="product-section">
+      <div style="display: flex; align-items: baseline; justify-content: space-between;">
+        <h1 style="margin: 0;">รายการสินค้า</h1>
+        <p style="margin: 0; font-size: 16px; color: #666;">
+          <a style="text-decoration: none; color: #666;" th:href="@{/product}">ดูทั้งหมด</a>
+        </p>
+      </div>
+      <br>
+      <div class="product-grid">
+        <div class="product-card" th:each="p : ${products}">
+          <div class="product-image">
+            <img th:src="${p.imageUrl}" th:alt="${p.name}" />
+          </div>
+          <div class="product-info">
+            <span class="product-name" th:text="${p.name}">ชื่อสินค้า</span>
+            <span class="product-price" th:text="'฿ ' + ${p.price}">฿ 00.0</span>
+          </div>
+        </div>
       </div>
     </div>
   </main>
-
+  
   <!-- ======= Footer ======= -->
   <footer>
     <div class="footer-content">
@@ -83,14 +133,21 @@
       <p>คุณต้องการออกจากระบบหรือไม่</p>
       <div class="modal-buttons">
         <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
-        <button id="confirm-logout" class="confirm-btn" 
-                th:onclick="|window.location.href='@{/logout}'|">ยืนยัน</button>
+        <button id="confirm-logout" class="confirm-btn" th:onclick="|window.location.href='@{/logout}'|">ยืนยัน</button>
       </div>
       <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
     </div>
   </div>
-  <!-- ======= Script ======= -->
-  <script th:src="@{/js/main.js}"></script>
+
+  <div class="logout-success" id="logout-success">
+    <div class="success-content">
+      <i class="fa-solid fa-circle-check"></i>
+      <p>ออกจากระบบสำเร็จแล้ว</p>
+    </div>
+  </div>
+
+  <!-- JS (dropdown/search/logout) -->
+  <script th:src="@{/js/main.js}" defer></script>
 </body>
 </html>
 
