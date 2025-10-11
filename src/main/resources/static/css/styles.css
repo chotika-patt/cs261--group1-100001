@@ -4,28 +4,6 @@ body {
   overflow-x: hidden; 
 }
 
-/* --- ADDED ---: โค้ดสำหรับสร้าง Liquid Glass Effect Overlay */
-body.search-active::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.1); /* พื้นหลังโปร่งแสงเล็กน้อย */
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 999; /* Z-index ต้องน้อยกว่า Navbar (1000) */
-  pointer-events: none; /* ทำให้คลิกทะลุได้ */
-  opacity: 1;
-  transition: opacity 0.4s ease-out;
-}
-/* ทำให้ effect หายไปตอนไม่ได้ active */
-body::after {
-  opacity: 0;
-}
-/* --- END ADDED SECTION --- */
-
 /* ก้อนแรก */
 .nav-top {
   background-color: #1D1D1F;
@@ -57,9 +35,7 @@ body::after {
   margin-right: 1
 }
 .nav-bottom {
-  background: rgba(29, 29, 31, 0.7); /* ปรับให้โปร่งแสงขึ้นเล็กน้อย */
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(10px);
+  background-color: #1D1D1F;
   padding: 10px 0;
   width: 100%;
   position: sticky; 
@@ -296,89 +272,74 @@ main {
   }
 }
 
-/* ======== CSS สำหรับแถบค้นหา (แก้ไข) ======== */
-.search-dropdown {
-  background-color: #f8f8f8;
-  padding: 0 20px;
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.4s ease-out, padding 0.4s ease-out;
-  /* --- ADDED ---: ทำให้ลอยอยู่เหนือ effect */
-  position: relative;
-  z-index: 1000;
-  /* --- END ADDED SECTION --- */
+/* ======== CSS สำหรับแถบค้นหาแบบใหม่ ======== */
+
+/* ซ่อนเมนูเดิมเมื่อเปิดค้นหา */
+.nav-bottom.search-active .menu {
+  display: none;
 }
 
-.search-dropdown.open {
-  max-height: 300px;
-  padding: 30px 20px;
-  border-bottom: 1px solid #ddd;
-}
-
-.search-dropdown .search-content {
-  max-width: 700px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+/* แถบค้นหาใหม่ - ซ่อนไว้ตอนปกติ */
+.search-bar-replacement {
+  display: none;
   align-items: center;
-}
-
-.search-dropdown .search-bar-container {
-  display: flex;
-  align-items: center;
+  justify-content: center;
   width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fff;
-  padding: 5px 15px;
-}
-
-.search-dropdown .search-bar-container .fa-magnifying-glass {
-  font-size: 18px;
-  color: #888;
-}
-
-.search-dropdown .search-bar-container input {
-  width: 100%;
-  border: none;
-  outline: none;
-  padding: 10px;
-  font-size: 18px;
-  background-color: transparent;
-}
-
-.search-dropdown .quick-links {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
-.search-dropdown .quick-links p {
-  margin: 0;
-  font-size: 14px;
-  color: #555;
-}
-
-.search-dropdown .quick-links ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
+  padding: 10px 20px;
   gap: 15px;
 }
 
-.search-dropdown .quick-links ul li {
-  margin: 0;
+/* แสดงแถบค้นหาเมื่อ active */
+.nav-bottom.search-active .search-bar-replacement {
+  display: flex;
 }
 
-.search-dropdown .quick-links ul a {
-  text-decoration: none;
+/* กล่อง input ค้นหา */
+.search-bar-replacement .search-input-container {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 25px;
+  padding: 0px 20px;
+  max-width: 600px;
+  width: 100%;
+  gap: 10px;
+}
+
+/* ไอคอนแว่นขยาย */
+.search-bar-replacement .search-input-container .fa-magnifying-glass {
+  font-size: 18px;
+  color: #666;
+}
+
+/* ช่อง input */
+.search-bar-replacement .search-input-container input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 8px;
+  font-size: 16px;
+  background-color: transparent;
   color: #333;
-  font-size: 14px;
 }
 
-.search-dropdown .quick-links ul a:hover {
+/* placeholder */
+.search-bar-replacement .search-input-container input::placeholder {
+  color: #999;
+}
+
+/* ปุ่มปิด X */
+.search-close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: color 0.3s;
+}
+
+.search-close-btn:hover {
   color: #C32032;
 }
 
@@ -472,8 +433,8 @@ main {
   cursor: pointer;
 }
 
-    /*  ปุ่มชื่อบัญชีผู้ใช้  */
-    .user-btn {
+/*  ปุ่มชื่อบัญชีผู้ใช้  */
+.user-btn {
   background: none;
   border: none;
   color: white;
@@ -489,12 +450,12 @@ main {
   line-height: 1;          /* ลดความสูงตัวอักษรให้ตรงกลาง */
 }
 
-    .user-btn:hover {
-      opacity: 0.85;
-    }
+.user-btn:hover {
+  opacity: 0.85;
+}
 
-    /* วงกลมไอคอนเหลือง  */
-    .user-icon {
+/* วงกลมไอคอนเหลือง  */
+.user-icon {
   background-color: #f7c948;
   color: #1a1a1a;
   width: 30px;
@@ -507,22 +468,22 @@ main {
   transition: 0.2s;
 }
 
-   .user-btn:hover .user-icon {
+.user-btn:hover .user-icon {
   background-color: #ffd84d;
 }
 
-    /* ไอคอนตะกร้า */
-    .cart-icon {
-      color: white;
-      font-size: 20px;
-      transition: 0.2s;
-    }
-   
+/* ไอคอนตะกร้า */
+.cart-icon {
+  color: white;
+  font-size: 20px;
+  transition: 0.2s;
+}
 
-    .cart-icon:hover {
-      color: #f7c948;
-    }
-     .dropdown {
+.cart-icon:hover {
+  color: #f7c948;
+}
+
+.dropdown {
   position: absolute;
   top: 60px;
   right: 20px;
@@ -537,74 +498,73 @@ main {
   z-index: 1000; /* เพิ่มบรรทัดนี้ให้ dropdown อยู่บนสุด */
 }
 
-    .dropdown.active {
-      display: flex;
-    }
+.dropdown.active {
+  display: flex;
+}
 
-    .dropdown .close {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      font-size: 18px;
-      color: #555;
-      cursor: pointer;
-    }
+.dropdown .close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 18px;
+  color: #555;
+  cursor: pointer;
+}
 
-    .dropdown .avatar {
-      background-color: #f7c948;
-      color: #fff;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
+.dropdown .avatar {
+  background-color: #f7c948;
+  color: #fff;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin-bottom: 8px;
+}
 
-    .dropdown h4 {
-      font-size: 16px;
-      font-weight: 600;
-      color: #1a1a1a;
-      margin: 6px 0 10px;
-      text-align: center;
-      border-bottom: 1px solid #ccc;
-      width: 80%;
-      padding-bottom: 8px;
-    }
+.dropdown h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 6px 0 10px;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+  width: 80%;
+  padding-bottom: 8px;
+}
 
-    .info {
-      width: 80%;
-      margin-top: 6px;
-      color: #1a1a1a;
-      font-size: 14px;
-      text-align: left;
-    }
+.info {
+  width: 80%;
+  margin-top: 6px;
+  color: #1a1a1a;
+  font-size: 14px;
+  text-align: left;
+}
 
-    .info p {
-      margin: 8px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+.info p {
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-    .logout-btn {
-      margin-top: 16px;
-      background-color: #f7c948;
-      border: none;
-      color: #000;
-      font-weight: 700;
-      border-radius: 10px;
-      padding: 10px 30px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+.logout-btn {
+  margin-top: 16px;
+  background-color: #f7c948;
+  border: none;
+  color: #000;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 10px 30px;
+  cursor: pointer;
+  transition: 0.2s;
+}
 
-    .logout-btn:hover {
-      background-color: #ffd84d;
-    }
-
+.logout-btn:hover {
+  background-color: #ffd84d;
+}
 
 /*  Dropdown Profile  */
 .dropdown {
@@ -698,7 +658,6 @@ main {
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-
 }
 
 .category-header i {
@@ -728,7 +687,6 @@ main {
   justify-content: center;  /* เพิ่มบรรทัดนี้ถ้าอยากให้อยู่กึ่งกลางแนวนอน */
   height: 50px;
   margin-left: 200px;
- 
 }
 
 /* ===== Dropdown หมวดหมู่สินค้า =====*/
