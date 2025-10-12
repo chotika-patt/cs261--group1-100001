@@ -32,6 +32,9 @@ public class Product {
     @Column(nullable = false)
     private ProductStatus status;
 
+    @Column(length = 255, nullable = true)
+    private String main_image;  // path หรือ URL ของไฟล์ภาพ (.jpg / .pdf)
+
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
