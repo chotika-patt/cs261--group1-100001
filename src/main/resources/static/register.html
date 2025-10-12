@@ -36,7 +36,7 @@
 
 <div class="form-container">
 <!-- ฟอร์มผู้ซื้อ -->
-<form class="register-form active" id="buyerForm" action="/register/buyer" method="post">
+<form class="register-form active" id="buyerForm">
 <label class="login-label" for="buyer-username">ชื่อผู้ใช้</label>
 <input type="text" id="buyer-username" name="username" class="login-input" placeholder="ใส่ชื่อผู้ใช้ของคุณ" required>
 
@@ -52,12 +52,12 @@
 <label class="login-label" for="buyer-confirm-password">ยืนยันรหัสผ่าน</label>
 <input type="password" id="buyer-confirm-password" name="confirm_password" class="login-input" placeholder="ยืนยันรหัสผ่านของคุณ" required>
 
-<button type="submit" class="login-submit-btn">ยืนยันการลงทะเบียน</button>
+<button type="submit" class="login-submit-btn" id="buyerSubmit">ยืนยันการลงทะเบียน</button>
 </form>
 
 <div class="seller-form-box">
 <!-- ฟอร์มผู้ขาย -->
-<form class="register-form" id="sellerForm" action="/register/seller" method="post">
+<form class="register-form" id="sellerForm">
 <label class="login-label" for="seller-username">ชื่อผู้ใช้</label>
 <input type="text" id="seller-username" name="username" class="login-input" placeholder="ใส่ชื่อผู้ใช้ของคุณ" required>
 
@@ -74,7 +74,7 @@
 <input type="tel" id="seller-phone" name="phone" class="login-input" placeholder="หมายเลขโทรศัพท์ของคุณ" required>
 
 <label class="login-label" for="student-ID">รหัสนักศึกษา</label>
-<input type="text" id="student-ID" name="student_ID" class="login-input" placeholder="ใส่รหัสนักศึกษาของคุณ" required>
+<input type="text" id="student-ID" name="studentID" class="login-input" placeholder="ใส่รหัสนักศึกษาของคุณ" required>
 
 <label class="login-label" for="role">บทบาท</label>
 <select id="role" name="role" class="login-input" required>
@@ -83,9 +83,9 @@
 </select>
 
 <label class="login-label" for="application-document">เอกสารยื่นคำร้อง</label>
-<input type="file" id="application-document" name="application_document" class="login-input" required>
+<input type="file" id="application-document" name="verify_document" class="login-input" required>
 
-<button type="submit" class="login-submit-btn">ยืนยันการลงทะเบียน</button>
+<button type="submit" class="login-submit-btn" id="sellerSubmit">ยืนยันการลงทะเบียน</button>
 </form>
 </div>
 
@@ -93,6 +93,36 @@
 </div>
 </div>
 </div>
+<<<<<<< HEAD
 <script src = "js/register.js"></script>
+=======
+
+    <script src="js/register.js"></script>
+
+<script>
+function switchForm(type) {
+    const buyerForm = document.getElementById('buyerForm');
+    const sellerForm = document.getElementById('sellerForm');
+    const buyerBtn = document.getElementById('buyerBtn');
+    const sellerBtn = document.getElementById('sellerBtn');
+    const toggleSlider = document.getElementById('toggleSlider');
+
+    if (type === 'buyer') {
+        buyerForm.classList.add('active');
+        sellerForm.classList.remove('active');
+        buyerBtn.classList.add('active');
+        sellerBtn.classList.remove('active');
+        toggleSlider.classList.remove('seller');
+    } else {
+        sellerForm.classList.add('active');
+        buyerForm.classList.remove('active');
+        sellerBtn.classList.add('active');
+        buyerBtn.classList.remove('active');
+        toggleSlider.classList.add('seller');
+    }
+}
+
+</script>
+>>>>>>> 770a79fd6cb563a45fffbf57b8d2514a0b0a3379
 </body>
 </html>
