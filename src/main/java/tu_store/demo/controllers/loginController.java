@@ -12,6 +12,6 @@ public class loginController {
         model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("email", session.getAttribute("email"));
         model.addAttribute("phone", session.getAttribute("phone"));
-        return "loginTemp"; 
+        return "loginTemp";
     }
 }

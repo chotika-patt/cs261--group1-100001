@@ -78,5 +78,46 @@ public class UserService {
     public User findByUsername(String username) {
         return userRepository.findFirstByUsername(username);
     }
+    public User registerReturnUser(User httpUser) {
+        String username = httpUser.getUsername().trim();
+        String email = httpUser.getEmail().trim();
+        String password = httpUser.getPassword();
+        String phone = httpUser.getPhone();
+        String studentID = httpUser.getStudentID();
+        UserRole role = httpUser.getRole();
+
+        User existingUser = userRepository.findFirstByUsernameIgnoreCase(username);
+        if (existingUser != null) {
+            throw new RuntimeException("Username has already been used.");
+        }
+
+        if (password.length() < 6) {
+            throw new RuntimeException("Password must be at least 6 characters.");
+        }
+
+        if (!email.contains("@")) {
+            throw new RuntimeException("Invalid email address.");
+        }
+
+        if (phone.length() != 10) {
+            throw new RuntimeException("Invalid phone number.");
+        }
+
+        String hashedPassword = new BCryptPasswordEncoder().encode(password);
+
+        User newUser;
+        if (role == UserRole.CLIENT) {
+            newUser = new User(username, email, hashedPassword, phone, null, null, role);
+        } else if (role == UserRole.SELLER) {
+            if (studentID == null || studentID.length() != 10) {
+                throw new RuntimeException("Invalid student ID.");
+            }
+            newUser = new User(username, email, hashedPassword, phone, studentID, null, role);
+        } else {
+            throw new RuntimeException("Invalid role.");
+        }
+        return userRepository.save(newUser); // คืนค่า User ที่บันทึกแล้ว (มี user_id)
+    }
+
 
 }

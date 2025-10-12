@@ -11,6 +11,7 @@ import tu_store.demo.services.UserService;
 
 
 
+
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -20,17 +21,18 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
     @PostMapping("/register/buyer")
     public String registerBuyer(@RequestBody User user) {
         user.setRole(UserRole.CLIENT);
         return userService.register(user);
     }
     @PostMapping("/register/seller")
-    public String registerSeller(@RequestBody User user) {
+    public Long registerSeller(@RequestBody User user) {
         user.setRole(UserRole.SELLER);
-        return userService.register(user);
+        User savedUser = userService.registerReturnUser(user); 
+        return savedUser.getUser_id();
     }
+
     @PostMapping("/login")
     public ResponseEntity<String> login(HttpSession sessions,@RequestBody User user) {
         boolean valid = userService.login(user);
@@ -49,5 +51,14 @@ public class UserController {
         session.invalidate();
         return "redirect:/loginTemp";
     }
-  
+
+    @PostMapping("/uplaod")
+    public String uploadData(@RequestBody String entity) {
+        
+        return "Success" ;
+    }
+    
+
+
+
 }

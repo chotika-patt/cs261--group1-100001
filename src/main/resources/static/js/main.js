@@ -1,6 +1,6 @@
-// Code นี้ ใช้กับ template lo
+// Code นี้ ใช้กับ template
 
-const userBtn = document.getElementById("user-btn");
+    const userBtn = document.getElementById("user-btn");
     const dropdown = document.getElementById("user-dropdown");
     const closeBtn = document.getElementById("close-dropdown");
     const logoutBtn = document.getElementById("logout-btn");
@@ -42,4 +42,17 @@ const userBtn = document.getElementById("user-btn");
 
     confirmLogout.addEventListener("click", () => {
       window.location.href = "index.html";
+    });
+
+    const searchIcon = document.getElementById('search-icon');
+    const searchClose = document.getElementById('search-close');
+    const navBottom = document.querySelector('.nav-bottom');
+
+    searchIcon.addEventListener('click', (event) => {
+      event.preventDefault(); 
+      navBottom.classList.add('search-active');
+    });
+
+    searchClose.addEventListener('click', () => {
+      navBottom.classList.remove('search-active');
     });
