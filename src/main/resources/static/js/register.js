@@ -78,3 +78,43 @@ document.getElementById("sellerForm").addEventListener("submit", async (event) =
   }
 });
 
+// ----------------------------
+// ฟอร์มผู้ซื้อ
+// ----------------------------
+document.getElementById("buyerForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  // 1️⃣ สร้าง object JSON สำหรับผู้ซื้อ
+  const userData = {
+    username: document.getElementById("buyer-username").value,
+    email: document.getElementById("buyer-email").value,
+    password: document.getElementById("buyer-password").value,
+    confirm_password: document.getElementById("buyer-confirm-password").value,
+    phone: document.getElementById("buyer-phone").value,
+    role: "CLIENT"
+  };
+
+  try {
+    // 2️⃣ ส่ง JSON ไป backend
+    const response = await fetch("/api/register/buyer", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData)
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      return alert("ลงทะเบียนล้มเหลว: " + text);
+    }
+
+    // 3️⃣ รับข้อความจาก backend (เช่น "CLIENT registered successfully")
+    const result = await response.text();
+    alert(result);
+
+    // 4️⃣ ไปหน้า login
+    window.location.href = "login.html";
+
+  } catch (error) {
+    alert("เกิดข้อผิดพลาด: " + error.message);
+  }
+});

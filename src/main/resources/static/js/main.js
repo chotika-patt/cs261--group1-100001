@@ -1,7 +1,5 @@
 // Code นี้ ใช้กับ template
-
     const userBtn = document.getElementById("user-btn");
-    const dropdown = document.getElementById("user-dropdown");
     const closeBtn = document.getElementById("close-dropdown");
     const logoutBtn = document.getElementById("logout-btn");
     const logoutModal = document.getElementById("logout-modal");
@@ -56,3 +54,23 @@
     searchClose.addEventListener('click', () => {
       navBottom.classList.remove('search-active');
     });
+    // ===== แถบค้นหาแบบใหม่ =====
+    
+
+    // ===== แถบแดงหมวดหมู่สินค้าหน้า product เป็นแถบ dropdown =====
+    const toggle = document.querySelector('.dropdown-toggle');
+    const dropdown = document.querySelector('.dropdown-content');
+    const overlay = document.querySelector('.overlay');
+
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      const isOpen = dropdown.style.display === 'block';
+      dropdown.style.display = isOpen ? 'none' : 'block';
+      overlay.style.display = isOpen ? 'none' : 'block';
+    });
+
+    overlay.addEventListener('click', function() {
+      dropdown.style.display = 'none';
+      overlay.style.display = 'none';
+    });
+
