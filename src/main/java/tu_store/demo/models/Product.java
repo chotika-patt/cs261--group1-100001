@@ -30,6 +30,10 @@ public class Product {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    private Category category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ProductStatus status;
 
     @Column(length = 255, nullable = true)
