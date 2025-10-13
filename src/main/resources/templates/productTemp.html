@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/product-detail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<nav class="nav-top">
+    <div class="right-buttons">
+      <a href="login.html" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
+      <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+    </div>
+  </nav>
+<nav class="nav-bottom">
+    <ul class="menu">
+        <li><a href="index.html"><img class="logo" src="img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo"></a></li>
+        <li><a href="index.html">หน้าหลัก</a></li>
+        <li class="dropdown-category">
+        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+         <div class="overlay"></div> <div class="dropdown-content">
+            <a href="#">เสื้อ</a>
+            <a href="#">กระเป๋า</a>
+            <a href="#">เครื่องแบบนักศึกษา</a>
+            <a href="#">ของใช้ทั่วไป</a>
+            <a href="#">ของที่ระลึก</a>
+        </div>
+        </li>
+        <li><a href="#">เช็คสถานะ</a></li>
+        <li><a href="#">ติดต่อเรา</a></li>
+        <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+    </ul>
+</nav><br>
+<div class="product-container">
+    <div class="product-detail-photo">
+        รูป
+    </div>
+    <div class="product-detail-main">
+        <div class="product-header">
+            <h1>ชื่อสินค้า :</h1>
+            <button class="add-to-cart-btn">เพิ่มลงตะกร้า</button>
+        </div>
+        <p class="product-category">หมวดหมู่ :</p>
+        <div class="product-options">
+            <span class="option-label">สี :</span>
+            <button class="color-option">สีดำ</button>
+            <button class="color-option">สีขาว</button>
+        </div>
+       <div class="product-quantity">
+            <span class="option-label">จำนวน</span>
+            <div class="quantity-selector">
+                <button class="minus">-</button>
+                <input type="text" value="1" id="quantity" readonly>
+                <button class="plus">+</button>
+            </div>
+        </div>
+        <div class="product-price-box">
+            <div class="price-label">ราคา</div>
+            <div class="price-value">฿1,290</div>
+        </div>
+
+    </div>
+    <div class="product-detail-describe">
+        <h3>รายละเอียดสินค้า</h3>
+        </div>
+</div>
+
+<script>
+// ===== แถบแดงหมวดหมู่สินค้าหน้า product เป็นแถบ dropdown =====
+const toggle = document.querySelector('.dropdown-toggle');
+const dropdown = document.querySelector('.dropdown-content');
+const overlay = document.querySelector('.overlay');
+
+toggle.addEventListener('click', function(e) {
+e.preventDefault();
+const isOpen = dropdown.style.display === 'block';
+dropdown.style.display = isOpen ? 'none' : 'block';
+overlay.style.display = isOpen ? 'none' : 'block';
+});
+
+overlay.addEventListener('click', function() {
+dropdown.style.display = 'none';
+overlay.style.display = 'none';
+});
+</script>
+
+<script>
+  const minusBtn = document.querySelector('.minus');
+  const plusBtn = document.querySelector('.plus');
+  const quantityInput = document.getElementById('quantity');
+
+  plusBtn.addEventListener('click', () => {
+    let currentValue = parseInt(quantityInput.value);
+    quantityInput.value = currentValue + 1;
+  });
+
+  minusBtn.addEventListener('click', () => {
+    let currentValue = parseInt(quantityInput.value);
+    if (currentValue > 1) { // ไม่ให้ลดต่ำกว่า 1
+      quantityInput.value = currentValue - 1;
+    }
+  });
+</script>
+</body>
+</html>
