@@ -46,19 +46,13 @@ public class UserController {
         sessions.setAttribute("role", dbUser.getRole());
         return ResponseEntity.ok("Login successful");
     }
-    @GetMapping("/logout")
-    public String logOut(HttpSession session) {
+    @PostMapping("/logout")
+    public ResponseEntity<String> logOut(HttpSession session) {
         session.invalidate();
-        return "redirect:/loginTemp";
+        return ResponseEntity.ok("Logout successful");
     }
-
     @PostMapping("/uplaod")
     public String uploadData(@RequestBody String entity) {
-        
         return "Success" ;
-    }
-    
-
-
-
+    }    
 }

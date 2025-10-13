@@ -15,8 +15,12 @@ import java.util.List;
 @RequestMapping("/api")
 public class ProductController {
     
-    @PostMapping("/")
-    public void addToCart(@RequestBody Product product  ){
+    @PostMapping("/add")
+    public void addProductToDB(@RequestBody Product product){
+        
+    }
+    @PostMapping("/addcart")
+    public void addProductToCart(@RequestBody Product product  ){
         
     }
 

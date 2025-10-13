@@ -28,7 +28,7 @@ document.getElementById("subBtn").addEventListener("click", function(event) {
         if (response.ok) {
             // login สำเร็จ
             alert("Login สำเร็จ!");
-            window.location.href = "/loginTemp"; // redirect ไปหน้าแรก
+            window.location.href = "/loginTemp";
         } else if (response.status === 401) {
             alert("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
         } else {

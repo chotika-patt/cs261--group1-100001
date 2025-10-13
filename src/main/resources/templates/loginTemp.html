@@ -24,8 +24,8 @@
           <div class="avatar"><i class="fa-solid fa-user"></i></div>
           <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
           <div class="info">
-            <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username01@gmail.com</span></p>
-            <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">0601111111</span></p>
+            <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
+            <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
           </div>
           <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
         </div>
@@ -184,7 +184,7 @@
       <p>คุณต้องการออกจากระบบหรือไม่</p>
       <div class="modal-buttons">
         <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
-        <button id="confirm-logout" class="confirm-btn" th:onclick="|window.location.href='@{/logout}'|">ยืนยัน</button>
+        <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
       </div>
       <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
     </div>
@@ -199,6 +199,7 @@
 
   <!-- JS (dropdown/search/logout) -->
   <script th:src="@{/js/main.js}" defer></script>
+  <script th:src="@{/js/auth.js}" defer></script>
 </body>
 </html>
 
