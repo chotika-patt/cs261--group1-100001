@@ -1,4 +1,4 @@
-  // =================== USER DROPDOWN ===================
+// =================== USER DROPDOWN ===================
 const userBtn = document.getElementById("user-btn");
 const dropdown = document.getElementById("user-dropdown");
 const closeBtn = document.getElementById("close-dropdown");

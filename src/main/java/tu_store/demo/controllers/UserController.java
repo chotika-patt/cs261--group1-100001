@@ -49,8 +49,9 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<String> logOut(HttpSession session) {
         session.invalidate();
-        return ResponseEntity.ok("Logout successful");
+        return ResponseEntity.ok("Logout succuess");
     }
+
     @PostMapping("/uplaod")
     public String uploadData(@RequestBody String entity) {
         return "Success" ;

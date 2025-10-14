@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 
-
 @Entity
 @Table(name = "Products")
 public class Product {
@@ -37,7 +36,7 @@ public class Product {
     private ProductStatus status;
 
     @Column(length = 255, nullable = true)
-    private String main_image;  // path หรือ URL ของไฟล์ภาพ (.jpg / .pdf)
+    private String main_image;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -46,12 +45,10 @@ public class Product {
 
     public Product(User seller, String name, long price, String description, int stock) {
         setSeller(seller);
-
         this.name = name;
         this.price = price;
         this.description = description;
         this.stock = stock;
-
         this.status = ProductStatus.AVAILABLE;
     }
 
@@ -61,14 +58,54 @@ public class Product {
 
     public void setStock(int stock){
         this.stock = stock;
-
         if(stock > 0) this.status = ProductStatus.AVAILABLE;
         else this.status = ProductStatus.OUT_OF_STOCK;
+    }
+
+    public int getStock(){
+        return this.stock;
     }
 
     public void setSeller(User seller) {
         if(seller != null && seller.getRole() == UserRole.SELLER){
             this.seller = seller;
         }
+    }
+
+    // ===== แก้ getter =====
+    public Long getProduct_id() {
+        return this.product_id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public long getPrice() {
+        return this.price;
+    }
+
+    public Category getCategory() {
+        return this.category;
+    }
+
+    public ProductStatus getStatus() {
+        return this.status;
+    }
+
+    public User getSeller() {
+        return this.seller;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public String getMain_image() {
+        return this.main_image;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
     }
 }
