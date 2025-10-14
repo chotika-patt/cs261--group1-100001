@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <title>Product Page</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <title>รายการสินค้า | TU Store</title>
 </head>
+
 <body>
+  <!-- ======= Navbar บนสุด ======= -->
   <nav class="nav-top">
     <div class="right-buttons">
       <a href="login.html" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
@@ -15,13 +17,16 @@
     </div>
   </nav>
 
+  <!-- ======= Navbar ล่าง ======= -->
   <nav class="nav-bottom">
     <ul class="menu">
-      <li><a href="index.html"><img class="logo" src="img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo"></a></li>
+      <li>
+        <a href="index.html"><img class="logo" src="img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo"></a>
+      </li>
       <li><a href="index.html">หน้าหลัก</a></li>
       <li class="dropdown-category">
         <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
-        <div class="overlay"></div> <!-- สำหรับ liquid glass -->
+        <div class="overlay"></div>
         <div class="dropdown-content">
           <a href="#">เสื้อ</a>
           <a href="#">กระเป๋า</a>
@@ -35,7 +40,7 @@
       <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
     </ul>
 
-    <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
+    <!-- แถบค้นหา -->
     <div class="search-bar-replacement">
       <div class="search-input-container">
         <i class="fa-solid fa-magnifying-glass"></i>
@@ -47,7 +52,7 @@
     </div>
   </nav>
 
-  <!-- แถบหมวดหมู่สินค้า (Red Dropdown Bar) -->
+  <!-- ======= แถบหมวดหมู่สินค้า ======= -->
   <div class="category-bar">
     <div class="category-header" onclick="toggleCategoryDropdown()">
       <a class="category-toggle"><span>หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></span></a>
@@ -57,31 +62,31 @@
       <div class="category-con">
         <div class="category-item">
           <div class="category-box">
-            <a href="product_detail.html"><img src="img/jersey.png" alt="Category Shirt"></a>
+            <img src="img/jersey.png" alt="เสื้อ">
           </div>
           <h3>เสื้อ</h3>
         </div>
         <div class="category-item">
           <div class="category-box">
-            <img src="img/bag.png" alt="Category Bag">
+            <img src="img/bag.png" alt="กระเป๋า">
           </div>
           <h3>กระเป๋า</h3>
         </div>
         <div class="category-item">
           <div class="category-box">
-            <img src="img/uniform.png" alt="Category Uniform">
+            <img src="img/uniform.png" alt="เครื่องแบบนักศึกษา">
           </div>
           <h3>เครื่องแบบนักศึกษา</h3>
         </div>
         <div class="category-item">
           <div class="category-box">
-            <img src="img/things.png" alt="Category General Use">
+            <img src="img/things.png" alt="ของใช้ทั่วไป">
           </div>
           <h3>ของใช้ทั่วไป</h3>
         </div>
         <div class="category-item">
           <div class="category-box">
-            <img src="img/arttoy.png" alt="Category Souvenir">
+            <img src="img/arttoy.png" alt="ของที่ระลึก">
           </div>
           <h3>ของที่ระลึก</h3>
         </div>
@@ -89,72 +94,28 @@
     </div>
   </div>
 
+  <!-- ======= ส่วนแสดงสินค้า ======= -->
   <div class="product-section">
     <div style="display: flex; align-items: baseline; justify-content: space-between;">
       <h1 style="margin: 0;">รายการสินค้า</h1>
     </div>
     <br>
+
+    <!-- ✅ ว่างไว้ ให้ JS สร้างการ์ดเอง -->
     <div class="product-grid">
-      <div class="product-card">
-        <div class="product-image"></div>
-        <div class="product-info">
-          <span class="product-name">ชื่อสินค้า</span>
-          <span class="product-price">฿ 00.0</span>
-        </div>
-      </div>
-      <div class="product-card">
-        <div class="product-image"></div>
-        <div class="product-info">
-          <span class="product-name">ชื่อสินค้า</span>
-          <span class="product-price">฿ 00.0</span>
-        </div>
-      </div>
-      <div class="product-card">
-        <div class="product-image"></div>
-        <div class="product-info">
-          <span class="product-name">ชื่อสินค้า</span>
-          <span class="product-price">฿ 00.0</span>
-        </div>
-      </div>
-      <div class="product-card">
-        <div class="product-image"></div>
-        <div class="product-info">
-          <span class="product-name">ชื่อสินค้า</span>
-          <span class="product-price">฿ 00.0</span>
-        </div>
-      </div>
-      <div class="product-card">
-        <div class="product-image"></div>
-        <div class="product-info">
-          <span class="product-name">ชื่อสินค้า</span>
-          <span class="product-price">฿ 00.0</span>
-        </div>
-      </div>
-      <div class="product-card">
-        <div class="product-image"></div>
-        <div class="product-info">
-          <span class="product-name">ชื่อสินค้า</span>
-          <span class="product-price">฿ 00.0</span>
-        </div>
-      </div>
-      <div class="product-card">
-        <div class="product-image"></div>
-        <div class="product-info">
-          <span class="product-name">ชื่อสินค้า</span>
-          <span class="product-price">฿ 00.0</span>
-        </div>
-      </div>
+      <!-- การ์ดสินค้าจะถูกสร้างที่นี่แบบ Dynamic -->
     </div>
   </div>
 
+  <!-- ======= Script ส่วน Navbar และ Category ======= -->
   <script>
-    // ===== แถบค้นหาแบบใหม่ =====
+    // ===== แถบค้นหา =====
     const searchIcon = document.getElementById('search-icon');
     const searchClose = document.getElementById('search-close');
     const navBottom = document.querySelector('.nav-bottom');
 
     searchIcon.addEventListener('click', (event) => {
-      event.preventDefault(); 
+      event.preventDefault();
       navBottom.classList.add('search-active');
     });
 
@@ -162,7 +123,7 @@
       navBottom.classList.remove('search-active');
     });
 
-    // ===== Dropdown หมวดหมู่สินค้าใน nav-bottom =====
+    // ===== Dropdown หมวดหมู่ =====
     const toggle = document.querySelector('.dropdown-toggle');
     const dropdownContent = document.querySelector('.dropdown-content');
     const overlay = document.querySelector('.overlay');
@@ -181,17 +142,174 @@
       });
     }
 
-    // ===== Toggle Category Bar (แถบแดง) =====
+    // ===== Toggle Category Bar =====
     function toggleCategoryDropdown() {
       const bar = document.querySelector('.category-bar');
       const categoryDropdown = document.querySelector('.category-dropdown');
-      
       if (bar && categoryDropdown) {
         categoryDropdown.classList.toggle('show');
         bar.classList.toggle('active');
       }
     }
   </script>
+
+  <!-- ======= Script แสดงสินค้าแบบ Dynamic ======= -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const productGrid = document.querySelector(".product-grid");
+      productGrid.innerHTML = "<p>กำลังโหลดสินค้า...</p>";
+
+      fetch("http://localhost:8080/api/products")
+        .then(response => {
+          if (!response.ok) throw new Error("โหลดข้อมูลสินค้าไม่สำเร็จ");
+          return response.json();
+        })
+        .then(products => {
+          productGrid.innerHTML = ""; // ล้างข้อความเดิมทั้งหมด
+
+          if (!products || products.length === 0) {
+            productGrid.innerHTML = `
+              <p style="text-align:center; font-size:18px; width:100%;">
+                ไม่มีสินค้าในระบบ
+              </p>`;
+            return;
+          }
+
+          // วนลูปสร้างการ์ดสินค้า
+          products.forEach(product => {
+            const card = document.createElement("div");
+            card.classList.add("product-card");
+
+            card.innerHTML = `
+              <div class="product-image">
+                <img src="${product.imageUrl || 'img/placeholder.png'}" alt="${product.name}">
+              </div>
+              <div class="product-info">
+                <span class="product-name">${product.name}</span>
+                <span class="product-price">฿ ${product.price ? product.price.toFixed(2) : '0.00'}</span>
+              </div>
+            `;
+
+            productGrid.appendChild(card);
+          });
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          productGrid.innerHTML = `
+            <p style="text-align:center; color:red;">
+              โหลดข้อมูลสินค้าไม่สำเร็จ
+            </p>`;
+        });
+    });
+  </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const productGrid = document.querySelector(".product-grid");
+  productGrid.innerHTML = "<p>กำลังโหลดสินค้า...</p>";
+
+  // 🔍 อ่านค่าจาก URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchQuery = urlParams.get('search');
+  const categoryQuery = urlParams.get('category');
+
+  // ✅ สร้าง URL สำหรับเรียก backend
+  let apiUrl = "http://localhost:8080/api/products";
+
+  if (searchQuery) {
+    apiUrl += `?name=${encodeURIComponent(searchQuery)}`;
+  } else if (categoryQuery) {
+    apiUrl += `?category=${encodeURIComponent(categoryQuery)}`;
+  }
+
+  fetch(apiUrl)
+    .then(response => {
+      if (!response.ok) throw new Error("โหลดข้อมูลสินค้าไม่สำเร็จ");
+      return response.json();
+    })
+    .then(products => {
+      productGrid.innerHTML = "";
+
+      if (!products || products.length === 0) {
+        productGrid.innerHTML = `
+          <p style="text-align:center; font-size:18px; width:100%;">
+            ไม่พบสินค้าที่ต้องการค้นหา
+          </p>`;
+        return;
+      }
+
+      products.forEach(product => {
+        const card = document.createElement("div");
+        card.classList.add("product-card");
+
+        card.innerHTML = `
+          <div class="product-image">
+            <img src="${product.imageUrl || 'img/placeholder.png'}" alt="${product.name}">
+          </div>
+          <div class="product-info">
+            <span class="product-name">${product.name}</span>
+            <span class="product-price">฿ ${product.price ? product.price.toFixed(2) : '0.00'}</span>
+          </div>
+        `;
+
+        productGrid.appendChild(card);
+      });
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      productGrid.innerHTML = `
+        <p style="text-align:center; color:red;">
+          โหลดข้อมูลสินค้าไม่สำเร็จ
+        </p>`;
+    });
+});
+</script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const params = new URLSearchParams(window.location.search);
+        const categoryName = params.get("category");
+
+        let apiUrl = "http://localhost:8080/api/products";
+        if (categoryName) {
+          apiUrl += `?name=&categoryName=${encodeURIComponent(categoryName)}`;
+        }
+
+        fetch(apiUrl)
+          .then(response => response.json())
+          .then(products => {
+            const grid = document.querySelector(".product-grid");
+            grid.innerHTML = "";
+
+            if (!products || products.length === 0) {
+              grid.innerHTML = `<p style="text-align:center;width:100%;">ไม่พบสินค้าที่คุณต้องการค้นหา</p>`;
+              return;
+            }
+
+            products.forEach(p => {
+              const card = `
+                <div class="product-card">
+                  <div class="product-image">
+                    <img src="${p.main_image || 'img/placeholder.png'}" alt="${p.name}">
+                  </div>
+                  <div class="product-info">
+                    <span class="product-name">${p.name}</span>
+                    <span class="product-price">฿ ${p.price}</span>
+                  </div>
+                </div>
+              `;
+              grid.insertAdjacentHTML("beforeend", card);
+            });
+          })
+          .catch(err => {
+            console.error("Error fetching products:", err);
+            document.querySelector(".product-grid").innerHTML =
+              `<p style="text-align:center;width:100%;">ไม่สามารถโหลดข้อมูลสินค้าได้</p>`;
+          });
+      });
+  </script>
+
+
 
 </body>
 </html>

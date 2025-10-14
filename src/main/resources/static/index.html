@@ -1,169 +1,136 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TU Store</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TU Store</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
+
 <body>
-  
-  <nav class="nav-top">
+<!-- ======= Navbar บนสุด ======= -->
+<nav class="nav-top">
     <div class="right-buttons">
-      <a href="login.html" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
-      <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+        <a href="login.html" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
+        <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
-  </nav>
+</nav>
 
-  <nav class="nav-bottom">
+<!-- ======= Navbar ล่าง ======= -->
+<nav class="nav-bottom">
     <ul class="menu">
-      <li><a href="index.html"><img class="logo" src="img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo"></a></li>
-      <li><a href="#">หน้าหลัก</a></li>
-      <li class="dropdown-category">
-        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
-        <div class="overlay"></div> <!-- สำหรับ liquid glass -->
-        <div class="dropdown-content">
-          <a href="#">เสื้อ</a>
-          <a href="#">กระเป๋า</a>
-          <a href="#">เครื่องแบบนักศึกษา</a>
-          <a href="#">ของใช้ทั่วไป</a>
-          <a href="#">ของที่ระลึก</a>
-        </div>
-      </li>
-      <li><a href="#">เช็คสถานะ</a></li>
-      <li><a href="#">ติดต่อเรา</a></li>
-      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+        <li><a href="index.html"><img class="logo" src="img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo"></a></li>
+        <li><a href="#">หน้าหลัก</a></li>
+        <li class="dropdown-category">
+            <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+            <div class="overlay"></div>
+            <div class="dropdown-content">
+                <a href="#">เสื้อ</a>
+                <a href="#">กระเป๋า</a>
+                <a href="#">เครื่องแบบนักศึกษา</a>
+                <a href="#">ของใช้ทั่วไป</a>
+                <a href="#">ของที่ระลึก</a>
+            </div>
+        </li>
+        <li><a href="#">เช็คสถานะ</a></li>
+        <li><a href="#">ติดต่อเรา</a></li>
+        <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
     </ul>
-    
-    <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
-    <div class="search-bar-replacement">
-      <div class="search-input-container">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
-      </div>
-      <button class="search-close-btn" id="search-close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-  </nav>
 
-  <main>
-    <div class="box-container">
-      <div class="box">
-        <h1>รวมร้านค้า <span>ในนาม ม.ธรรมศาสตร์</span></h1>
-        <h1>ครบ จบ ในที่เดียว</h1>
-      </div>
-      <div class="box">
-        <img class="banner" src="img/thammasat Identity.jpg" alt="Thammasat Banner">
-      </div>
+    <!-- แถบค้นหา -->
+    <div class="search-bar-replacement">
+        <div class="search-input-container">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+        </div>
+        <button class="search-close-btn" id="search-close">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
     </div>
-    
+</nav>
+
+<!-- ======= ส่วนเนื้อหา ======= -->
+<main>
+    <!-- Banner -->
+    <div class="box-container">
+        <div class="box">
+            <h1>รวมร้านค้า <span>ในนาม มหาวิทยาลัยธรรมศาสตร์</span></h1>
+            <h1>ครบ จบ ในที่เดียว</h1>
+        </div>
+        <div class="box">
+            <img class="banner" src="img/thammasat Identity.jpg" alt="Thammasat Banner">
+        </div>
+    </div>
+
     <div class="next"></div>
 
+    <!-- หมวดหมู่สินค้า -->
     <div class="category-con">
-      <div class="category-item">
-        <div class="category-box">
-          <a href="product_detail.html"><img src="img/jersey.png" alt="Category Shirt"></a>
+        <div class="category-item">
+            <div class="category-box">
+                <a href="product.html?category=เสื้อ"><img src="img/jersey.png" alt="Category Shirt"></a>
+            </div>
+            <h3>เสื้อ</h3>
         </div>
-        <h3>เสื้อ</h3>
-      </div>
-      <div class="category-item">
-        <div class="category-box">
-          <img src="img/bag.png" alt="Category Bag">
+        <div class="category-item">
+            <div class="category-box">
+                <a href="product.html?category=กระเป๋า"><img src="img/bag.png" alt="Category Bag"></a>
+            </div>
+            <h3>กระเป๋า</h3>
         </div>
-        <h3>กระเป๋า</h3>
-      </div>
-      <div class="category-item">
-        <div class="category-box">
-          <img src="img/uniform.png" alt="Category Uniform">
+        <div class="category-item">
+            <div class="category-box">
+                <a href="product.html?category=เครื่องแบบนักศึกษา"><img src="img/uniform.png" alt="Category Uniform"></a>
+            </div>
+            <h3>เครื่องแบบนักศึกษา</h3>
         </div>
-        <h3>เครื่องแบบนักศึกษา</h3>
-      </div>
-      <div class="category-item">
-        <div class="category-box">
-          <img src="img/things.png" alt="Category General Use">
+        <div class="category-item">
+            <div class="category-box">
+                <a href="product.html?category=ของใช้ทั่วไป"><img src="img/things.png" alt="Category General Use"></a>
+            </div>
+            <h3>ของใช้ทั่วไป</h3>
         </div>
-        <h3>ของใช้ทั่วไป</h3>
-      </div>
-      <div class="category-item">
-        <div class="category-box">
-          <img src="img/arttoy.png" alt="Category Souvenir">
+        <div class="category-item">
+            <div class="category-box">
+                <a href="product.html?category=ของที่ระลึก"><img src="img/arttoy.png" alt="Category Souvenir"></a>
+            </div>
+            <h3>ของที่ระลึก</h3>
         </div>
-        <h3>ของที่ระลึก</h3>
-      </div>
     </div>
 
-    <div class="next-session"></div>
-
+    <!-- รายการสินค้า -->
     <div class="product-section">
-      <div style="display: flex; align-items: baseline; justify-content: space-between;">
-        <h1 style="margin: 0;">รายการสินค้า</h1>
-        <p style="margin: 0; font-size: 16px; color: #666;"><a style="text-decoration: none; color: #666;" href="product.html">ดูทั้งหมด</a></p>
-      </div>
-      <br>
-      <div class="product-grid">
-        <div class="product-card">
-          <div class="product-image"></div>
-          <div class="product-info">
-            <span class="product-name">ชื่อสินค้า</span>
-            <span class="product-price">฿ 00.0</span>
-          </div>
+        <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <h1 style="margin: 0;">รายการสินค้า</h1>
+            <p style="margin: 0; font-size: 16px; color: #666;">
+                <a style="text-decoration: none; color: #666;" href="product.html">ดูทั้งหมด</a>
+            </p>
         </div>
-        <div class="product-card">
-          <div class="product-image"></div>
-          <div class="product-info">
-            <span class="product-name">ชื่อสินค้า</span>
-            <span class="product-price">฿ 00.0</span>
-          </div>
+        <br>
+        <div class="product-grid">
+            <!-- การ์ดสินค้าจะถูกสร้างที่นี่ด้วย JS -->
         </div>
-        <div class="product-card">
-          <div class="product-image"></div>
-          <div class="product-info">
-            <span class="product-name">ชื่อสินค้า</span>
-            <span class="product-price">฿ 00.0</span>
-          </div>
-        </div>
-        <div class="product-card">
-          <div class="product-image"></div>
-          <div class="product-info">
-            <span class="product-name">ชื่อสินค้า</span>
-            <span class="product-price">฿ 00.0</span>
-          </div>
-        </div>
-        <div class="product-card">
-          <div class="product-image"></div>
-          <div class="product-info">
-            <span class="product-name">ชื่อสินค้า</span>
-            <span class="product-price">฿ 00.0</span>
-          </div>
-        </div>
-        <div class="product-card">
-          <div class="product-image"></div>
-          <div class="product-info">
-            <span class="product-name">ชื่อสินค้า</span>
-            <span class="product-price">฿ 00.0</span>
-          </div>
-        </div>
-      </div>
     </div>
-  </main>
+</main>
 
-  <footer>
+<!-- ======= Footer ======= -->
+<footer>
     <div class="footer-content">
-      <p>&copy; 2025 TU Store. All rights reserved.</p>
-      <p>ติดต่อเรา: <a href="mailto:info@tu-store.com">info@tu-store.com</a></p>
+        <p>&copy; 2025 TU Store. All rights reserved.</p>
+        <p>ติดต่อเรา: <a href="mailto:info@tu-store.com">info@tu-store.com</a></p>
     </div>
-  </footer>
+</footer>
 
-  <script>
-    // ===== แถบค้นหาแบบใหม่ =====
+<!-- ======= Script ======= -->
+<script>
+    // ===== แถบค้นหา =====
     const searchIcon = document.getElementById('search-icon');
     const searchClose = document.getElementById('search-close');
     const navBottom = document.querySelector('.nav-bottom');
 
     searchIcon.addEventListener('click', (event) => {
-      event.preventDefault(); 
+      event.preventDefault();
       navBottom.classList.add('search-active');
     });
 
@@ -171,7 +138,7 @@
       navBottom.classList.remove('search-active');
     });
 
-    // ===== แถบแดงหมวดหมู่สินค้าหน้า product เป็นแถบ dropdown =====
+    // ===== Dropdown หมวดหมู่ =====
     const toggle = document.querySelector('.dropdown-toggle');
     const dropdown = document.querySelector('.dropdown-content');
     const overlay = document.querySelector('.overlay');
@@ -187,7 +154,93 @@
       dropdown.style.display = 'none';
       overlay.style.display = 'none';
     });
-  </script>
+
+    // ===== โหลดสินค้า (สูงสุด 6 ชิ้น) =====
+    document.addEventListener("DOMContentLoaded", () => {
+      const productGrid = document.querySelector(".product-grid");
+      productGrid.innerHTML = "<p>กำลังโหลดสินค้า...</p>";
+
+      fetch("http://localhost:8080/api/products")
+        .then(response => {
+          if (!response.ok) throw new Error("โหลดข้อมูลสินค้าไม่สำเร็จ");
+          return response.json();
+        })
+        .then(products => {
+          productGrid.innerHTML = ""; // ล้างข้อความเก่า
+
+          if (!products || products.length === 0) {
+            productGrid.innerHTML = `
+              <p style="text-align:center; font-size:18px; width:100%;">
+                ไม่มีสินค้าในระบบ
+              </p>`;
+            return;
+          }
+
+          // จำกัดแค่ 6 ชิ้นแรก
+          const limitedProducts = products.slice(0, 6);
+
+          limitedProducts.forEach(product => {
+            const card = document.createElement("div");
+            card.classList.add("product-card");
+
+            card.innerHTML = `
+              <div class="product-image">
+                <img src="${product.imageUrl || 'img/placeholder.png'}" alt="${product.name}">
+              </div>
+              <div class="product-info">
+                <span class="product-name">${product.name}</span>
+                <span class="product-price">฿ ${product.price ? product.price.toFixed(2) : '0.00'}</span>
+              </div>
+            `;
+
+            productGrid.appendChild(card);
+          });
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          productGrid.innerHTML = `
+            <p style="text-align:center; color:red;">
+              โหลดข้อมูลสินค้าไม่สำเร็จ
+            </p>`;
+        });
+    });
+</script>
+<!-- ======= ระบบค้นหา ======= -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.querySelector('.search-input-container input');
+    const dropdownLinks = document.querySelectorAll('.dropdown-content a');
+    const categoryItems = document.querySelectorAll('.category-item h3');
+
+    // ✅ 1) กด Enter ใน Search Bar
+    searchInput.addEventListener('keypress', function (event) {
+      if (event.key === 'Enter') {
+        const query = searchInput.value.trim();
+        if (query) {
+          window.location.href = `product.html?search=${encodeURIComponent(query)}`;
+        }
+      }
+    });
+
+    // ✅ 2) คลิกจาก Dropdown หมวดหมู่
+    dropdownLinks.forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        const category = this.textContent.trim();
+        window.location.href = `product.html?category=${encodeURIComponent(category)}`;
+      });
+    });
+
+    // ✅ 3) คลิกจากกล่องหมวดหมู่
+    categoryItems.forEach(cat => {
+      cat.addEventListener('click', function () {
+        const category = this.textContent.trim();
+        window.location.href = `product.html?category=${encodeURIComponent(category)}`;
+      });
+    });
+  });
+</script>
+
 
 </body>
 </html>
