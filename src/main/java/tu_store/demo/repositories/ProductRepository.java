@@ -25,4 +25,6 @@ List<Product> searchProducts(
     @Param("minPrice") Long minPrice,
     @Param("maxPrice") Long maxPrice
 );
+
+  Product findFirstByName(String name);
 }

@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+/src/main/java/tu_store/demo/testLocal/
+
 ### STS ###
 .apt_generated
 .classpath

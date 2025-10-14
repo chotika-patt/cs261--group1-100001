@@ -45,11 +45,29 @@ public class Product {
 
     public Product(User seller, String name, long price, String description, int stock) {
         setSeller(seller);
+        setStock(stock);
+
         this.name = name;
         this.price = price;
         this.description = description;
-        this.stock = stock;
-        this.status = ProductStatus.AVAILABLE;
+        
+        if(stock <= 0){ 
+            this.status = ProductStatus.OUT_OF_STOCK; 
+        }else this.status = ProductStatus.AVAILABLE; 
+    }
+
+    public Product(User seller, String name, long price, String description, int stock, Category category) 
+    { 
+        setSeller(seller); 
+        setStock(stock); 
+        this.name = name; 
+        this.price = price; 
+        this.description = description; 
+        this.category = category; 
+
+        if(stock <= 0){ 
+            this.status = ProductStatus.OUT_OF_STOCK; 
+        }else this.status = ProductStatus.AVAILABLE; 
     }
 
     public boolean isAvailable() {
