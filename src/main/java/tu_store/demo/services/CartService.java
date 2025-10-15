@@ -87,12 +87,20 @@ public class CartService {
         cartItemService.changeQuantityBy(cartItemService.createItem(cart, dto), qty);
     }
 
-    public double calculateTotalPrice(Cart cart){
+    public double calculateSubtotalPrice(Cart cart){
         double price = 0;
 
         for(CartItem item : cart.getItems()){
             price = price + cartItemService.calculateTotalPrice(item);
         }
+
+        return price;
+    }
+
+    public double calculateTotalPrice(Cart cart){
+        double price = calculateSubtotalPrice(cart);
+        double vat = price * 0.07; // Vat 7%;
+        price = price + vat;
 
         return price;
     }

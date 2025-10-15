@@ -10,8 +10,6 @@ import tu_store.demo.models.UserRole;
 import tu_store.demo.services.UserService;
 
 
-
-
 @RestController
 @RequestMapping("/api")
 public class UserController {
