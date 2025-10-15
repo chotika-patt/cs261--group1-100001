@@ -37,6 +37,7 @@ public class CartItem {
     }
 
     public void setQuantity(int qty){
+        if(qty < 0) return;
         this.quantity = qty;
     }
 

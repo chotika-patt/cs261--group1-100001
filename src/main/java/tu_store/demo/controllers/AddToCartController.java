@@ -48,14 +48,14 @@ public class AddToCartController {
         return ResponseEntity.ok("Added!");
     }
 
-    @PostMapping("/setQty")
+    @PostMapping("/set")
     public ResponseEntity<?> setQty(HttpSession session, @RequestBody CartItemDto item){
         User user = userService.getUserBySession(session);
         
         if (user == null) return ResponseEntity.status(401).body("Please login first.");
 
         Cart cart = cartService.createCart(user);
-        cartService.updateItemQuantity(cart, item);
+        cartService.setItemQuantity(cart, item);
 
         return ResponseEntity.ok("Setted!");
     }

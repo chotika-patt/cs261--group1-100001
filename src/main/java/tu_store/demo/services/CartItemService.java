@@ -28,7 +28,7 @@ public class CartItemService {
 
     public CartItem createItem(Cart cart, CartItemDto dto) {
         Product product = productRepository.findFirstByProductId(dto.getProductId());
-        
+
         if(product == null) return null;
 
         return new CartItem(cart, product, dto.getQuantity());
@@ -49,11 +49,22 @@ public class CartItemService {
         else return false;
     }
 
-    public void removeItem(Cart cart, CartItem oldItem) {
-        if(cart == null || oldItem == null) return;
+    public CartItem findCartItemFromCart(Cart cart, CartItem oldItem, boolean retItemInputIfNull){
+        if(cart == null || oldItem == null) return null;
   
         CartItem item = cart.getItems().stream()
         .filter(itemI -> itemI.getProductId() == oldItem.getProductId()).findFirst().orElse(null);
+
+        if(item == null && retItemInputIfNull == true) item = oldItem;
+
+        return item;
+    }
+    public CartItem findCartItemFromCart(Cart cart, CartItem oldItem){
+        return findCartItemFromCart(cart, oldItem, false);
+    }
+
+    public void removeItem(Cart cart, CartItem item) {
+        item = findCartItemFromCart(cart, item);
         
         if(item == null) return;
 
@@ -63,8 +74,15 @@ public class CartItemService {
     }
 
     public void setQuantity(CartItem item, int qty){
+        item = findCartItemFromCart(item.getCart(), item, true);
+
         if(item == null) return;
+
         if(!isStockAvailable(item, qty)) return;
+        if(qty <= 0){
+            removeItem(item.getCart(), item);
+            return;
+        }
 
         item.setQuantity(qty);
         cartItemRepository.save(item);

@@ -12,11 +12,17 @@ import tu_store.demo.repositories.*;
 @Service
 public class CartService {
 
+    private final CartItemRepository cartItemRepository;
+
     @Autowired
     private CartRepository cartRepository;
 
     @Autowired
     private CartItemService cartItemService;
+
+    CartService(CartItemRepository cartItemRepository) {
+        this.cartItemRepository = cartItemRepository;
+    }
 
     // @Autowired
     // private CartItemRepository cartItemRepository;
@@ -49,13 +55,13 @@ public class CartService {
         CartItem oldItem = cart.getItems().stream()
         .filter(item -> item.getProductId() == newItem.getProductId()).findFirst().orElse(null);
 
-        if(oldItem != null){
-            cartItemService.changeQuantityBy(oldItem, newItem.getQuantity());
-        }
-        else{
-            newItem.setCart(cart);
-            cart.addItem(newItem);
-        }
+        if(oldItem != null) cartItemService.changeQuantityBy(oldItem, newItem.getQuantity());
+
+        if(newItem.getQuantity() <= 0) return;
+        if(!cartItemService.isStockAvailable(newItem, newItem.getQuantity())) return;
+
+        newItem.setCart(cart);
+        cart.addItem(newItem);
         cartRepository.save(cart);
     }
     public void addItemsToCart(Cart cart, List<CartItem> items){
@@ -76,7 +82,7 @@ public class CartService {
         cartItemService.removeItem(cart, item);
     }
 
-    public void updateItemQuantity(Cart cart, CartItemDto dto){
+    public void setItemQuantity(Cart cart, CartItemDto dto){
         cartItemService.setQuantity(cartItemService.createItem(cart, dto), dto.getQuantity());
     }
 
