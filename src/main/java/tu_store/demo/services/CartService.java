@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tu_store.demo.dto.CartItemDto;
 import tu_store.demo.models.*;
 import tu_store.demo.repositories.*;
 
@@ -31,7 +32,6 @@ public class CartService {
         }
         return cart;
     }
-
     public Cart createCart(String sessionId){
         Cart cart = cartRepository.findFirstBySessionId(sessionId);
 
@@ -42,6 +42,9 @@ public class CartService {
         return cart;
     }
 
+    public void addItemToCart(Cart cart, CartItemDto dto){
+        addItemToCart(cart, cartItemService.createItem(cart, dto));
+    }
     public void addItemToCart(Cart cart, CartItem newItem) {
         CartItem oldItem = cart.getItems().stream()
         .filter(item -> item.getProductId() == newItem.getProductId()).findFirst().orElse(null);
@@ -55,41 +58,33 @@ public class CartService {
         }
         cartRepository.save(cart);
     }
-
-    public void addItemsToCard(Cart cart, List<CartItem> items){
+    public void addItemsToCart(Cart cart, List<CartItem> items){
         for (CartItem item : items) {
             addItemToCart(cart, item);
         }
     }
-
-    public void addProductToCart(Cart cart, Product product) {
-        CartItem newItem = cartItemService.createItem(cart, product, 1);
-
-        addItemToCart(cart, newItem);
-    }
-    public void addProductToCart(Cart cart, Product product, int qty) {
-        CartItem newItem = cartItemService.createItem(cart, product, qty);
-
-        addItemToCart(cart, newItem);
-    }
-    public void addProductsToCart(Cart cart, List<Product> products){
-        for (Product product : products) {
-            CartItem item = cartItemService.createItem(cart, product, 1);
-
-            item.setCart(cart);
-            cart.addItem(item); 
-        }
-        cartRepository.save(cart);
+    public void addProductToCart(Cart cart, Product product, int qty){
+        addItemToCart(cart, cartItemService.createItem(cart, product, qty));
     }
 
+    public void removeItemFromCart(Cart cart, CartItemDto dto){
+        removeItemFromCart(cart, cartItemService.createItem(cart, dto));
+    }
     public void removeItemFromCart(Cart cart, CartItem item){
         if(item == null) return;
         if(cart.findFirstItemById(item.getProductId()) == null) return;
         cartItemService.removeItem(cart, item);
     }
 
+    public void updateItemQuantity(Cart cart, CartItemDto dto){
+        cartItemService.setQuantity(cartItemService.createItem(cart, dto), dto.getQuantity());
+    }
+
     public void changeItemQuantityBy(CartItem item, int qty){
         cartItemService.changeQuantityBy(item, qty);
+    }
+    public void changeItemQuantityBy(Cart cart, CartItemDto dto, int qty){
+        cartItemService.changeQuantityBy(cartItemService.createItem(cart, dto), qty);
     }
 
     public double calculateTotalPrice(Cart cart){
