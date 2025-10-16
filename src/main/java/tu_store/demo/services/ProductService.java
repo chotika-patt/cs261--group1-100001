@@ -34,7 +34,7 @@ public class ProductService {
         }
         return productRepository.save(product);
     }
-    public List<Product> search(String name, Category category, ProductStatus status, long minPrice, long maxPrice) {
+    public List<Product> search(String name, Category category, ProductStatus status, Long minPrice, Long maxPrice) {
         return productRepository.searchProducts(name, category, status, minPrice, maxPrice);
     }
     public ProductResponse addProductDTO(Product product, String username){

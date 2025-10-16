@@ -7,8 +7,8 @@ public class ProductSearchRequest {
     private String name;
     private Category category;
     private ProductStatus status;
-    private long minPrice;
-    private long maxPrice;
+    private Long minPrice;
+    private Long maxPrice;
 
     //Getters & Setters
     public String getName() {
@@ -32,17 +32,17 @@ public class ProductSearchRequest {
         this.status = status;
     }
 
-    public long getMinPrice() {
+    public Long getMinPrice() {
         return minPrice;
     }
-    public void setMinPrice(long minPrice) {
+    public void setMinPrice(Long minPrice) {
         this.minPrice = minPrice;
     }
 
-    public long getMaxPrice() {
+    public Long getMaxPrice() {
         return maxPrice;
     }
-    public void setMaxPrice(long maxPrice) {
+    public void setMaxPrice(Long maxPrice) {
         this.maxPrice = maxPrice;
     }
 }
