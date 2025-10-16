@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long product_id;
+    private Long productId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", nullable = false)
@@ -92,7 +92,7 @@ public class Product {
 
     // ===== แก้ getter =====
     public Long getProduct_id() {
-        return this.product_id;
+        return this.productId;
     }
 
     public String getName() {

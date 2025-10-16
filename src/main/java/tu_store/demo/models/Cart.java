@@ -6,6 +6,7 @@ import java.util.List;
 
 
 import jakarta.persistence.*;
+import tu_store.demo.dto.CartItemDto;
 
 @Entity
 @Table(name = "cart")
@@ -63,7 +64,24 @@ public class Cart {
         return items;
     }
 
+    // public List<CartItemDto> getItemDtos(){
+    //     List<CartItemDto> itemDtos = new ArrayList<>();
+
+    //     for (CartItem item : this.items) {
+    //         CartItemDto dto = new CartItemDto();
+    //         dto.setProductId(item.getProductId());
+    //         dto.setQuantity(item.getQuantity());
+    //         itemDtos.add(dto);
+    //     }
+
+    //     return itemDtos;
+    // }
+
     public LocalDateTime getCreatedAt(){
         return this.createdAt;
+    }
+
+    public Long getCartId() {
+        return cartId;
     }
 }

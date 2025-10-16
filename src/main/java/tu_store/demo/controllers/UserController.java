@@ -10,8 +10,6 @@ import tu_store.demo.models.UserRole;
 import tu_store.demo.services.UserService;
 
 
-
-
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -34,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(HttpSession sessions,@RequestBody User user) {
+    public ResponseEntity<String> login(HttpSession sessions, @RequestBody User user) {
         boolean valid = userService.login(user);
         if (!valid) {
             return ResponseEntity.status(401).body("Invalid username or password");
