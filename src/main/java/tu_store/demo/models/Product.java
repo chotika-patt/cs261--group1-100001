@@ -2,6 +2,7 @@ package tu_store.demo.models;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,16 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", nullable = false)
+    @JsonIgnoreProperties({
+            "password",
+            "verify_document",
+            "studentID",
+            "phone",
+            "role",
+            "createdAt",
+            "user_id",
+            "hibernateLazyInitializer",
+            "handler"})
     private User seller;
 
     @Column(nullable = false, length = 255)
