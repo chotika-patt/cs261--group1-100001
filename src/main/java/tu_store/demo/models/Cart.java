@@ -70,24 +70,19 @@ public class Cart {
         return items;
     }
 
-    // public List<CartItemDto> getItemDtos(){
-    //     List<CartItemDto> itemDtos = new ArrayList<>();
-
-    //     for (CartItem item : this.items) {
-    //         CartItemDto dto = new CartItemDto();
-    //         dto.setProductId(item.getProductId());
-    //         dto.setQuantity(item.getQuantity());
-    //         itemDtos.add(dto);
-    //     }
-
-    //     return itemDtos;
-    // }
-
     public LocalDateTime getCreatedAt(){
         return this.createdAt;
     }
 
     public Long getCartId() {
         return cartId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public long getUserId() {
+        return user.getUser_id();
     }
 }

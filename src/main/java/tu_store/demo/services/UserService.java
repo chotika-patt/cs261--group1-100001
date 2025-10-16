@@ -91,6 +91,14 @@ public class UserService {
         return user;
     }
 
+    public Long getUserIdBySession(HttpSession session){
+        User user = getUserBySession(session);
+        
+        if(user == null) return null;
+
+        return user.getUser_id();
+    }
+
     public User registerReturnUser(User httpUser) {
         String username = httpUser.getUsername().trim();
         String email = httpUser.getEmail().trim();
