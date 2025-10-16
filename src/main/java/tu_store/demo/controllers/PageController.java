@@ -2,6 +2,8 @@ package tu_store.demo.controllers;
 // import java.util.HashMap;
 // import java.util.Map;
 
+import java.util.Map;
+
 // import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,5 +37,16 @@ public class PageController {
     public String logoutPage(@RequestParam String param) {
         return "redirect:/index";
     }
+   @GetMapping("/product_detail_temp")
+    public String productDetail(HttpSession session, Model model) {
+        model.addAllAttributes(Map.of(
+            "username", session.getAttribute("username"),
+            "email", session.getAttribute("email"),
+            "phone", session.getAttribute("phone"),
+            "role", session.getAttribute("role")
+        ));
+        return "product_detail_temp";
+    }
+
 }
 

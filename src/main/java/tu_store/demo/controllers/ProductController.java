@@ -2,6 +2,7 @@ package tu_store.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,15 +46,4 @@ public class ProductController {
             return ResponseEntity.status(403).body(e.getMessage());
         }
     }
-    @PostMapping("/cart/add")
-    public ResponseEntity<?>  addToCart(@RequestBody AddToCartRequest request,HttpSession session) {
-        return ResponseEntity.ok("add item to cart successful");
-    }
-    @PostMapping("/cart/delete")
-    public ResponseEntity<?> deleteFromCart(@RequestBody Cart cart) {
-        return  ResponseEntity.ok("delete item from cart successful");
-    }
-    
-    
-
 }
