@@ -33,6 +33,15 @@ public class CartItemService {
 
         return new CartItem(cart, product, dto.getQuantity());
     }
+    public CartItemDto createCartItemResponse(CartItem item){
+        CartItemDto dto = new CartItemDto();
+        dto.setPrice(item.getProduct().getPrice());
+        dto.setProductId(item.getProductId());
+        dto.setQuantity(item.getQuantity());
+
+        return dto;
+    }
+
 
     public double calculateTotalPrice(CartItem item){
         if(item == null) return 0;
@@ -74,7 +83,7 @@ public class CartItemService {
     }
 
     public void setQuantity(CartItem item, int qty){
-        item = findCartItemFromCart(item.getCart(), item, true);
+        item = findCartItemFromCart(item.getCart(), item);
 
         if(item == null) return;
 
