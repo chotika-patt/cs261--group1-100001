@@ -20,29 +20,24 @@ public class Cart {
     private User user;
 
     @Column(name = "session_id")
-    private String sessionId;
+    private String sessionId;  
+ 
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<CartItem> items = new ArrayList<>();
     
-    // getters & setters
     public Cart() {}
     
-
+    
     public Cart(String id){
         this.sessionId = id;
-    }
-
+    } 
+    
     public Cart(User user){
         this.user = user;
     }
-
-    public void setSessionId(String id){
-        this.sessionId = id;
-    }
-
     public void setUser(User user){
         this.user = user;
     }
@@ -64,7 +59,6 @@ public class Cart {
         .findFirst()
         .orElse(null);
     }
-
     public List<CartItem> getItems(){
         return items;
     }

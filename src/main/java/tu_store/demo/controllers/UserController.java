@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @PostMapping("/uplaod")
-    public String uploadData(@RequestBody String entity) {
+    public String uploadData(@RequestBody User user) {
         return "Success" ;
     }    
 }

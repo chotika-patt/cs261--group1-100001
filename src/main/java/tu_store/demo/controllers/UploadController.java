@@ -60,7 +60,6 @@ public class UploadController {
 
             // 🧩 6. บันทึกไฟล์ลงโฟลเดอร์
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
             // 🧩 7. บันทึก path ลงในฐานข้อมูล
             user.setVerify_document(filePath.toString());
             userRepository.save(user);

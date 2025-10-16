@@ -8,11 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpSession;
+import tu_store.demo.dto.AddToCartRequest;
 import tu_store.demo.dto.ProductResponse;
 import tu_store.demo.dto.ProductSearchRequest;
+import tu_store.demo.models.Cart;
 import tu_store.demo.models.Product;
+import tu_store.demo.models.User;
+import tu_store.demo.repositories.CartRepository;
+import tu_store.demo.repositories.UserRepository;
 import tu_store.demo.services.ProductService;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -39,5 +45,15 @@ public class ProductController {
             return ResponseEntity.status(403).body(e.getMessage());
         }
     }
+    @PostMapping("/cart/add")
+    public ResponseEntity<?>  addToCart(@RequestBody AddToCartRequest request,HttpSession session) {
+        return ResponseEntity.ok("add item to cart successful");
+    }
+    @PostMapping("/cart/delete")
+    public ResponseEntity<?> deleteFromCart(@RequestBody Cart cart) {
+        return  ResponseEntity.ok("delete item from cart successful");
+    }
+    
+    
 
 }
