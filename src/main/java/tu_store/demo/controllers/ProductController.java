@@ -14,6 +14,7 @@ import tu_store.demo.models.Product;
 import tu_store.demo.services.ProductService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -22,8 +23,22 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping("/search")
-    public List<Product> searchProducts(@RequestBody ProductSearchRequest searchRequest){
-        return productService.search(searchRequest.getName(), searchRequest.getCategory(), searchRequest.getStatus(), searchRequest.getMinPrice(), searchRequest.getMaxPrice());
+    public ResponseEntity<?> searchProducts(@RequestBody ProductSearchRequest searchRequest){
+        var results = productService.search(
+                searchRequest.getName(),
+                searchRequest.getCategory(),
+                searchRequest.getStatus(),
+                searchRequest.getMinPrice(),
+                searchRequest.getMaxPrice()
+        );
+
+
+    if (results.isEmpty()){
+        return ResponseEntity.ok(Map.of("message", "Nothing match your search terms, please try again."));
+    }
+
+    return ResponseEntity.ok(results);
+
     }
     @PostMapping("/add")
     public ResponseEntity<?> addProductToDatabase(HttpSession session,@RequestBody Product product) {
