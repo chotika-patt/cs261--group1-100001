@@ -27,4 +27,5 @@ List<Product> searchProducts(
 );
 
   Product findFirstByName(String name);
+  Product findFirstByProductId(long id);
 }

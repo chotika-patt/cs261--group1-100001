@@ -6,6 +6,7 @@ import java.util.List;
 
 
 import jakarta.persistence.*;
+import tu_store.demo.dto.CartItemDto;
 
 @Entity
 @Table(name = "cart")
@@ -71,5 +72,17 @@ public class Cart {
 
     public LocalDateTime getCreatedAt(){
         return this.createdAt;
+    }
+
+    public Long getCartId() {
+        return cartId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public long getUserId() {
+        return user.getUser_id();
     }
 }

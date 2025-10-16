@@ -18,7 +18,6 @@ public class CartItem {
     @JoinColumn(name = "product_id")
     private Product product;
 
-
     private int quantity;
 
     public CartItem(){}
@@ -38,6 +37,7 @@ public class CartItem {
     }
 
     public void setQuantity(int qty){
+        if(qty < 0) return;
         this.quantity = qty;
     }
 

@@ -3,6 +3,7 @@ package tu_store.demo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tu_store.demo.dto.CartItemDto;
 import tu_store.demo.models.*;
 import tu_store.demo.repositories.*;
 // import tu_store.demo.services.*;
@@ -17,13 +18,30 @@ public class CartItemService {
     @Autowired
     private CartRepository cartRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
 
 
     public CartItem createItem(Cart cart, Product product, int qty) {
-        CartItem item = new CartItem(cart, product, qty);
-
-        return item;
+        return new CartItem(cart, product, qty);
     }
+
+    public CartItem createItem(Cart cart, CartItemDto dto) {
+        Product product = productRepository.findFirstByProductId(dto.getProductId());
+
+        if(product == null) return null;
+
+        return new CartItem(cart, product, dto.getQuantity());
+    }
+    public CartItemDto createCartItemResponse(CartItem item){
+        CartItemDto dto = new CartItemDto();
+        dto.setPrice(item.getProduct().getPrice());
+        dto.setProductId(item.getProductId());
+        dto.setQuantity(item.getQuantity());
+
+        return dto;
+    }
+
 
     public double calculateTotalPrice(CartItem item){
         if(item == null) return 0;
@@ -40,8 +58,24 @@ public class CartItemService {
         else return false;
     }
 
+    public CartItem findCartItemFromCart(Cart cart, CartItem oldItem, boolean retItemInputIfNull){
+        if(cart == null || oldItem == null) return null;
+  
+        CartItem item = cart.getItems().stream()
+        .filter(itemI -> itemI.getProductId() == oldItem.getProductId()).findFirst().orElse(null);
+
+        if(item == null && retItemInputIfNull == true) item = oldItem;
+
+        return item;
+    }
+    public CartItem findCartItemFromCart(Cart cart, CartItem oldItem){
+        return findCartItemFromCart(cart, oldItem, false);
+    }
+
     public void removeItem(Cart cart, CartItem item) {
-        if(cart == null) return;
+        item = findCartItemFromCart(cart, item);
+        
+        if(item == null) return;
 
         cart.getItems().remove(item);
         cartItemRepository.delete(item);
@@ -49,8 +83,15 @@ public class CartItemService {
     }
 
     public void setQuantity(CartItem item, int qty){
+        item = findCartItemFromCart(item.getCart(), item);
+
         if(item == null) return;
+
         if(!isStockAvailable(item, qty)) return;
+        if(qty <= 0){
+            removeItem(item.getCart(), item);
+            return;
+        }
 
         item.setQuantity(qty);
         cartItemRepository.save(item);

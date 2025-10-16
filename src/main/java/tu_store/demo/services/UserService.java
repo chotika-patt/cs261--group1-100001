@@ -9,6 +9,8 @@ import tu_store.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import jakarta.servlet.http.HttpSession;
+
 // import java.util.HashMap;
 // import java.util.Map;
 
@@ -78,6 +80,25 @@ public class UserService {
     public User findByUsername(String username) {
         return userRepository.findFirstByUsername(username);
     }
+
+    public User getUserBySession(HttpSession session){
+        String username = (String) session.getAttribute("username");
+        if(username == null) return null;
+
+        User user = findByUsername(username);
+        if(user == null) return null;
+
+        return user;
+    }
+
+    public Long getUserIdBySession(HttpSession session){
+        User user = getUserBySession(session);
+        
+        if(user == null) return null;
+
+        return user.getUser_id();
+    }
+
     public User registerReturnUser(User httpUser) {
         String username = httpUser.getUsername().trim();
         String email = httpUser.getEmail().trim();
@@ -118,6 +139,8 @@ public class UserService {
         }
         return userRepository.save(newUser); // คืนค่า User ที่บันทึกแล้ว (มี user_id)
     }
+
+
 
 
 }
