@@ -36,9 +36,10 @@
   <!-- ======= Navbar ล่าง ======= -->
     <nav class="nav-bottom">
     <ul class="menu">
-      <li><a href="loginTemp"><img class="logo" src="img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo"></a></li>
-      <li><a href="#">หน้าหลัก</a></li>
-      <li class="dropdown-category">
+        <li><a th:href="@{/buyerTemp}"><img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo" /></a></li>
+        <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
+
+        <li class="dropdown-category">
         <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
         <div class="overlay"></div> <!-- สำหรับ liquid glass -->
         <div class="dropdown-content">
@@ -119,7 +120,8 @@
     <div class="product-section">
       <div style="display: flex; align-items: baseline; justify-content: space-between;">
         <h1 style="margin: 0;">รายการสินค้า</h1>
-        <p style="margin: 0; font-size: 16px; color: #666;"><a style="text-decoration: none; color: #666;" href="product.html">ดูทั้งหมด</a></p>
+        <p style="margin: 0; font-size: 16px; color: #666;"><a th:href="@{/product}">ดูทั้งหมด</a>
+        </p>
       </div>
       <br>
       <div class="product-grid">
