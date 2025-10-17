@@ -64,7 +64,7 @@ public class ProductService {
 
     public ProductResponse createProductResponse(Product product){
         ProductResponse response = new ProductResponse(
-            product.getProduct_id(),
+            product.getProductId(),
             product.getName(),
             product.getPrice(),
             product.getStock(),

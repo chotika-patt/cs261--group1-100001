@@ -5,7 +5,7 @@ document.getElementById("subBtn").addEventListener("click", async function(event
     const password = document.getElementById("password").value.trim();
 
     if (!username || !password) {
-        alert("⚠️ กรุณากรอกชื่อผู้ใช้และรหัสผ่านให้ครบ");
+        alert("กรุณากรอกชื่อผู้ใช้และรหัสผ่านให้ครบ");
         return;
     }
 
@@ -28,17 +28,24 @@ document.getElementById("subBtn").addEventListener("click", async function(event
         });
 
         if (response.ok) {
-            alert("✅ เข้าสู่ระบบสำเร็จ!");
+            const data = await response.json();
+            alert("เข้าสู่ระบบสำเร็จ!");
             // ✅ redirect ไป controller ที่อ่าน session แล้วแสดงชื่อผู้ใช้
-            window.location.href = "/loginTemp";
+            if (data.role === "SELLER"){
+                window.location.href = "sellerTemp";
+            } else if (data.role === "CLIENT") {
+                window.location.href = "buyerTemp";
+            } else {
+                window.location.href = "index"; //Fallback
+            }
         } else if (response.status === 401) {
-            alert("❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
+            alert("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
         } else {
-            alert("⚠️ เกิดข้อผิดพลาดในระบบ กรุณาลองใหม่อีกครั้ง");
+            alert("เกิดข้อผิดพลาดในระบบ กรุณาลองใหม่อีกครั้ง");
         }
     } catch (error) {
         console.error("Error:", error);
-        alert("❌ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้");
+        alert("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้");
     } finally {
         btn.disabled = false;
         btn.textContent = "เข้าสู่ระบบ";

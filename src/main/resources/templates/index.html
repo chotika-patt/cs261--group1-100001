@@ -105,50 +105,16 @@
         </div>
         <br>
         <div class="product-grid">
-            <div class="product-card">
-                <div class="product-image"></div>
-                <div class="product-info">
-                    <span class="product-name">ชื่อสินค้า</span>
-                    <span class="product-price">฿ 00.0</span>
+            <div class="product-card" th:each="product : ${products}">
+                <div class="product-image">
+                    <img th:src="@{/img/placeholder.png}" alt="Product Image" />
                 </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-image"></div>
                 <div class="product-info">
-                    <span class="product-name">ชื่อสินค้า</span>
-                    <span class="product-price">฿ 00.0</span>
+                    <span class="product-name" th:text="${product.name}">Product Name</span>
+                    <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
                 </div>
+                <a th:href="@{'/product_detail/' + ${product.productId}}" class="view-detail-btn">ดูรายละเอียด</a>
             </div>
-            <div class="product-card">
-                <div class="product-image"></div>
-                <div class="product-info">
-                    <span class="product-name">ชื่อสินค้า</span>
-                    <span class="product-price">฿ 00.0</span>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image"></div>
-                <div class="product-info">
-                    <span class="product-name">ชื่อสินค้า</span>
-                    <span class="product-price">฿ 00.0</span>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image"></div>
-                <div class="product-info">
-                    <span class="product-name">ชื่อสินค้า</span>
-                    <span class="product-price">฿ 00.0</span>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image"></div>
-                <div class="product-info">
-                    <span class="product-name">ชื่อสินค้า</span>
-                    <span class="product-price">฿ 00.0</span>
-                </div>
-            </div>
-
         </div>
     </div>
 </main>

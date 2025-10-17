@@ -102,7 +102,7 @@ public class Product {
     }
 
     // ===== แก้ getter =====
-    public Long getProduct_id() {
+    public Long getProductId() {
         return this.productId;
     }
 

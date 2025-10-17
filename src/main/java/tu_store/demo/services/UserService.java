@@ -139,8 +139,4 @@ public class UserService {
         }
         return userRepository.save(newUser); // คืนค่า User ที่บันทึกแล้ว (มี user_id)
     }
-
-
-
-
 }

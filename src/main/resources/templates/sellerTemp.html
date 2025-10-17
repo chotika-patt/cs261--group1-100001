@@ -64,31 +64,21 @@
 
     <div class="product-management-section">
       <h2>รายการสินค้าของคุณ</h2>
-      <div class="product-management-grid">
-        <div class="product-card-seller">
-          <div class="product-image-placeholder"></div>
-          <div class="product-info-seller">
-            <span class="product-name">ชื่อสินค้า</span>
-            <span class="product-price">฿ 00.0</span>
-          </div>
-          <div class="product-actions">
-            <button class="edit-btn">แก้ไข</button>
-            <button class="delete-btn">ลบ</button>
-          </div>
+        <div class="product-management-grid">
+            <div class="product-card-seller" th:each="product : ${products}">
+                <div class="product-image-placeholder">
+                    <img th:if="${product.main_image != null}" th:src="@{${product.main_image}}" alt="Product Image">
+                </div>
+                <div class="product-info-seller">
+                    <span class="product-name" th:text="${product.name}">ชื่อสินค้า</span>
+                    <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
+                </div>
+                <div class="product-actions">
+                    <button class="edit-btn" th:onclick="'location.href=\'/product_edit/' + ${product.productId} + '\';'">แก้ไข</button>
+                    <button class="delete-btn" th:onclick="'location.href=\'/product_delete/' + ${product.productId} + '\';'">ลบ</button>
+                </div>
+            </div>
         </div>
-
-        <div class="product-card-seller">
-          <div class="product-image-placeholder"></div>
-          <div class="product-info-seller">
-            <span class="product-name">ชื่อสินค้า</span>
-            <span class="product-price">฿ 00.0</span>
-          </div>
-          <div class="product-actions">
-            <button class="edit-btn">แก้ไข</button>
-            <button class="delete-btn">ลบ</button>
-          </div>
-        </div>
-      </div>
     </div>
   </main>
 

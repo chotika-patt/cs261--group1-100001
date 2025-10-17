@@ -3,12 +3,15 @@ package tu_store.demo.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import tu_store.demo.models.Product;
 import tu_store.demo.models.Category;
 import tu_store.demo.models.ProductStatus;
+import tu_store.demo.models.User;
 
 import java.util.List;
 
+@Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
    @Query("""
     SELECT p FROM Product p
@@ -29,4 +32,5 @@ List<Product> searchProducts(
   Product findFirstByName(String name);
   Product findFirstByProductId(long id);
   List<Product> findAllBySellerUserId(Long id);
+    List<Product> findBySeller(User seller);
 }

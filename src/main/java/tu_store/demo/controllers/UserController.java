@@ -9,6 +9,8 @@ import tu_store.demo.models.User;
 import tu_store.demo.models.UserRole;
 import tu_store.demo.services.UserService;
 
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api")
@@ -32,17 +34,23 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(HttpSession sessions, @RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> login(HttpSession sessions, @RequestBody User user) {
         boolean valid = userService.login(user);
         if (!valid) {
-            return ResponseEntity.status(401).body("Invalid username or password");
+            return ResponseEntity.status(401).body(Map.of("error", "Invalid username or password"));
         }
         User dbUser = userService.findByUsername(user.getUsername());
         sessions.setAttribute("username", dbUser.getUsername());
         sessions.setAttribute("email", dbUser.getEmail());
         sessions.setAttribute("phone", dbUser.getPhone());
         sessions.setAttribute("role", dbUser.getRole());
-        return ResponseEntity.ok("Login successful");
+
+        Map<String, Object> resp = Map.of(
+                "username", dbUser.getUsername(),
+                "role", dbUser.getRole().toString()
+        );
+
+        return ResponseEntity.ok(resp);
     }
     @PostMapping("/logout")
     public ResponseEntity<String> logOut(HttpSession session) {
@@ -50,7 +58,7 @@ public class UserController {
         return ResponseEntity.ok("Logout succuess");
     }
 
-    @PostMapping("/uplaod")
+    @PostMapping("/upload")
     public String uploadData(@RequestBody User user) {
         return "Success" ;
     }    

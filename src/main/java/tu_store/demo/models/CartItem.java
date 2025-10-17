@@ -46,7 +46,7 @@ public class CartItem {
     }
 
     public long getProductId(){
-        return this.product.getProduct_id();
+        return this.product.getProductId();
     }
 
     public Product getProduct(){

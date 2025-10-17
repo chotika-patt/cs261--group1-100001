@@ -56,7 +56,7 @@ public class Cart {
 
     public CartItem findFirstItemByProduct(Product product){
         return this.getItems().stream()
-        .filter(item -> item.getProductId() == product.getProduct_id())
+        .filter(item -> item.getProductId() == product.getProductId())
         .findFirst()
         .orElse(null);
     }
