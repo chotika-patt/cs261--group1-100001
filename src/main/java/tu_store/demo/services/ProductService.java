@@ -12,6 +12,7 @@ import tu_store.demo.models.UserRole;
 import tu_store.demo.repositories.ProductRepository;
 import tu_store.demo.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,7 +22,7 @@ public class ProductService {
 
     @Autowired
     private UserRepository userRepository;
-    public Product addProduct(Product product,String username){
+    public Product addProduct(Product product, String username){
         User seller = userRepository.findFirstByUsername(username);
         if(seller == null || seller.getRole() != UserRole.SELLER){
             throw new IllegalArgumentException("Only sellers can add products");
@@ -37,17 +38,47 @@ public class ProductService {
     public List<Product> search(String name, Category category, ProductStatus status, Long minPrice, Long maxPrice) {
         return productRepository.searchProducts(name, category, status, minPrice, maxPrice);
     }
-    public ProductResponse addProductDTO(Product product, String username){
-        Product saved = addProduct(product, username);  // ใช้ method เดิม
-        return new ProductResponse(
-            saved.getProduct_id(),
-            saved.getName(),
-            saved.getPrice(),
-            saved.getStock(),
-            saved.getCategory(),
-            saved.getStatus(),
-            saved.getSeller().getUsername()
+
+
+    public ProductResponse getProductResponseById(Long id){
+        Product product = productRepository.findFirstByProductId(id);
+
+        if(product == null) return null;
+
+        ProductResponse response = createProductResponse(product);
+
+        return response;
+    } 
+
+    public List<ProductResponse> getAllProductsResponseByUserId(Long id){
+        List<Product> products = productRepository.findAllBySellerUserId(id);
+        List<ProductResponse> responseList = new ArrayList<>();
+
+        for(Product p : products){
+            ProductResponse response = createProductResponse(p);
+            responseList.add(response);
+        }
+
+        return responseList;
+    } 
+
+    public ProductResponse createProductResponse(Product product){
+        ProductResponse response = new ProductResponse(
+            product.getProduct_id(),
+            product.getName(),
+            product.getPrice(),
+            product.getStock(),
+            product.getCategory(),
+            product.getStatus(),
+            product.getSeller().getUsername()
         );
+
+        return response;
     }
 
+    public ProductResponse addProductDTO(Product product, String username){
+        Product saved = addProduct(product, username);  // ใช้ method เดิม
+        return createProductResponse(saved);
+    }
+    
 }

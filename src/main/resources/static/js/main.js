@@ -55,7 +55,7 @@
             logoutSuccess.classList.add("active");
             setTimeout(() => {
               logoutSuccess.classList.remove("active");
-              window.location.href = "/loginTemp"; // redirect หลัง logout สำเร็จ
+              window.location.href = "/"; // redirect หลัง logout สำเร็จ
             }, 2500);
           } else {
             alert("เกิดข้อผิดพลาดในการออกจากระบบ");

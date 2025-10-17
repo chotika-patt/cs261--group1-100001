@@ -30,7 +30,6 @@ public class UserController {
         User savedUser = userService.registerReturnUser(user); 
         return savedUser.getUser_id();
     }
-
     @PostMapping("/login")
     public ResponseEntity<String> login(HttpSession sessions, @RequestBody User user) {
         boolean valid = userService.login(user);
@@ -49,7 +48,6 @@ public class UserController {
         session.invalidate();
         return ResponseEntity.ok("Logout succuess");
     }
-
     @PostMapping("/uplaod")
     public String uploadData(@RequestBody User user) {
         return "Success" ;

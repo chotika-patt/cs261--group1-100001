@@ -12,30 +12,9 @@
 <!-- ======= Navbar บนสุด ======= -->
 <nav class="nav-top">
     <div class="right-buttons">
-        <div class="user-menu">
-            <button class="user-btn" id="user-btn">
-                <!-- ✅ Syntax ถูกต้อง -->
-                <span class="user-text" th:text="${session.username != null ? session.username : 'Guest'}">Guest</span>
-                <div class="user-icon"><i class="fa-solid fa-user"></i></div>
-            </button>
-
-            <!-- ✅ ใช้ session ตรงๆ -->
-            <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
-                <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
-                <div class="avatar"><i class="fa-solid fa-user"></i></div>
-                <h4 th:text="${session.username}">ชื่อบัญชีผู้ใช้</h4>
-                <div class="info">
-                    <p><i class="fa-solid fa-envelope"></i>
-                        <span th:text="${session.email}">username@gmail.com</span>
-                    </p>
-                    <p><i class="fa-solid fa-phone"></i>
-                        <span th:text="${session.phone}">xxx-xxx-xxxx</span>
-                    </p>
-                </div>
-                <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
-            </div>
-        </div>
-        <a th:href="@{/cart}" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></a>
+        <!-- ✅ แก้ให้ไปที่ /login -->
+        <a th:href="@{/login}" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
+        <a th:href="@{/cart}"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
 </nav>
 <!-- ======= Navbar ล่าง ======= -->

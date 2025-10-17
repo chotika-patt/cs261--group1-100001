@@ -41,7 +41,6 @@ public class PageController {
     public String cartPage() {
         return "cart"; // หมายถึงไฟล์ templates/cart.html
     }
-    
     @GetMapping("/buyerTemp")
     public String buyerTempPage(HttpSession session, Model model) {
         model.addAttribute("username", session.getAttribute("username"));
@@ -62,15 +61,31 @@ public class PageController {
     public String productPage() {
         return "product"; // ✅ ชี้ไปที่ templates/product.html
     }
-    @GetMapping("/product_detail_temp")
+    @GetMapping("/product_detail")
     public String productDetail(HttpSession session, Model model) {
-        model.addAllAttributes(Map.of(
-            "username", session.getAttribute("username"),
-            "email", session.getAttribute("email"),
-            "phone", session.getAttribute("phone"),
-            "role", session.getAttribute("role")
-        ));
-        return "product_detail";
+        String username = (String) session.getAttribute("username");
+        String email = (String) session.getAttribute("email");
+        String phone = (String) session.getAttribute("phone");
+        if (username != null) {
+            model.addAllAttributes(Map.of(
+                "username", username,
+                "email", email,
+                "phone", phone
+            ));
+            return "product_detail";
+        } else {
+            model.addAllAttributes(Map.of(
+                "username", "Guest",
+                "email", "-",
+                "phone", "-"
+            ));
+            return "product_detail_no_login";
+        }
+    }
+
+    @GetMapping("/login")
+    public String logIn() {
+        return "login"; 
     }
 }
 

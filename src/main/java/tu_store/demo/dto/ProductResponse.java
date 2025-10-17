@@ -12,6 +12,8 @@ public class ProductResponse {
     private ProductStatus status;
     private String sellerName;
 
+    public ProductResponse(){}
+
     public ProductResponse(Long product_id, String name, long price, int stock,
                            Category category, ProductStatus status, String sellerName) {
         this.product_id = product_id;
