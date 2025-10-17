@@ -37,32 +37,11 @@ public class PageController {
     public String logoutPage(@RequestParam String param) {
         return "redirect:/index";
     }
-   @GetMapping("redirect:/loginTemp")
-    public String productDetail(HttpSession session, Model model) {
-        model.addAllAttributes(Map.of(
-            "username", session.getAttribute("username"),
-            "email", session.getAttribute("email"),
-            "phone", session.getAttribute("phone"),
-            "role", session.getAttribute("role")
-        ));
-        return "product_detail_temp";
-    }
-
     @GetMapping("/cart")
     public String cartPage() {
         return "cart"; // หมายถึงไฟล์ templates/cart.html
     }
-
-    @GetMapping("/")
-    public String indexPage() {
-        return "buyerTemp"; // จะไป templates/index.html
-    }
-
-    @GetMapping("/index.html")
-    public String redirectToIndex() {
-        return "buyerTemp";
-    }
-
+    
     @GetMapping("/buyerTemp")
     public String buyerTempPage(HttpSession session, Model model) {
         model.addAttribute("username", session.getAttribute("username"));
@@ -83,13 +62,15 @@ public class PageController {
     public String productPage() {
         return "product"; // ✅ ชี้ไปที่ templates/product.html
     }
-
     @GetMapping("/product_detail_temp")
-    public String productDetailTempPage() {
-        return "product_detail_temp"; // ✅ อยู่ใน templates/product_detail_temp.html
+    public String productDetail(HttpSession session, Model model) {
+        model.addAllAttributes(Map.of(
+            "username", session.getAttribute("username"),
+            "email", session.getAttribute("email"),
+            "phone", session.getAttribute("phone"),
+            "role", session.getAttribute("role")
+        ));
+        return "product_detail";
     }
-
-
-
 }
 
