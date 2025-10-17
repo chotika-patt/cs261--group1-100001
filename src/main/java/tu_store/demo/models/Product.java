@@ -52,6 +52,10 @@ public class Product {
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @ManyToOne
+    @JoinColumn(name = "group_id", nullable = false)
+    private ProductGroup productGroup;
+
     public Product() {}
 
     public Product(User seller, String name, long price, String description, int stock) {
@@ -101,7 +105,16 @@ public class Product {
         }
     }
 
+    public void setProductGroup(ProductGroup productGroup) {
+        this.productGroup = productGroup;
+    }
+
     // ===== แก้ getter =====
+
+    public ProductGroup getProductGroup() {
+        return productGroup;
+    }
+
     public Long getProductId() {
         return this.productId;
     }
