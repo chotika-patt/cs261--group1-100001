@@ -1,44 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Product Detail</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" th:href="@{/css/product-detail.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <script th:src="@{/js/main.js}" defer></script>
 </head>
 <body>
+<!-- ======= Navbar บนสุด ======= -->
 <nav class="nav-top">
     <div class="right-buttons">
-      <div class="user-menu">
-        <button class="user-btn" id="user-btn">
-          <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
-          <div class="user-icon"><i class="fa-solid fa-user"></i></div>
-        </button>
-
-        <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
-          <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
-          <div class="avatar"><i class="fa-solid fa-user"></i></div>
-          <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
-          <div class="info">
-            <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
-            <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
-          </div>
-          <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
-        </div>
-      </div>
-      <a th:href="@{/cart}" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></a>
+        <!-- ✅ แก้ให้ไปที่ /login -->
+        <a th:href="@{/login}" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
+        <a th:href="@{/cart}"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
-  </nav>
-
-  <!-- ======= Navbar ล่าง ======= -->
-    <nav class="nav-bottom">
+</nav>
+<!-- ======= Navbar ล่าง ======= -->
+<nav class="nav-bottom">
     <ul class="menu">
-      <li><a href="loginTemp"><img class="logo" src="img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo"></a></li>
-      <li><a href="#">หน้าหลัก</a></li>
-      <li class="dropdown-category">
+        <li><a th:href="@{/buyerTemp}"><img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo" /></a></li>
+        <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
+        <li class="dropdown-category">
         <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
         <div class="overlay"></div> <!-- สำหรับ liquid glass -->
         <div class="dropdown-content">
@@ -58,29 +42,33 @@
     <div class="search-bar-replacement">
       <div class="search-input-container">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+        <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
       </div>
       <button class="search-close-btn" id="search-close">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
-  </nav>
+    <div id="search-results"></div>
+</nav><br>
 <div class="product-container">
     <div class="product-detail-photo">
-        img th:src="@{${product.imageUrl}}" alt="Product Image">
+        <img th:src="@{/img/sample-product.jpg}" alt="Product Image" />
     </div>
+
     <div class="product-detail-main">
         <div class="product-header">
-            <h1 th:text="${product.name}">ชื่อสินค้า :</h1>
+            <h1>ชื่อสินค้า :</h1>
             <button class="add-to-cart-btn">เพิ่มลงตะกร้า</button>
         </div>
         <p class="product-category">หมวดหมู่ :</p>
+
         <div class="product-options">
             <span class="option-label">สี :</span>
             <button class="color-option">สีดำ</button>
             <button class="color-option">สีขาว</button>
         </div>
-       <div class="product-quantity">
+
+        <div class="product-quantity">
             <span class="option-label">จำนวน</span>
             <div class="quantity-selector">
                 <button class="minus">-</button>
@@ -88,36 +76,40 @@
                 <button class="plus">+</button>
             </div>
         </div>
+
         <div class="product-price-box">
             <div class="price-label">ราคา</div>
-            <div class="price-value" th:text="'฿' + ${product.price}">฿1,290</div>
+            <div class="price-value">฿1,290</div>
         </div>
-
     </div>
+
     <div class="product-detail-describe">
         <h3>รายละเอียดสินค้า</h3>
-        <p th:text="${product.description}">รายละเอียดสินค้า</p>
-        </div>
+        <p>รายละเอียดสินค้าตัวอย่าง...</p>
+    </div>
 </div>
+
+<!-- ======= Popup Logout ======= -->
 <div class="logout-modal" id="logout-modal">
     <div class="modal-content">
-      <i class="fa-solid fa-circle-exclamation"></i>
-      <p>คุณต้องการออกจากระบบหรือไม่</p>
-      <div class="modal-buttons">
-        <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
-        <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
-      </div>
-      <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <p>คุณต้องการออกจากระบบหรือไม่</p>
+        <div class="modal-buttons">
+            <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+            <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+        </div>
+        <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
     </div>
-  </div>
+</div>
 
-  <div class="logout-success" id="logout-success">
+<div class="logout-success" id="logout-success">
     <div class="success-content">
-      <i class="fa-solid fa-circle-check"></i>
-      <p>ออกจากระบบสำเร็จแล้ว</p>
+        <i class="fa-solid fa-circle-check"></i>
+        <p>ออกจากระบบสำเร็จแล้ว</p>
     </div>
-  </div>
+</div>
 <script th:src="@{/js/main.js}" defer></script>
-<script th:src="@{/js/detail.js}" defer></script>
+<script th:src="@{/js/product-detail.js}" defer></script>
+<script th:src="@{/js/search.js}" defer></script>
 </body>
 </html>

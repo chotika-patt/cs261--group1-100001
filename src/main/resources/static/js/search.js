@@ -65,8 +65,8 @@ document.getElementById("search-input").addEventListener("keydown", (e) => {
   document.getElementById("search-close").addEventListener("click",()=>{
     input.value = '';
   })
-  
 */
+  
   
 const closeSearch = document.getElementById('search-close');
 const inputSearch = document.getElementById('search-input');

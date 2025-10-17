@@ -74,7 +74,6 @@ public class ProductController {
 
     @GetMapping("users/{userId}/products")
     public ResponseEntity<?> getProdctsByUserId(@PathVariable Long userId) {
-
         List <ProductResponse> responseList = productService.getAllProductsResponseByUserId(userId);
         return ResponseEntity.ok(responseList);
     }
