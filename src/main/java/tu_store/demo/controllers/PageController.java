@@ -116,9 +116,9 @@ public class PageController {
         return "product"; // ✅ ชี้ไปที่ templates/product.html
     }
 
-    @GetMapping("/product_detail_temp")
+    @GetMapping("/product_detail")
     public String productDetailTempPage() {
-        return "product_detail_temp"; // ✅ อยู่ใน templates/product_detail_temp.html
+        return "product_detail"; // ✅ อยู่ใน templates/product_detail_temp.html
     }
 
     @GetMapping("/product_detail/{productId}")
@@ -128,7 +128,7 @@ public class PageController {
             return "redirect:/error"; // or handle product not found
         }
         model.addAttribute("product", product);
-        return "product_detail_temp";
+        return "product_detail";
     }
 }
 
