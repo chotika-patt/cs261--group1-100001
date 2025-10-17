@@ -57,7 +57,7 @@
 
     <div class="product-detail-main">
         <div class="product-header">
-            <h1>ชื่อสินค้า :</h1>
+            <h1 th:text="${product.name}">ชื่อสินค้า :</h1>
             <button class="add-to-cart-btn">เพิ่มลงตะกร้า</button>
         </div>
         <p class="product-category">หมวดหมู่ :</p>
@@ -79,13 +79,13 @@
 
         <div class="product-price-box">
             <div class="price-label">ราคา</div>
-            <div class="price-value">฿1,290</div>
+            <div class="price-value" th:text="'฿' + ${product.price}">฿1,290</div>
         </div>
     </div>
 
     <div class="product-detail-describe">
         <h3>รายละเอียดสินค้า</h3>
-        <p>รายละเอียดสินค้าตัวอย่าง...</p>
+        <p th:text="${product.description}">รายละเอียดสินค้า</p>
     </div>
 </div>
 

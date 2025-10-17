@@ -117,16 +117,59 @@ public class PageController {
     }
 
     @GetMapping("/product_detail")
-    public String productDetailTempPage() {
-        return "product_detail"; // ✅ อยู่ใน templates/product_detail_temp.html
+    public String productDetail(HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+        // mock product object
+        Map<String, Object> product = Map.of(
+            "name", "เสื้อยืดธรรมศาสตร์",
+            "price", 259,
+            "description", "เสื้อยืดผ้าคุณภาพดี พิมพ์ลายตรามหาวิทยาลัยธรรมศาสตร์"
+        );
+        model.addAttribute("product", product);
+
+        if (username == null) {
+            model.addAllAttributes(Map.of(
+                "username", "Guest",
+                "email", "-",
+                "phone", "-"
+            ));
+            return "product_detail_no_login";
+        }
+        // login แล้ว
+        String email = (String) session.getAttribute("email");
+        String phone = (String) session.getAttribute("phone");
+        model.addAllAttributes(Map.of(
+            "username", username,
+            "email", email,
+            "phone", phone
+        ));
+        return "product_detail";
     }
 
+
     @GetMapping("/product_detail/{productId}")
-    public String productDetailPage (Model model, @PathVariable Long productId) {
+    public String productDetailPage (Model model, @PathVariable Long productId,HttpSession session) {
+        String username = (String) session.getAttribute("username");
         Product product = productRepository.findById(productId).orElse(null);
         if (product == null) {
-            return "redirect:/error"; // or handle product not found
+            return "redirect:/error";
         }
+        if (username == null) {
+            model.addAllAttributes(Map.of(
+                "username", "Guest",
+                "email", "-",
+                "phone", "-"
+            ));
+            model.addAttribute("product", product);
+            return "product_detail_no_login";
+        }
+        String email = (String) session.getAttribute("email");
+        String phone = (String) session.getAttribute("phone");
+        model.addAllAttributes(Map.of(
+            "username", username,
+            "email", email,
+            "phone", phone
+        ));
         model.addAttribute("product", product);
         return "product_detail";
     }
