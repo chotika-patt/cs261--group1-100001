@@ -22,17 +22,25 @@ public class PageController {
         model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("email", session.getAttribute("email"));
         model.addAttribute("phone", session.getAttribute("phone"));
-        UserRole role =(UserRole) session.getAttribute("role");
-        
-        if(role.equals(UserRole.SELLER)){
-            return "sellerTemp";
+
+        UserRole role = (UserRole) session.getAttribute("role");
+
+        // ✅ ป้องกัน NullPointerException
+        if (role == null) {
+            // ถ้าไม่มี role ใน session ให้กลับไปหน้า login
+            return "redirect:/login";
         }
-        else if(role.equals(UserRole.CLIENT)){
+
+        if (role.equals(UserRole.SELLER)) {
+            return "sellerTemp";
+        } else if (role.equals(UserRole.CLIENT)) {
             return "buyerTemp";
         }
-        // ADMIN ค่อยทำ
-        return "Failed";
+
+        // เผื่อ role ไม่ตรงกับที่กำหนดไว้
+        return "redirect:/login";
     }
+
     @GetMapping("/logout")
     public String logoutPage(@RequestParam String param) {
         return "redirect:/index";
@@ -53,14 +61,9 @@ public class PageController {
         return "cart"; // หมายถึงไฟล์ templates/cart.html
     }
 
-    @GetMapping("/")
+    @GetMapping({"/", "/index"})
     public String indexPage() {
-        return "buyerTemp"; // จะไป templates/index.html
-    }
-
-    @GetMapping("/index.html")
-    public String redirectToIndex() {
-        return "buyerTemp";
+        return "index"; // ชี้ไปที่ templates/index.html
     }
 
     @GetMapping("/buyerTemp")
@@ -88,6 +91,19 @@ public class PageController {
     public String productDetailTempPage() {
         return "product_detail_temp"; // ✅ อยู่ใน templates/product_detail_temp.html
     }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login"; // หมายถึง templates/login.html
+    }
+
+    @GetMapping("/product_detail")
+    public String productDetailPage(HttpSession session) {
+        // ดึงจาก session แล้วส่งให้ Thymeleaf ใช้
+        session.getAttribute("username");
+        return "product_detail"; // ชื่อไฟล์ใน templates
+    }
+
 
 
 

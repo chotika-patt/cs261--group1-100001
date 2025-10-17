@@ -1,30 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Product Detail</title>
-    <link rel="stylesheet" href="../static/css/styles.css">
-    <link rel="stylesheet" href="../static/css/product-detail.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- ✅ ใช้ th:href เพื่อให้ Spring Boot ดึง static ได้ถูก -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/product-detail.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
+
 <body>
 <!-- ======= Navbar บนสุด ======= -->
 <nav class="nav-top">
     <div class="right-buttons">
         <div class="user-menu">
             <button class="user-btn" id="user-btn">
-                <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
+                <!-- ✅ Syntax ถูกต้อง -->
+                <span class="user-text" th:text="${session.username != null ? session.username : 'Guest'}">Guest</span>
                 <div class="user-icon"><i class="fa-solid fa-user"></i></div>
             </button>
 
+            <!-- ✅ ใช้ session ตรงๆ -->
             <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
                 <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
                 <div class="avatar"><i class="fa-solid fa-user"></i></div>
-                <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
+                <h4 th:text="${session.username}">ชื่อบัญชีผู้ใช้</h4>
                 <div class="info">
-                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
-                    <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
+                    <p><i class="fa-solid fa-envelope"></i>
+                        <span th:text="${session.email}">username@gmail.com</span>
+                    </p>
+                    <p><i class="fa-solid fa-phone"></i>
+                        <span th:text="${session.phone}">xxx-xxx-xxxx</span>
+                    </p>
                 </div>
                 <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
             </div>
@@ -32,42 +40,51 @@
         <a th:href="@{/cart}" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
 </nav>
+
+<!-- ======= Navbar ล่าง ======= -->
 <nav class="nav-bottom">
     <ul class="menu">
-        <li>
-            <a th:href="@{/buyerTemp}"><img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo"></a>
-        </li><li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>>
+        <li><a th:href="@{/buyerTemp}"><img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo" /></a></li>
+        <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
         <li class="dropdown-category">
-        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
-         <div class="overlay"></div> <div class="dropdown-content">
-            <a href="#">เสื้อ</a>
-            <a href="#">กระเป๋า</a>
-            <a href="#">เครื่องแบบนักศึกษา</a>
-            <a href="#">ของใช้ทั่วไป</a>
-            <a href="#">ของที่ระลึก</a>
-        </div>
+            <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+            <div class="overlay"></div>
+            <div class="dropdown-content">
+                <a href="#">เสื้อ</a>
+                <a href="#">กระเป๋า</a>
+                <a href="#">เครื่องแบบนักศึกษา</a>
+                <a href="#">ของใช้ทั่วไป</a>
+                <a href="#">ของที่ระลึก</a>
+            </div>
         </li>
         <li><a href="#">เช็คสถานะ</a></li>
         <li><a href="#">ติดต่อเรา</a></li>
         <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
     </ul>
-</nav><br>
+</nav>
+
+<br />
+
+<!-- ======= Product Detail Section ======= -->
 <div class="product-container">
     <div class="product-detail-photo">
-        รูป
+        <img th:src="@{/img/sample-product.jpg}" alt="Product Image" />
     </div>
+
     <div class="product-detail-main">
         <div class="product-header">
             <h1>ชื่อสินค้า :</h1>
             <button class="add-to-cart-btn">เพิ่มลงตะกร้า</button>
         </div>
         <p class="product-category">หมวดหมู่ :</p>
+
         <div class="product-options">
             <span class="option-label">สี :</span>
             <button class="color-option">สีดำ</button>
             <button class="color-option">สีขาว</button>
         </div>
-       <div class="product-quantity">
+
+        <div class="product-quantity">
             <span class="option-label">จำนวน</span>
             <div class="quantity-selector">
                 <button class="minus">-</button>
@@ -75,16 +92,19 @@
                 <button class="plus">+</button>
             </div>
         </div>
+
         <div class="product-price-box">
             <div class="price-label">ราคา</div>
             <div class="price-value">฿1,290</div>
         </div>
-
     </div>
+
     <div class="product-detail-describe">
         <h3>รายละเอียดสินค้า</h3>
-        </div>
+        <p>รายละเอียดสินค้าตัวอย่าง...</p>
+    </div>
 </div>
+
 <!-- ======= Popup Logout ======= -->
 <div class="logout-modal" id="logout-modal">
     <div class="modal-content">
@@ -105,44 +125,38 @@
     </div>
 </div>
 
+<!-- ======= Scripts ======= -->
 <script>
-// ===== แถบแดงหมวดหมู่สินค้าหน้า product เป็นแถบ dropdown =====
-const toggle = document.querySelector('.dropdown-toggle');
-const dropdown = document.querySelector('.dropdown-content');
-const overlay = document.querySelector('.overlay');
+    // Dropdown หมวดหมู่
+    const toggle = document.querySelector('.dropdown-toggle');
+    const dropdown = document.querySelector('.dropdown-content');
+    const overlay = document.querySelector('.overlay');
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      const isOpen = dropdown.style.display === 'block';
+      dropdown.style.display = isOpen ? 'none' : 'block';
+      overlay.style.display = isOpen ? 'none' : 'block';
+    });
+    overlay.addEventListener('click', function() {
+      dropdown.style.display = 'none';
+      overlay.style.display = 'none';
+    });
 
-toggle.addEventListener('click', function(e) {
-e.preventDefault();
-const isOpen = dropdown.style.display === 'block';
-dropdown.style.display = isOpen ? 'none' : 'block';
-overlay.style.display = isOpen ? 'none' : 'block';
-});
-
-overlay.addEventListener('click', function() {
-dropdown.style.display = 'none';
-overlay.style.display = 'none';
-});
+    // Quantity Selector
+    const minusBtn = document.querySelector('.minus');
+    const plusBtn = document.querySelector('.plus');
+    const quantityInput = document.getElementById('quantity');
+    plusBtn.addEventListener('click', () => {
+      let currentValue = parseInt(quantityInput.value);
+      quantityInput.value = currentValue + 1;
+    });
+    minusBtn.addEventListener('click', () => {
+      let currentValue = parseInt(quantityInput.value);
+      if (currentValue > 1) quantityInput.value = currentValue - 1;
+    });
 </script>
 
-<script>
-  const minusBtn = document.querySelector('.minus');
-  const plusBtn = document.querySelector('.plus');
-  const quantityInput = document.getElementById('quantity');
-
-  plusBtn.addEventListener('click', () => {
-    let currentValue = parseInt(quantityInput.value);
-    quantityInput.value = currentValue + 1;
-  });
-
-  minusBtn.addEventListener('click', () => {
-    let currentValue = parseInt(quantityInput.value);
-    if (currentValue > 1) { // ไม่ให้ลดต่ำกว่า 1
-      quantityInput.value = currentValue - 1;
-    }
-  });
-</script>
-
-<!-- JS (dropdown/search/logout) -->
+<!-- JS สำหรับ dropdown/logout -->
 <script th:src="@{/js/main.js}" defer></script>
 </body>
 </html>
