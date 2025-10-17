@@ -110,9 +110,25 @@ public class PageController {
     }
 
     @GetMapping("/product")
-    public String productPage(Model model) {
+    public String productPage(HttpSession session,Model model) {
+        String username = (String) session.getAttribute("username");
         List<Product> products = productRepository.findAll();
         model.addAttribute("products", products);
+        if (username == null) {
+            model.addAllAttributes(Map.of(
+                "username", "Guest",
+                "email", "-",
+                "phone", "-"
+            ));
+            return "product_no_login";
+        }
+        String email = (String) session.getAttribute("email");
+        String phone = (String) session.getAttribute("phone");
+        model.addAllAttributes(Map.of(
+            "username", username,
+            "email", email,
+            "phone", phone
+        ));
         return "product"; // ✅ ชี้ไปที่ templates/product.html
     }
 

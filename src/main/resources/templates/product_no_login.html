@@ -11,24 +11,9 @@
 <!-- ======= Navbar บนสุด ======= -->
 <nav class="nav-top">
     <div class="right-buttons">
-        <div class="user-menu">
-            <button class="user-btn" id="user-btn">
-                <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
-                <div class="user-icon"><i class="fa-solid fa-user"></i></div>
-            </button>
-
-            <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
-                <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
-                <div class="avatar"><i class="fa-solid fa-user"></i></div>
-                <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
-                <div class="info">
-                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
-                    <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
-                </div>
-                <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
-            </div>
-        </div>
-        <a th:href="@{/cart}" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></a>
+        <!-- ✅ แก้ให้ไปที่ /login -->
+        <a th:href="@{/login}" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
+        <a th:href="@{/cart}"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
 </nav>
   <nav class="nav-bottom">
@@ -143,6 +128,51 @@
         <p>ออกจากระบบสำเร็จแล้ว</p>
     </div>
 </div>
-<script th:src="@{/js/main.js}" defer></script>
+  <script>
+    // ===== แถบค้นหาแบบใหม่ =====
+    const searchIcon = document.getElementById('search-icon');
+    const searchClose = document.getElementById('search-close');
+    const navBottom = document.querySelector('.nav-bottom');
+
+    searchIcon.addEventListener('click', (event) => {
+      event.preventDefault(); 
+      navBottom.classList.add('search-active');
+    });
+
+    searchClose.addEventListener('click', () => {
+      navBottom.classList.remove('search-active');
+    });
+
+    // ===== Dropdown หมวดหมู่สินค้าใน nav-bottom =====
+    const toggle = document.querySelector('.dropdown-toggle');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    const overlay = document.querySelector('.overlay');
+
+    if (toggle && dropdownContent && overlay) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        const isOpen = dropdownContent.style.display === 'block';
+        dropdownContent.style.display = isOpen ? 'none' : 'block';
+        overlay.style.display = isOpen ? 'none' : 'block';
+      });
+
+      overlay.addEventListener('click', function() {
+        dropdownContent.style.display = 'none';
+        overlay.style.display = 'none';
+      });
+    }
+
+    // ===== Toggle Category Bar (แถบแดง) =====
+    function toggleCategoryDropdown() {
+      const bar = document.querySelector('.category-bar');
+      const categoryDropdown = document.querySelector('.category-dropdown');
+      
+      if (bar && categoryDropdown) {
+        categoryDropdown.classList.toggle('show');
+        bar.classList.toggle('active');
+      }
+    }
+  </script>
+
 </body>
 </html>
