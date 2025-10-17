@@ -3,6 +3,7 @@ package tu_store.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,8 @@ import tu_store.demo.services.ProductService;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api")
@@ -60,5 +63,19 @@ public class ProductController {
         }catch (IllegalArgumentException e){
             return ResponseEntity.status(403).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/products/{id}")
+    public ResponseEntity<?> getProdctById(@PathVariable Long id) {
+        ProductResponse response = productService.getProductResponseById(id);
+        if (response == null) return ResponseEntity.status(404).body("Product not found");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("users/{userId}/products")
+    public ResponseEntity<?> getProdctsByUserId(@PathVariable Long userId) {
+
+        List <ProductResponse> responseList = productService.getAllProductsResponseByUserId(userId);
+        return ResponseEntity.ok(responseList);
     }
 }
