@@ -83,40 +83,38 @@
       </div>
     </div>
 
-    <!-- Categories -->
     <div class="category-con">
-      <div class="category-item">
-        <div class="category-box">
-          <a th:href="@{/product_detail}"><img src="img/jersey.png" alt="Category Shirt"></a>
+        <div class="category-item">
+            <div class="category-box">
+                <a th:href="@{'/category/' + 'SHIRT'}"><img th:src="@{/img/jersey.png}" alt="Category Shirt"></a>
+            </div>
+            <h3>เสื้อ</h3>
         </div>
-        <h3>เสื้อ</h3>
-      </div>
-      <div class="category-item">
-        <div class="category-box">
-          <img src="img/bag.png" alt="Category Bag">
+        <div class="category-item">
+            <div class="category-box">
+                <a th:href="@{'/category/' + 'SHIRT'}"><img th:src="@{/img/bag.png}" alt="Category Bag"></a>
+            </div>
+            <h3>กระเป๋า</h3>
         </div>
-        <h3>กระเป๋า</h3>
-      </div>
-      <div class="category-item">
-        <div class="category-box">
-          <img src="img/uniform.png" alt="Category Uniform">
+        <div class="category-item">
+            <div class="category-box">
+                <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}"><img th:src="@{/img/uniform.png}" alt="Category Uniform"></a>
+            </div>
+            <h3>เครื่องแบบนักศึกษา</h3>
         </div>
-        <h3>เครื่องแบบนักศึกษา</h3>
-      </div>
-      <div class="category-item">
-        <div class="category-box">
-          <img src="img/things.png" alt="Category General Use">
+        <div class="category-item">
+            <div class="category-box">
+                <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}"><img th:src="@{/img/things.png}" alt="Category General Use"></a>
+            </div>
+            <h3>ของใช้ทั่วไป</h3>
         </div>
-        <h3>ของใช้ทั่วไป</h3>
-      </div>
-      <div class="category-item">
-        <div class="category-box">
-          <img src="img/arttoy.png" alt="Category Souvenir">
+        <div class="category-item">
+            <div class="category-box">
+                <a th:href="@{'/category/' + 'MEMORABILIA'}"><img th:src="@{/img/arttoy.png}" alt="Category Souvenir"></a>
+            </div>
+            <h3>ของที่ระลึก</h3>
         </div>
-        <h3>ของที่ระลึก</h3>
-      </div>
     </div>
-
 
     <!-- Products -->
     <div class="product-section">
