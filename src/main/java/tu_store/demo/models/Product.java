@@ -150,4 +150,25 @@ public class Product {
     public LocalDateTime getCreatedAt() {
         return this.createdAt;
     }
+    public void setMain_image(String main_image) {
+        this.main_image = main_image;
+    }
+
+    public void setName(String name) {
+        this.name = name; 
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setPrice(long price) {
+       this.price = price;
+    }
+
+    public void setDescription(String description) {
+       this.description = description;
+    }
+
+
 }

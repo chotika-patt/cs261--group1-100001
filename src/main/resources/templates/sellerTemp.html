@@ -109,9 +109,48 @@
       <p>ออกจากระบบสำเร็จแล้ว</p>
     </div>
   </div>
+  <!-- ======= Popup เพิ่มสินค้า ======= -->
+<div id="add-product-popup" class="popup-overlay">
+  <div class="popup-content">
+    <h2>เพิ่มสินค้าใหม่</h2>
+
+      <form id="add-product-form">
+        <label>ชื่อสินค้า</label>
+        <input type="text" id="product-name" required>
+
+        <label>หมวดหมู่</label>
+        <select id="product-category" required>
+          <option value="">-- เลือกหมวดหมู่ --</option>
+          <option value="SHIRT">เสื้อ</option>
+          <option value="BAG">กระเป๋า</option>
+          <option value="STUDENT_UNIFORM">เครื่องแบบนักศึกษา</option>
+          <option value="GENERAL_PURPOSE">ของใช้ทั่วไป</option>
+          <option value="MEMORABILIA">ของที่ระลึก</option>
+        </select>
+
+        <label>ราคา (บาท)</label>
+        <input type="number" id="product-price" min="0" required>
+
+        <label>จำนวนในสต็อก</label>
+        <input type="number" id="product-stock" min="0" required>
+
+        <label>รายละเอียดสินค้า</label>
+        <textarea id="product-description" rows="3" required></textarea>
+
+        <label>อัปโหลดรูปภาพ</label>
+        <input type="file" id="product-image" accept="image/*">
+
+        <div class="popup-buttons">
+          <button type="submit" class="btn-confirm">บันทึก</button>
+          <button type="button" id="close-popup" class="btn-cancel">ยกเลิก</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- ======= Script ======= -->
   <script th:src="@{/js/main.js}" defer></script>
   <script th:src="@{/js/auth.js}" defer></script>
+  <script th:src="@{/js/sellerTemp.js}" defer></script>
 </body>
 </html>

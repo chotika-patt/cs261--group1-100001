@@ -749,7 +749,6 @@ main {
 .dropdown-content a:hover {
   background-color: rgba(0,0,0,0.05);
 }
-
 /* ===== Overlay สำหรับ liquid glass ===== */
 .overlay {
   display: none; /* เริ่มต้นซ่อน */

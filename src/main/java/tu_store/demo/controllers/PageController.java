@@ -39,12 +39,14 @@ public class PageController {
     public PageController(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
-
+    @GetMapping("/register")
+    public String gotoRegister(){
+        return "register.html";
+    }
     @GetMapping("/login")
     public String showLoginPage() {
         return "login"; // just show the login.html template
     }
-
     @PostMapping("/login")
     public String handleLogin(
             @RequestParam String username,
@@ -80,9 +82,22 @@ public class PageController {
     }
 
     @GetMapping({"/", "/index"})
-    public String indexPage(Model model) {
+    public String indexPage(Model model, HttpSession session) {
+        Object role = session.getAttribute("role");
+
         List<Product> products = productRepository.findAll();
         model.addAttribute("products", products);
+
+        if (role == null) {
+            return "index"; // Not logged in, show homepage
+        }
+
+        // Redirect based on role
+        if ("SELLER".equals(role.toString())) {
+            return "redirect:/sellerTemp";
+        } else if ("CLIENT".equals(role.toString())) {
+            return "redirect:/buyerTemp";
+        }
         return "index"; // ชี้ไปที่ templates/index.html
     }
 
@@ -110,23 +125,93 @@ public class PageController {
     }
 
     @GetMapping("/product")
-    public String productPage(Model model) {
+    public String productPage(HttpSession session,Model model) {
+        String username = (String) session.getAttribute("username");
         List<Product> products = productRepository.findAll();
         model.addAttribute("products", products);
+        if (username == null) {
+            model.addAllAttributes(Map.of(
+                "username", "Guest",
+                "email", "-",
+                "phone", "-"
+            ));
+            return "product_no_login";
+        }
+        String email = (String) session.getAttribute("email");
+        String phone = (String) session.getAttribute("phone");
+        model.addAllAttributes(Map.of(
+            "username", username,
+            "email", email,
+            "phone", phone
+        ));
         return "product"; // ✅ ชี้ไปที่ templates/product.html
     }
 
     @GetMapping("/product_detail")
-    public String productDetailTempPage() {
-        return "product_detail"; // ✅ อยู่ใน templates/product_detail_temp.html
+    public String productDetail(HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+        // mock product object
+        Map<String, Object> product = Map.of(
+            "name", "เสื้อยืดธรรมศาสตร์",
+            "price", 259,
+            "description", "เสื้อยืดผ้าคุณภาพดี พิมพ์ลายตรามหาวิทยาลัยธรรมศาสตร์"
+        );
+        model.addAttribute("product", product);
+
+        if (username == null) {
+            model.addAllAttributes(Map.of(
+                "username", "Guest",
+                "email", "-",
+                "phone", "-"
+            ));
+            return "product_detail_no_login";
+        }
+        // login แล้ว
+        String email = (String) session.getAttribute("email");
+        String phone = (String) session.getAttribute("phone");
+        model.addAllAttributes(Map.of(
+            "username", username,
+            "email", email,
+            "phone", phone
+        ));
+        return "product_detail";
     }
 
+
     @GetMapping("/product_detail/{productId}")
-    public String productDetailPage (Model model, @PathVariable Long productId) {
+    public String productDetailPage (Model model, @PathVariable Long productId,HttpSession session) {
+        String username = (String) session.getAttribute("username");
         Product product = productRepository.findById(productId).orElse(null);
-        if (product == null) {
-            return "redirect:/error"; // or handle product not found
+
+        // Validate productId
+        if (productId == null || productId <= 0) {
+            model.addAttribute("errorMessage", "รหัสสินค้าผิดพลาด");
+            return "error_page"; // create a generic error template
         }
+
+        Product prod = productRepository.findById(productId).orElse(null);
+
+        if (prod == null) {
+            model.addAttribute("errorMessage", "สินค้านี้ไม่มีอยู่");
+            return "error_page"; // or redirect to a 404 page
+        }
+
+        if (username == null) {
+            model.addAllAttributes(Map.of(
+                "username", "Guest",
+                "email", "-",
+                "phone", "-"
+            ));
+            model.addAttribute("product", product);
+            return "product_detail_no_login";
+        }
+        String email = (String) session.getAttribute("email");
+        String phone = (String) session.getAttribute("phone");
+        model.addAllAttributes(Map.of(
+            "username", username,
+            "email", email,
+            "phone", phone
+        ));
         model.addAttribute("product", product);
         return "product_detail";
     }
