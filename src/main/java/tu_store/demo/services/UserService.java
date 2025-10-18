@@ -24,6 +24,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TuApiService tuApiService;
+
     public boolean login(User user) {
         User dbUser = userRepository.findFirstByUsername(user.getUsername());
 
@@ -61,14 +64,14 @@ public class UserService {
         String hashedPassword = passwordEncoder.encode(password);
 
         if(role == UserRole.CLIENT){
-            User newUser = new User(username, email, hashedPassword, phone, null, null, role);
+            User newUser = new User(username, email, hashedPassword, phone, null, null, role, null);
             userRepository.save(newUser);
         }
         else if(role == UserRole.SELLER){
             if (studentID.length() != 10){
                 return "Invalid student ID.";
             }
-            User newUser = new User(username, email, hashedPassword, phone, studentID, httpUser.getVerify_document(), role);
+            User newUser = new User(username, email, hashedPassword, phone, studentID, httpUser.getVerify_document(), role, false);
             userRepository.save(newUser);
         }
         else{
@@ -128,12 +131,17 @@ public class UserService {
 
         User newUser;
         if (role == UserRole.CLIENT) {
-            newUser = new User(username, email, hashedPassword, phone, null, null, role);
+            newUser = new User(username, email, hashedPassword, phone, null, null, role, null);
         } else if (role == UserRole.SELLER) {
             if (studentID == null || studentID.length() != 10) {
                 throw new RuntimeException("Invalid student ID.");
             }
-            newUser = new User(username, email, hashedPassword, phone, studentID, null, role);
+            boolean isValidStudent = tuApiService.checkStudentExists(studentID);
+            if (!isValidStudent) {
+                throw new RuntimeException("Student ID not valid according to TU records.");
+            }
+
+            newUser = new User(username, email, hashedPassword, phone, studentID, null, role, false);
         } else {
             throw new RuntimeException("Invalid role.");
         }
