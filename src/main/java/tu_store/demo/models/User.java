@@ -30,6 +30,9 @@ public class User {
     @Column(length = 255, nullable = true)
     private String verify_document;  // path หรือ URL ของไฟล์ยืนยัน (.jpg / .pdf)
 
+    @Column(nullable = true)
+    private Boolean verified;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private UserRole role;  // client, seller, admin
@@ -41,7 +44,7 @@ public class User {
     public User() {}
 
     public User(String username, String email, String password, String phone,
-                String studentID, String verify_document, UserRole role) {
+                String studentID, String verify_document, UserRole role,  Boolean verified) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -49,6 +52,7 @@ public class User {
         this.studentID = studentID;
         this.verify_document = verify_document;
         this.role = role;
+        this.verified = verified;
     }
 
     // ----- Getters & Setters -----
@@ -77,4 +81,7 @@ public class User {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public Boolean getVerified() { return verified; }
+    public void setVerified(Boolean verified) { this.verified = verified; }
 }

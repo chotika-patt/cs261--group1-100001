@@ -30,6 +30,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import org.springframework.web.bind.annotation.RequestParam;
+import tu_store.demo.services.UserService;
 
 
 @RestController
@@ -37,6 +38,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ProductController {
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Value("${file.upload-dir-product}")
     private String uploadDirProduct;
@@ -73,6 +77,11 @@ public class ProductController {
         String username = (String) session.getAttribute("username");
         if (username == null) {
             return ResponseEntity.status(401).body("Please login as seller.");
+        }
+
+        User user = userRepository.findByUsername(username);
+        if (user.getVerified() == null || !user.getVerified()) {
+            return ResponseEntity.status(403).body("Your account has not been verified yet.");
         }
 
         try {
