@@ -11,7 +11,7 @@ import java.net.http.HttpResponse;
 
 @Service
 public class TuApiService {
-    private static final String ACCESS_TOKEN = "access_token";
+    private static final String ACCESS_TOKEN = "TU86ef004ae9c4dc077b0f5ee076f23388452133650814c706551da3b9bdbdde09a4fb72e5142d25ee2069187888c64b4d";
 
     public boolean checkStudentExists(String studentID){
         try {
