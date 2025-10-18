@@ -24,6 +24,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TuApiService tuApiService;
+
     public boolean login(User user) {
         User dbUser = userRepository.findFirstByUsername(user.getUsername());
 
@@ -133,6 +136,11 @@ public class UserService {
             if (studentID == null || studentID.length() != 10) {
                 throw new RuntimeException("Invalid student ID.");
             }
+            boolean isValidStudent = tuApiService.checkStudentExists(studentID);
+            if (!isValidStudent) {
+                throw new RuntimeException("Student ID not valid according to TU records.");
+            }
+
             newUser = new User(username, email, hashedPassword, phone, studentID, null, role, false);
         } else {
             throw new RuntimeException("Invalid role.");
