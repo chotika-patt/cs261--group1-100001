@@ -13,7 +13,11 @@
 <body>
   <!-- ======= Navbar ด้านบน ======= -->
   <nav class="nav-top">
-    <div class="right-buttons">
+      <div class="left-logo">
+          <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+      </div>
+
+      <div class="right-buttons">
       <div class="user-menu">
         <button class="user-btn" id="user-btn">
           <span class="user-text" th:text="${session.username}">Seller Name</span>
@@ -58,7 +62,11 @@
   <main class="seller-dashboard">
     <div class="dashboard-header">
       <h1 th:text="'ยินดีต้อนรับ, ' + ${username} + '!'">ยินดีต้อนรับ, Seller Name!</h1>
-      <button class="add-product-btn"><i class="fa-solid fa-plus"></i> เพิ่มสินค้าใหม่</button>
+        <a th:href="@{/addProduct}" class="add-product-link">
+            <button class="add-product-btn">
+                <i class="fa-solid fa-plus"></i> เพิ่มสินค้าใหม่
+            </button>
+        </a>
     </div>
 
     <div class="product-management-section">

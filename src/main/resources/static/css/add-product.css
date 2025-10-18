@@ -1,0 +1,252 @@
+/* ======= โครงหลัก ======= */
+body {
+  background-color: #f7f7f8;
+  font-family: "Prompt", sans-serif;
+  color: #333;
+}
+
+.product-container {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 25px;
+  max-width: 1100px;
+  margin: 50px auto;
+  align-items: start;
+}
+
+/* ======= กล่อง upload รูป ======= */
+.product-detail-photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background-color: #FFDD7041;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: 0.2s;
+}
+
+.product-detail-photo label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.product-detail-photo:hover {
+  background-color: #f4e594;
+}
+
+.product-detail-photo i {
+  font-size: 60px;
+  color: #f5c04f;
+  margin-bottom: 10px;
+}
+
+/* ======= ฟอร์มขวา ======= */
+.product-detail-main {
+  background-color: #ffffff;
+  padding: 25px 30px;
+  border-radius: 10px;
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.08);
+  position: relative;
+}
+
+/* ======= ปุ่มบันทึก ======= */
+.add-to-cart-btn {
+  background-color: #c32032;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: bold;
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #a61d2a;
+}
+
+/* ======= หัวข้อฟอร์ม ======= */
+.product-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 25px;
+}
+
+/* ======= ช่องกรอก ======= */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+/* ======= ช่องกรอก ======= */
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: none;                    /* ❌ ไม่มีขอบ */
+  border-radius: 8px;
+  background-color: #f2f2f2;       /* ✅ เทาอ่อน สบายตา */
+  font-size: 15px;
+  color: #222;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;                   /* ❌ ไม่มีกรอบเวลา focus */
+  background-color: #ffffff;       /* ✅ คลิกแล้วขาวขึ้น */
+  box-shadow: none;                /* ❌ ไม่มีเงา */
+}
+
+/* ======= ปุ่ม dropdown ======= */
+select {
+  height: 44px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%23333' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px;
+  background-color: #f2f2f2;
+}
+
+/* ======= กล่องราคา ======= */
+.product-price-box {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fbe3e3;       /* 🔴 แดงอ่อนนุ่ม */
+  margin-top: 5px;
+  border: none;                    /* ❌ ไม่มีเส้นขอบ */
+  box-shadow: none;                /* ❌ ไม่มีเงา */
+}
+
+.price-label {
+  background-color: #c32032;       /* 🔴 แดงเข้ม TU */
+  color: #fff;
+  font-weight: bold;
+  padding: 15px 25px;
+  width: 120px;
+  text-align: center;
+  border: none;
+}
+
+.price-value {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+}
+
+.price-value input {
+  border: none;                    /* ❌ ไม่มีกรอบในช่องราคา */
+  background: transparent;
+  font-size: 15px;
+  width: 100%;
+  color: #333;
+}
+
+/* ======= กล่องรายละเอียดสินค้า ======= */
+.product-detail-describe {
+  grid-column: 1 / -1;
+  background-color: #ffffff;       /* พื้นหลังขาวสะอาด */
+  padding: 25px 30px;
+  border-radius: 10px;
+  margin-top: 10px;
+  border: none;                    /* ❌ ไม่มีขอบ */
+  box-shadow: none;                /* ❌ ไม่มีเงา */
+}
+
+.product-detail-describe h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.product-detail-describe textarea {
+  width: 100%;
+  height: 120px;
+  resize: none;
+  border: none;                    /* ❌ ไม่มีกรอบ */
+  border-radius: 6px;
+  background-color: #f2f2f2;       /* ✅ เทาอ่อนนวลตา */
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #222;
+}
+
+.product-detail-describe textarea:focus {
+  background-color: #ffffff;       /* ✅ คลิกแล้วขาว */
+  outline: none;
+  box-shadow: none;
+}
+
+#uploadLabel {
+  text-align: center;
+  color: #000000;
+  cursor: pointer;
+  font-size: 24px;
+  transition: 0.2s;
+}
+
+#uploadLabel i {
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+/* ✅ รูปเต็มกรอบ */
+#previewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* ทำให้รูปเต็มแต่ไม่บี้ */
+  display: none;
+  border-radius: 10px;
+}
+
+/* ✅ ปุ่มลบอยู่ตรงกลางล่าง */
+#removeImage {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #c32032;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  display: none;
+}
+
+#removeImage:hover {
+  background-color: #a91e2b;
+}

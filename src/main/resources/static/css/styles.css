@@ -6,10 +6,18 @@ body {
 
 /* ก้อนแรก */
 .nav-top {
+    display: flex;
+  justify-content: space-between; /* โลโก้ซ้าย / ปุ่มขวา */
+  align-items: center;
   background-color: #1D1D1F;
   padding: 10px 20px;
 }
 
+.left-logo img {
+  height: 45px;
+  width: auto;
+  vertical-align: middle;
+}
 .right-buttons {
   display: flex;
   justify-content: flex-end;
@@ -80,6 +88,19 @@ main {
 .nav-top .fa-cart-shopping:hover {
   color: #c00; 
 }
+/* ✅ โลโก้ TU Store กลาง nav */
+.nav-logo-center {
+  background-color: #1D1D1F; /* ให้กลืนกับ nav */
+  text-align: center;
+  padding: 10px 0;
+}
+
+.nav-logo-center img {
+  height: 80px;
+  width: auto;
+  display: inline-block;
+}
+
 
 .box-container {
   display: grid;

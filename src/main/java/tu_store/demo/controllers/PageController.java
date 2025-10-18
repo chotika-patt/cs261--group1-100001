@@ -130,5 +130,9 @@ public class PageController {
         model.addAttribute("product", product);
         return "product_detail";
     }
+    @GetMapping("/addProduct")
+    public String addProductPage() {
+        return "addProduct"; // <-- ต้องมีไฟล์ addProduct.html ใน templates
+    }
 }
 

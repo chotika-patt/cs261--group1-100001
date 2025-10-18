@@ -11,7 +11,12 @@
 <body>
   <!-- ======= Navbar บนสุด ======= -->
   <nav class="nav-top">
-    <div class="right-buttons">
+
+      <div class="left-logo">
+          <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+      </div>
+
+      <div class="right-buttons">
       <div class="user-menu">
         <button class="user-btn" id="user-btn">
           <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
