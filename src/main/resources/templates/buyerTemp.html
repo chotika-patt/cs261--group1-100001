@@ -48,18 +48,17 @@
         <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
         <div class="overlay"></div> <!-- สำหรับ liquid glass -->
         <div class="dropdown-content">
-          <a href="#">เสื้อ</a>
-          <a href="#">กระเป๋า</a>
-          <a href="#">เครื่องแบบนักศึกษา</a>
-          <a href="#">ของใช้ทั่วไป</a>
-          <a href="#">ของที่ระลึก</a>
+              <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+              <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+              <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+              <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+              <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
         </div>
       </li>
       <li><a href="#">เช็คสถานะ</a></li>
       <li><a href="#">ติดต่อเรา</a></li>
       <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-    </ul>
-    
+    </ul> 
     <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
     <div class="search-bar-replacement">
       <div class="search-input-container">
@@ -72,8 +71,6 @@
     </div>
     <div id="search-results"></div>
   </nav>
-
-
   <!-- ======= ส่วนหลักของหน้า ======= -->
   <main>
     <div class="box-container">

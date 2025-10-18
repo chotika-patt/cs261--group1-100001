@@ -10,10 +10,13 @@
 <body>
 <!-- ======= Navbar บนสุด ======= -->
 <nav class="nav-top">
+    <div class="left-logo">
+            <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+    </div>
     <div class="right-buttons">
         <!-- ✅ แก้ให้ไปที่ /login -->
         <a th:href="@{/login}" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
-        <a th:href="@{/cart}"><i class="fa-solid fa-cart-shopping"></i></a>
+        <a th:href="@{/login}"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
 </nav>
   <nav class="nav-bottom">
@@ -25,11 +28,11 @@
         <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
         <div class="overlay"></div> <!-- สำหรับ liquid glass -->
         <div class="dropdown-content">
-          <a href="#">เสื้อ</a>
-          <a href="#">กระเป๋า</a>
-          <a href="#">เครื่องแบบนักศึกษา</a>
-          <a href="#">ของใช้ทั่วไป</a>
-          <a href="#">ของที่ระลึก</a>
+                <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+                <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+                <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+                <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+                <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
         </div>
       </li>
       <li><a href="#">เช็คสถานะ</a></li>
@@ -50,6 +53,42 @@
   </nav>
 
   <!-- แถบหมวดหมู่สินค้า (Red Dropdown Bar) -->
+  <div class="category-dropdown">
+        <div class="category-con">
+            <div class="category-item">
+                <div class="category-box">
+                    <a th:href="@{'/category/' + 'SHIRT'}"><img th:src="@{/img/jersey.png}" alt="Category Shirt"></a>
+                </div>
+                <h3>เสื้อ</h3>
+            </div>
+            <div class="category-item">
+                <div class="category-box">
+                    <a th:href="@{'/category/' + 'BAG'}"><img th:src="@{/img/bag.png}" alt="Category Bag"></a>
+                </div>
+                <h3>กระเป๋า</h3>
+            </div>
+            <div class="category-item">
+                <div class="category-box">
+                    <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}"><img th:src="@{/img/uniform.png}" alt="Category Uniform"></a>
+                </div>
+                <h3>เครื่องแบบนักศึกษา</h3>
+            </div>
+            <div class="category-item">
+                <div class="category-box">
+                  <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}"><img th:src="@{/img/things.png}" alt="Category General Use"></a>
+                </div>
+                <h3>ของใช้ทั่วไป</h3>
+            </div>
+            <div class="category-item">
+                <div class="category-box">
+                  <a th:href="@{'/category/' + 'MEMORABILIA'}"><img th:src="@{/img/arttoy.png}" alt="Category Souvenir"></a>
+                </div>
+                <h3>ของที่ระลึก</h3>
+            </div>
+        </div>
+    </div>
+    </div>
+      <!-- แถบหมวดหมู่สินค้า (Red Dropdown Bar) -->
   <div class="category-bar">
     <div class="category-header" onclick="toggleCategoryDropdown()">
       <a class="category-toggle"><span>หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></span></a>
@@ -59,38 +98,37 @@
         <div class="category-con">
             <div class="category-item">
                 <div class="category-box">
-                    <a th:href="@{/product_detail_temp}"><img src="img/jersey.png" alt="Category Shirt"></a>
+                    <a th:href="@{'/category/' + 'SHIRT'}"><img th:src="@{/img/jersey.png}" alt="Category Shirt"></a>
                 </div>
                 <h3>เสื้อ</h3>
             </div>
             <div class="category-item">
                 <div class="category-box">
-                    <img src="img/bag.png" alt="Category Bag">
+                    <a th:href="@{'/category/' + 'BAG'}"><img th:src="@{/img/bag.png}" alt="Category Bag"></a>
                 </div>
                 <h3>กระเป๋า</h3>
             </div>
             <div class="category-item">
                 <div class="category-box">
-                    <img src="img/uniform.png" alt="Category Uniform">
+                    <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}"><img th:src="@{/img/uniform.png}" alt="Category Uniform"></a>
                 </div>
                 <h3>เครื่องแบบนักศึกษา</h3>
             </div>
             <div class="category-item">
                 <div class="category-box">
-                    <img src="img/things.png" alt="Category General Use">
+                  <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}"><img th:src="@{/img/things.png}" alt="Category General Use"></a>
                 </div>
                 <h3>ของใช้ทั่วไป</h3>
             </div>
             <div class="category-item">
                 <div class="category-box">
-                    <img src="img/arttoy.png" alt="Category Souvenir">
+                  <a th:href="@{'/category/' + 'MEMORABILIA'}"><img th:src="@{/img/arttoy.png}" alt="Category Souvenir"></a>
                 </div>
                 <h3>ของที่ระลึก</h3>
             </div>
         </div>
     </div>
     </div>
-
   <div class="product-section">
     <div style="display: flex; align-items: baseline; justify-content: space-between;">
       <h1 style="margin: 0;">รายการสินค้า</h1>
@@ -128,51 +166,6 @@
         <p>ออกจากระบบสำเร็จแล้ว</p>
     </div>
 </div>
-  <script>
-    // ===== แถบค้นหาแบบใหม่ =====
-    const searchIcon = document.getElementById('search-icon');
-    const searchClose = document.getElementById('search-close');
-    const navBottom = document.querySelector('.nav-bottom');
-
-    searchIcon.addEventListener('click', (event) => {
-      event.preventDefault(); 
-      navBottom.classList.add('search-active');
-    });
-
-    searchClose.addEventListener('click', () => {
-      navBottom.classList.remove('search-active');
-    });
-
-    // ===== Dropdown หมวดหมู่สินค้าใน nav-bottom =====
-    const toggle = document.querySelector('.dropdown-toggle');
-    const dropdownContent = document.querySelector('.dropdown-content');
-    const overlay = document.querySelector('.overlay');
-
-    if (toggle && dropdownContent && overlay) {
-      toggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        const isOpen = dropdownContent.style.display === 'block';
-        dropdownContent.style.display = isOpen ? 'none' : 'block';
-        overlay.style.display = isOpen ? 'none' : 'block';
-      });
-
-      overlay.addEventListener('click', function() {
-        dropdownContent.style.display = 'none';
-        overlay.style.display = 'none';
-      });
-    }
-
-    // ===== Toggle Category Bar (แถบแดง) =====
-    function toggleCategoryDropdown() {
-      const bar = document.querySelector('.category-bar');
-      const categoryDropdown = document.querySelector('.category-dropdown');
-      
-      if (bar && categoryDropdown) {
-        categoryDropdown.classList.toggle('show');
-        bar.classList.toggle('active');
-      }
-    }
-  </script>
-
+<script th:src="@{/js/main.js}" defer></script>
 </body>
 </html>

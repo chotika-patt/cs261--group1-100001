@@ -32,5 +32,6 @@ List<Product> searchProducts(
   Product findFirstByName(String name);
   Product findFirstByProductId(long id);
   List<Product> findAllBySellerUserId(Long id);
-    List<Product> findBySeller(User seller);
+  List<Product> findBySeller(User seller);
+  List<Product> findByCategory(Category category);
 }

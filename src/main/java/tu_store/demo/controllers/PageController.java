@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import tu_store.demo.models.Category;
 import tu_store.demo.models.Product;
 import tu_store.demo.models.User;
 import tu_store.demo.models.UserRole;
@@ -219,5 +221,34 @@ public class PageController {
     public String addProductPage() {
         return "addProduct"; // <-- ต้องมีไฟล์ addProduct.html ใน templates
     }
+    @GetMapping("/category/{category}")
+    public String getProductsByCategory(
+            @PathVariable("category") Category category,
+            Model model,
+            HttpSession session) {
+
+        List<Product> products = productRepository.findByCategory(category);
+        model.addAttribute("products", products);
+        model.addAttribute("category", category);
+
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            model.addAllAttributes(Map.of(
+                "username", "Guest",
+                "email", "-",
+                "phone", "-"
+            ));
+            return "product_no_login";
+        }
+
+        model.addAllAttributes(Map.of(
+            "username", username,
+            "email", session.getAttribute("email"),
+            "phone", session.getAttribute("phone")
+        ));
+
+        return "product";
+    }
+
 }
 

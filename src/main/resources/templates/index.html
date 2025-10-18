@@ -20,7 +20,7 @@
     <div class="right-buttons">
         <!-- ✅ แก้ให้ไปที่ /login -->
         <a th:href="@{/login}" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
-        <a th:href="@{/cart}"><i class="fa-solid fa-cart-shopping"></i></a>
+        <a th:href="@{/login}"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
 </nav>
 
@@ -34,11 +34,11 @@
             <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
             <div class="overlay"></div>
             <div class="dropdown-content">
-                <a href="#">เสื้อ</a>
-                <a href="#">กระเป๋า</a>
-                <a href="#">เครื่องแบบนักศึกษา</a>
-                <a href="#">ของใช้ทั่วไป</a>
-                <a href="#">ของที่ระลึก</a>
+                <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+                <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+                <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+                <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+                <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
             </div>
         </li>
         <li><a href="#">เช็คสถานะ</a></li>
@@ -134,6 +134,6 @@
 </footer>
 
 <!-- ✅ เรียก JS แบบ dynamic -->
-<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/main.js}"></script>
 </body>
 </html>
