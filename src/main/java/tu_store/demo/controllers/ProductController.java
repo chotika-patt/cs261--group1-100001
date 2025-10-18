@@ -53,8 +53,6 @@ public class ProductController {
                 searchRequest.getMinPrice(),
                 searchRequest.getMaxPrice()
         );
-
-
     if (results.isEmpty()){
         return ResponseEntity.ok(Map.of("message", "Nothing match your search terms, please try again."));
     }
@@ -62,8 +60,7 @@ public class ProductController {
     return ResponseEntity.ok(results);
 
     }
-
-@PostMapping("/add")
+    @PostMapping("/add")
     public ResponseEntity<?> addProduct(
             HttpSession session,
             @RequestParam String name,
@@ -107,6 +104,7 @@ public class ProductController {
             return ResponseEntity.status(500).body("เกิดข้อผิดพลาด: " + e.getMessage());
         }
     }
+
     @GetMapping("/products/{id}")
     public ResponseEntity<?> getProdctById(@PathVariable Long id) {
         ProductResponse response = productService.getProductResponseById(id);
