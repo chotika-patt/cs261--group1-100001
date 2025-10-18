@@ -10,20 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpSession;
-import tu_store.demo.dto.AddToCartRequest;
 import tu_store.demo.dto.ProductResponse;
 import tu_store.demo.dto.ProductSearchRequest;
-import tu_store.demo.models.Cart;
 import tu_store.demo.models.Product;
-import tu_store.demo.models.User;
-import tu_store.demo.repositories.CartRepository;
-import tu_store.demo.repositories.UserRepository;
 import tu_store.demo.services.ProductService;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -66,14 +59,14 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    public ResponseEntity<?> getProdctById(@PathVariable Long id) {
+    public ResponseEntity<?> getProductById(@PathVariable Long id) {
         ProductResponse response = productService.getProductResponseById(id);
         if (response == null) return ResponseEntity.status(404).body("Product not found");
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("users/{userId}/products")
-    public ResponseEntity<?> getProdctsByUserId(@PathVariable Long userId) {
+    public ResponseEntity<?> getProductsByUserId(@PathVariable Long userId) {
         List <ProductResponse> responseList = productService.getAllProductsResponseByUserId(userId);
         return ResponseEntity.ok(responseList);
     }

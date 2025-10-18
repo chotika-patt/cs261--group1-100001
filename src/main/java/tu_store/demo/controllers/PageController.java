@@ -167,9 +167,20 @@ public class PageController {
     public String productDetailPage (Model model, @PathVariable Long productId,HttpSession session) {
         String username = (String) session.getAttribute("username");
         Product product = productRepository.findById(productId).orElse(null);
-        if (product == null) {
-            return "redirect:/error";
+
+        // Validate productId
+        if (productId == null || productId <= 0) {
+            model.addAttribute("errorMessage", "รหัสสินค้าผิดพลาด");
+            return "error_page"; // create a generic error template
         }
+
+        Product prod = productRepository.findById(productId).orElse(null);
+
+        if (prod == null) {
+            model.addAttribute("errorMessage", "สินค้านี้ไม่มีอยู่");
+            return "error_page"; // or redirect to a 404 page
+        }
+
         if (username == null) {
             model.addAllAttributes(Map.of(
                 "username", "Guest",
