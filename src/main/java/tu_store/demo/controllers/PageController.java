@@ -80,9 +80,22 @@ public class PageController {
     }
 
     @GetMapping({"/", "/index"})
-    public String indexPage(Model model) {
+    public String indexPage(Model model, HttpSession session) {
+        Object role = session.getAttribute("role");
+
         List<Product> products = productRepository.findAll();
         model.addAttribute("products", products);
+
+        if (role == null) {
+            return "index"; // Not logged in, show homepage
+        }
+
+        // Redirect based on role
+        if ("SELLER".equals(role.toString())) {
+            return "redirect:/sellerTemp";
+        } else if ("CLIENT".equals(role.toString())) {
+            return "redirect:/buyerTemp";
+        }
         return "index"; // ชี้ไปที่ templates/index.html
     }
 
