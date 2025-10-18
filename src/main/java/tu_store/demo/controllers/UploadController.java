@@ -14,8 +14,7 @@ import java.nio.file.*;
 @RestController
 @RequestMapping("/api/upload")
 public class UploadController {
-
-    @Value("${file.upload-dir}")
+    @Value("${file.upload-dir-seller}")
     private String uploadDir;  // ที่เก็บไฟล์ (ตั้งค่าใน application.properties)
 
     private final UserRepository userRepository;

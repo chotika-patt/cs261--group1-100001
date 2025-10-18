@@ -61,7 +61,6 @@ public class ProductService {
 
         return responseList;
     } 
-
     public ProductResponse createProductResponse(Product product){
         ProductResponse response = new ProductResponse(
             product.getProductId(),

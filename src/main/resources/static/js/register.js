@@ -71,7 +71,7 @@ document.getElementById("sellerForm").addEventListener("submit", async (event) =
     }
 
     // ไปหน้า login
-    window.location.href = "login.html";
+    window.location.href = "login";
 
   } catch (error) {
     alert("เกิดข้อผิดพลาด: " + error.message);

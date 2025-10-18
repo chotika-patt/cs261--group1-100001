@@ -1,44 +1,42 @@
-// =================== Popup เพิ่มสินค้า ===================
-const addProductBtn = document.querySelector(".add-product-btn");
-const addProductPopup = document.getElementById("add-product-popup");
-const closePopupBtn = document.getElementById("close-popup");
-const addProductForm = document.getElementById("add-product-form");
+const popup = document.getElementById("add-product-popup");
+const openBtn = document.querySelector(".add-product-btn");
+const closeBtn = document.getElementById("close-popup");
+const form = document.getElementById("add-product-form");
 
-// เปิด popup
-if (addProductBtn) {
-  addProductBtn.addEventListener("click", () => {
-    addProductPopup.classList.add("active");
-  });
-}
+openBtn.addEventListener("click", () => popup.classList.add("active"));
+closeBtn.addEventListener("click", () => popup.classList.remove("active"));
 
-// ปิด popup
-if (closePopupBtn) {
-  closePopupBtn.addEventListener("click", () => {
-    addProductPopup.classList.remove("active");
-  });
-}
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-// ส่งข้อมูลฟอร์ม (ตัวอย่างยังไม่เชื่อม API)
-if (addProductForm) {
-  addProductForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  const formData = new FormData();
+  formData.append("name", document.getElementById("product-name").value);
+  formData.append("category", document.getElementById("product-category").value);
+  formData.append("price", document.getElementById("product-price").value);
+  formData.append("stock", document.getElementById("product-stock").value);
+  formData.append("description", document.getElementById("product-description").value);
 
-    const productData = {
-      name: document.getElementById("product-name").value,
-      category: document.getElementById("product-category").value,
-      price: parseFloat(document.getElementById("product-price").value),
-      stock: parseInt(document.getElementById("product-stock").value),
-      description: document.getElementById("product-description").value,
-      image: document.getElementById("product-image").files[0]?.name || null,
-    };
+  const fileInput = document.getElementById("product-image");
+  if(fileInput.files.length > 0){
+    formData.append("main_image", fileInput.files[0]);
+  }
 
-    console.log("📦 เพิ่มสินค้าใหม่:", productData);
+  try {
+    const res = await fetch("/api/add", {
+      method: "POST",
+      body: formData
+    });
 
-    // ตัวอย่างแจ้งเตือน
-    alert("เพิ่มสินค้าเรียบร้อย!");
-
-    // ปิด popup และเคลียร์ข้อมูล
-    addProductPopup.classList.remove("active");
-    addProductForm.reset();
-  });
-}
+    if (res.ok) {
+      alert("เพิ่มสินค้าสำเร็จ!");
+      form.reset();
+      location.reload();
+    } else {
+      const msg = await res.text();
+      alert("เกิดข้อผิดพลาด: " + msg);
+    }
+  } catch (err) {
+    console.error(err);
+    alert("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้");
+  }
+});

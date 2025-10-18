@@ -28,5 +28,20 @@
     "name": "\nserver.servlet.session.timeou",
     "type": "java.lang.String",
     "description": "A description for '\nserver.servlet.session.timeou'"
+  },
+  {
+    "name": "file.upload-dir-product",
+    "type": "java.lang.String",
+    "description": "A description for 'file.upload-dir-product'"
+  },
+  {
+    "name": "file.upload-dir-seller",
+    "type": "java.lang.String",
+    "description": "A description for 'file.upload-dir-seller'"
+  },
+  {
+    "name": "file.product-upload-dir",
+    "type": "java.lang.String",
+    "description": "A description for 'file.product-upload-dir'"
   }
 ]}

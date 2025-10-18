@@ -39,12 +39,14 @@ public class PageController {
     public PageController(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
-
+    @GetMapping("/register")
+    public String gotoRegister(){
+        return "register.html";
+    }
     @GetMapping("/login")
     public String showLoginPage() {
         return "login"; // just show the login.html template
     }
-
     @PostMapping("/login")
     public String handleLogin(
             @RequestParam String username,

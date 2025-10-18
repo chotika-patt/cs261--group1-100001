@@ -111,7 +111,7 @@ public class UserService {
         if (existingUser != null) {
             throw new RuntimeException("Username has already been used.");
         }
-
+        
         if (password.length() < 6) {
             throw new RuntimeException("Password must be at least 6 characters.");
         }
