@@ -32,7 +32,7 @@
                 <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
             </div>
         </div>
-        <a th:href="@{/cart}" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></a>
+        <!-- <a th:href="@{/cart}" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></a> -->
     </div>
 </nav>
 
@@ -46,6 +46,26 @@
         <li><a href="#">ตั้งค่าร้านค้า</a></li>
     </ul>
 </nav>
+
+<!-- ======= Popup Logout ======= -->
+<div class="logout-modal" id="logout-modal">
+<div class="modal-content">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <p>คุณต้องการออกจากระบบหรือไม่</p>
+    <div class="modal-buttons">
+    <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+    <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+    </div>
+    <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+</div>
+</div>
+
+<div class="logout-success" id="logout-success">
+<div class="success-content">
+    <i class="fa-solid fa-circle-check"></i>
+    <p>ออกจากระบบสำเร็จแล้ว</p>
+</div>
+  </div>
 
 <!-- ======= ฟอร์มเพิ่มสินค้า ======= -->
 <div class="product-container">
@@ -178,5 +198,6 @@ removeBtn.addEventListener('click', function() {
 
      });
 </script>
+  <script th:src="@{/js/main.js}" defer></script>
 </body>
 </html>

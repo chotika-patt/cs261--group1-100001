@@ -27,10 +27,10 @@
             <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
                 <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
                 <div class="avatar"><i class="fa-solid fa-user"></i></div>
-                <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
+                <h4 th:text="${session.username}">ชื่อบัญชีผู้ใช้</h4>
                 <div class="info">
-                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
-                    <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
+                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${session.email}">username@gmail.com</span></p>
+                    <p><i class="fa-solid fa-phone"></i> <span th:text="${session.phone}">xxx-xxx-xxxx</span></p>
                 </div>
                 <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
             </div>
@@ -118,7 +118,7 @@
         <p>ออกจากระบบสำเร็จแล้ว</p>
     </div>
 </div>
-<script>
+<!-- <script>
   const searchIcon = document.getElementById('search-icon');
   const searchDropdown = document.getElementById('search-dropdown');
 
@@ -148,7 +148,7 @@
     dropdown.style.display = 'none';
     overlay.style.display = 'none';
   });
-</script>
+</script> -->
 <!-- JS (dropdown/search/logout) -->
 <script th:src="@{/js/main.js}" defer></script>
 </body>
