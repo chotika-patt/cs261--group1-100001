@@ -53,7 +53,7 @@ public class Product {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
+    @JoinColumn(name = "group_id", nullable = true)
     private ProductGroup productGroup;
 
     public Product() {}

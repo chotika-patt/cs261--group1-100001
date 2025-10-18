@@ -75,11 +75,11 @@
             <label>หมวดหมู่สินค้า <span style="color:red">*</span></label>
             <select id="category" required>
                 <option value="">เลือกหมวดหมู่สินค้า</option>
-                <option value="เสื้อ">เสื้อ</option>
-                <option value="กระเป๋า">กระเป๋า</option>
-                <option value="เครื่องแบบนักศึกษา">เครื่องแบบนักศึกษา</option>
-                <option value="ของใช้ทั่วไป">ของใช้ทั่วไป</option>
-                <option value="ของที่ระลึก">ของที่ระลึก</option>
+                <option value="SHIRT">เสื้อ</option>
+                <option value="BAG">กระเป๋า</option>
+                <option value="STUDENT_UNIFORM">เครื่องแบบนักศึกษา</option>
+                <option value="GENERAL_PURPOSE">ของใช้ทั่วไป</option>
+                <option value="MEMORABILIA">ของที่ระลึก</option>
             </select>
 
             <label>จำนวนสินค้าในคลัง <span style="color:red">*</span></label>
@@ -132,6 +132,19 @@ removeBtn.addEventListener('click', function() {
      document.getElementById("submitBtn").addEventListener("click", async (event) => {
        event.preventDefault();
 
+
+        const formData = new FormData();
+        formData.append("name", document.getElementById("name").value);
+        formData.append("category", document.getElementById("category").value);
+        formData.append("price", parseFloat(document.getElementById("price").value));
+        formData.append("stock", parseInt(document.getElementById("stock").value));
+        formData.append("description", document.getElementById("description").value);
+        
+         const mainImageInput = document.getElementById("imageFile");
+        if (mainImageInput && mainImageInput.files.length > 0) {
+            formData.append("main_image", mainImageInput.files[0]);
+        }
+        /*
        const productData = {
          name: document.getElementById("name").value,
          category: document.getElementById("category").value,
@@ -140,13 +153,14 @@ removeBtn.addEventListener('click', function() {
          status: "AVAILABLE",
          description: document.getElementById("description").value
        };
+       */
 
        try {
          const response = await fetch("/api/add", {
            method: "POST",
-           headers: { "Content-Type": "application/json" },
+           //headers: { "Content-Type": "application/json" },
            credentials: "include",
-           body: JSON.stringify(productData)
+           body: formData
          });
 
          if (!response.ok) {
@@ -156,7 +170,7 @@ removeBtn.addEventListener('click', function() {
          }
 
          alert("✅ เพิ่มสินค้าเรียบร้อย!");
-         window.location.href = "/seller_home";
+         window.location.href = "/sellerTemp";
        } catch (error) {
          alert("เกิดข้อผิดพลาด: " + error.message);
        }
