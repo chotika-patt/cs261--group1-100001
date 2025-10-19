@@ -26,10 +26,11 @@ public class Product {
             "handler"})
     private User seller;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 255, columnDefinition = "NVARCHAR(255)")
     private String  name;
 
     @Lob
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     private String description;
     
     @Column(nullable = false)
