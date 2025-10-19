@@ -40,14 +40,14 @@ public class UserController {
                 user.getPassword() == null || user.getPassword().isBlank()) {
             return ResponseEntity
                     .badRequest() // <-- นี่คือ status 400
-                    .body(Map.of("error", "ข้อมูลไม่ครบ กรุณากรอกชื่อผู้ใช้และรหัสผ่าน"));
+                    .body(Map.of("status", "400","error", "ข้อมูลไม่ครบ กรุณากรอกชื่อผู้ใช้และรหัสผ่าน"));
         }
 
         boolean valid = userService.login(user);
         if (!valid) {
             return ResponseEntity
                     .status(401)
-                    .body(Map.of("error", "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"));
+                    .body(Map.of("status", "401","error", "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"));
         }
 
         User dbUser = userService.findByUsername(user.getUsername());
