@@ -95,15 +95,17 @@ public class ProductController {
             if (main_image != null && !main_image.isEmpty()) {
                 String fileName = System.currentTimeMillis() + "_" + main_image.getOriginalFilename();
 
-                // ✅ สร้าง directory ถ้ายังไม่มี
+                // สร้าง directory ถ้ายังไม่มี
                 Path uploadPath = Paths.get(uploadDirProduct).toAbsolutePath().normalize();
                 Files.createDirectories(uploadPath);
 
                 Path filePath = uploadPath.resolve(fileName);
                 main_image.transferTo(filePath.toFile());
 
-                product.setMain_image(filePath.toString());
+                // ❌ เก็บ full path → แก้เป็นเก็บเฉพาะชื่อไฟล์
+                product.setMain_image(fileName);
             }
+
 
             ProductResponse saved = productService.addProductDTO(product, username);
             return ResponseEntity.ok(saved);

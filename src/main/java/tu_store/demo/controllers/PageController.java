@@ -79,7 +79,10 @@ public class PageController {
     }
 
     @GetMapping("/cart")
-    public String cartPage() {
+    public String cartPage(HttpSession session, Model model) {
+        model.addAttribute("username", session.getAttribute("username"));
+        model.addAttribute("email", session.getAttribute("email"));
+        model.addAttribute("phone", session.getAttribute("phone"));
         return "cart"; // หมายถึงไฟล์ templates/cart.html
     }
 
@@ -218,7 +221,10 @@ public class PageController {
         return "product_detail";
     }
     @GetMapping("/addProduct")
-    public String addProductPage() {
+    public String addProductPage(HttpSession session, Model model) {
+        model.addAttribute("username", session.getAttribute("username"));
+        model.addAttribute("email", session.getAttribute("email"));
+        model.addAttribute("phone", session.getAttribute("phone"));
         return "addProduct"; // <-- ต้องมีไฟล์ addProduct.html ใน templates
     }
     @GetMapping("/category/{category}")
