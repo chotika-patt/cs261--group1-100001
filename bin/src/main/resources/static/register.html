@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ลงทะเบียน</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/login-regis.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+<nav class="nav-bottom">
+    <ul class="menu">
+    <li><a href="index"><img class="logo" src="img/Emblem_of_Thammasat_University.svg.png" alt="TU Logo"></a></li>
+    <li><a href="index">หน้าหลัก</a></li>
+    <li><a href="#">หมวดหมู่สินค้า</a></li>
+    <li><a href="#">เช็คสถานะ</a></li>
+    <li><a href="#">ติดต่อเรา</a></li>
+    <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+</ul>
+</nav>
+
+<div class="login-page">
+<div class="login-container">
+<div class="login-box">
+<a class="exit-btn" href="index"><i class="fa-solid fa-x"></i></a>
+<h1>ลงทะเบียน</h1>
+
+<!-- Toggle Switch -->
+<div class="user-type-toggle">
+<div class="toggle-slider" id="toggleSlider"></div>
+<button type="button" class="toggle-btn active" id="buyerBtn" onclick="switchForm('buyer')">ผู้ซื้อ</button>
+<button type="button" class="toggle-btn" id="sellerBtn" onclick="switchForm('seller')">ผู้ขาย</button>
+</div>
+
+<div class="form-container">
+<!-- ฟอร์มผู้ซื้อ -->
+<form class="register-form active" id="buyerForm">
+<label class="login-label" for="buyer-username">ชื่อผู้ใช้</label>
+<input type="text" id="buyer-username" name="username" class="login-input" placeholder="ใส่ชื่อผู้ใช้ของคุณ" required>
+
+<label class="login-label" for="buyer-email">อีเมล</label>
+<input type="email" id="buyer-email" name="email" class="login-input" placeholder="อีเมลของคุณ" required>
+
+<label class="login-label" for="buyer-phone">หมายเลขโทรศัพท์</label>
+<input type="tel" id="buyer-phone" name="phone" class="login-input" placeholder="หมายเลขโทรศัพท์ของคุณ" required>
+
+<label class="login-label" for="buyer-password">รหัสผ่าน</label>
+<input type="password" id="buyer-password" name="password" class="login-input" placeholder="รหัสผ่านของคุณ" required>
+
+<label class="login-label" for="buyer-confirm-password">ยืนยันรหัสผ่าน</label>
+<input type="password" id="buyer-confirm-password" name="confirm_password" class="login-input" placeholder="ยืนยันรหัสผ่านของคุณ" required>
+
+<button type="submit" class="login-submit-btn" id="buyerSubmit">ยืนยันการลงทะเบียน</button>
+</form>
+
+<div class="seller-form-box">
+<!-- ฟอร์มผู้ขาย -->
+<form class="register-form" id="sellerForm">
+<label class="login-label" for="seller-username">ชื่อผู้ใช้</label>
+<input type="text" id="seller-username" name="username" class="login-input" placeholder="ใส่ชื่อผู้ใช้ของคุณ" required>
+
+<label class="login-label" for="seller-email">อีเมล</label>
+<input type="email" id="seller-email" name="email" class="login-input" placeholder="อีเมลของคุณ" required>
+<label class="login-label" for="seller-phone">หมายเลขโทรศัพท์</label>
+<input type="tel" id="seller-phone" name="phone" class="login-input" placeholder="หมายเลขโทรศัพท์ของคุณ" required>
+
+<label class="login-label" for="student-ID">รหัสนักศึกษา</label>
+<input type="text" id="student-ID" name="studentID" class="login-input" placeholder="ใส่รหัสนักศึกษาของคุณ" required>
+
+<label class="login-label" for="role">ต้องการขายสินค้าในนาม</label>
+<select id="role" name="role" class="login-input" required>
+  <option value="" selected disabled hidden>ต้องการขายสินค้าในนาม</option>
+  
+  <option value="rally">ชุมนุม</option>
+  <option value="club">ชมรม</option>
+  <option value="independent-group">กลุ่มอิสระ</option>
+</select>
+
+<label class="login-label" for="application-document">เอกสารยื่นคำร้อง</label>
+<input type="file" id="application-document" name="verify_document" class="login-input" required>
+
+<label class="login-label" for="seller-password">รหัสผ่าน</label>
+<input type="password" id="seller-password" name="password" class="login-input" placeholder="รหัสผ่านของคุณ" required>
+
+<label class="login-label" for="seller-confirm-password">ยืนยันรหัสผ่าน</label>
+<input type="password" id="seller-confirm-password" name="confirm_password" class="login-input" placeholder="ยืนยันรหัสผ่านของคุณ" required>
+
+
+<button type="submit" class="login-submit-btn" id="sellerSubmit">ยืนยันการลงทะเบียน</button>
+</form>
+</div>
+
+<p class="login-link">มีบัญชีอยู่แล้ว? <a href="login">เข้าสู่ระบบ</a></p>
+</div>
+</div>
+</div>
+    <script src="js/register.js"></script>
+</body>
+</html>

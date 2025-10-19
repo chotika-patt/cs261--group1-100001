@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="th" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Detail</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/product-detail.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<!-- ======= Navbar บนสุด ======= -->
+<nav class="nav-top">
+    <div class="left-logo">
+        <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+    </div>
+
+    <div class="right-buttons">
+        <!-- ✅ แก้ให้ไปที่ /login -->
+        <a th:href="@{/login}" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
+        <a th:href="@{/cart}"><i class="fa-solid fa-cart-shopping"></i></a>
+    </div>
+</nav>
+<!-- ======= Navbar ล่าง ======= -->
+<nav class="nav-bottom">
+    <ul class="menu">
+        <li><a th:href="@{/buyerTemp}"><img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo" /></a></li>
+        <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
+        <li class="dropdown-category">
+        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+        <div class="overlay"></div> <!-- สำหรับ liquid glass -->
+        <div class="dropdown-content">
+          <a href="#">เสื้อ</a>
+          <a href="#">กระเป๋า</a>
+          <a href="#">เครื่องแบบนักศึกษา</a>
+          <a href="#">ของใช้ทั่วไป</a>
+          <a href="#">ของที่ระลึก</a>
+        </div>
+      </li>
+      <li><a href="#">เช็คสถานะ</a></li>
+      <li><a href="#">ติดต่อเรา</a></li>
+      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+    </ul>
+    
+    <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
+    <div class="search-bar-replacement">
+      <div class="search-input-container">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+      </div>
+      <button class="search-close-btn" id="search-close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div id="search-results"></div>
+</nav><br>
+<div class="product-container">
+    <div class="product-detail-photo">
+        <img th:src="@{/img/sample-product.jpg}" alt="Product Image" />
+    </div>
+
+    <div class="product-detail-main">
+        <div class="product-header">
+            <h1 th:text="${product.name}">ชื่อสินค้า :</h1>
+            <button class="add-to-cart-btn">เพิ่มลงตะกร้า</button>
+        </div>
+        <p class="product-category">หมวดหมู่ :</p>
+
+        <div class="product-options">
+            <span class="option-label">สี :</span>
+            <button class="color-option">สีดำ</button>
+            <button class="color-option">สีขาว</button>
+        </div>
+
+        <div class="product-quantity">
+            <span class="option-label">จำนวน</span>
+            <div class="quantity-selector">
+                <button class="minus">-</button>
+                <input type="text" value="1" id="quantity" readonly>
+                <button class="plus">+</button>
+            </div>
+        </div>
+
+        <div class="product-price-box">
+            <div class="price-label">ราคา</div>
+            <div class="price-value" th:text="'฿' + ${product.price}">฿1,290</div>
+        </div>
+    </div>
+
+    <div class="product-detail-describe">
+        <h3>รายละเอียดสินค้า</h3>
+        <p th:text="${product.description}">รายละเอียดสินค้า</p>
+    </div>
+</div>
+
+<!-- ======= Popup Logout ======= -->
+<div class="logout-modal" id="logout-modal">
+    <div class="modal-content">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <p>คุณต้องการออกจากระบบหรือไม่</p>
+        <div class="modal-buttons">
+            <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+            <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+        </div>
+        <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+    </div>
+</div>
+
+<div class="logout-success" id="logout-success">
+    <div class="success-content">
+        <i class="fa-solid fa-circle-check"></i>
+        <p>ออกจากระบบสำเร็จแล้ว</p>
+    </div>
+</div>
+<script th:src="@{/js/main.js}" defer></script>
+<script th:src="@{/js/product-detail.js}" defer></script>
+<script th:src="@{/js/search.js}" defer></script>
+</body>
+</html>

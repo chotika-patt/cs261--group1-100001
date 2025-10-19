@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="th" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>เพิ่มสินค้าใหม่ | TU Store</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/add-product.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+<!-- ======= Navbar บนสุด ======= -->
+<nav class="nav-top">
+    <div class="left-logo">
+        <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+    </div>
+    <div class="right-buttons">
+        <div class="user-menu">
+            <button class="user-btn" id="user-btn">
+                <span class="user-text" th:text="${session.username != null ? session.username : 'Guest'}">Guest</span>
+                <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+            </button>
+            <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
+                <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
+                <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                <h4 th:text="${session.username}">ชื่อบัญชีผู้ใช้</h4>
+                <div class="info">
+                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${session.email}">email</span></p>
+                    <p><i class="fa-solid fa-phone"></i> <span th:text="${session.phone}">08xxxxxxx</span></p>
+                </div>
+                <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+            </div>
+        </div>
+        <a th:href="@{/cart}" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></a>
+    </div>
+</nav>
+
+<!-- ======= Navbar ล่าง ======= -->
+<nav class="nav-bottom">
+    <ul class="menu">
+        <li><a th:href="@{/sellerTemp}"><img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo" /></a></li>
+        <li><a th:href="@{/sellerTemp}">แดชบอร์ด</a></li>
+        <li><a href="#">จัดการสินค้า</a></li>
+        <li><a href="#">คำสั่งซื้อ</a></li>
+        <li><a href="#">ตั้งค่าร้านค้า</a></li>
+    </ul>
+</nav>
+
+<!-- ======= ฟอร์มเพิ่มสินค้า ======= -->
+<div class="product-container">
+
+    <!-- ฝั่งซ้าย: Upload -->
+    <div class="product-detail-photo" id="imageArea">
+        <label for="imageFile" id="uploadLabel">
+            <i class="fa-solid fa-plus"></i><br>
+            เพิ่มรูปภาพสินค้า
+        </label>
+        <input type="file" id="imageFile" accept="image/*" style="display:none;">
+        <img id="previewImage" src="" alt="Preview">
+        <button id="removeImage">ลบรูป</button>
+    </div>
+
+    <!-- ฝั่งขวา: Form -->
+    <div class="product-detail-main">
+        <div class="product-header">
+            <h1>เพิ่มสินค้าใหม่</h1>
+            <button id="submitBtn" class="add-to-cart-btn">บันทึกข้อมูลสินค้า</button>
+        </div>
+
+        <form id="addProductForm">
+            <label>ชื่อสินค้า <span style="color:red">*</span></label>
+            <input id="name" type="text" placeholder="ใส่ชื่อสินค้า" required>
+
+            <label>หมวดหมู่สินค้า <span style="color:red">*</span></label>
+            <select id="category" required>
+                <option value="">เลือกหมวดหมู่สินค้า</option>
+                <option value="SHIRT">เสื้อ</option>
+                <option value="BAG">กระเป๋า</option>
+                <option value="STUDENT_UNIFORM">เครื่องแบบนักศึกษา</option>
+                <option value="GENERAL_PURPOSE">ของใช้ทั่วไป</option>
+                <option value="MEMORABILIA">ของที่ระลึก</option>
+            </select>
+
+            <label>จำนวนสินค้าในคลัง <span style="color:red">*</span></label>
+            <input id="stock" type="number" min="0" placeholder="ใส่จำนวนสินค้าในคลัง" required>
+
+            <div class="product-price-box">
+                <div class="price-label">ราคา *</div>
+                <div class="price-value">
+                    <input id="price" type="number" min="0" step="0.01" placeholder="ตั้งราคาสินค้า (หน่วย : บาท)" required>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- ล่าง: รายละเอียด -->
+    <div class="product-detail-describe">
+        <h3>รายละเอียดสินค้า *</h3>
+        <textarea id="description" placeholder="ใส่รายละเอียดสินค้านี้..."></textarea>
+    </div>
+</div>
+
+<script>
+    const imageInput = document.getElementById('imageFile');
+const previewImage = document.getElementById('previewImage');
+const removeBtn = document.getElementById('removeImage');
+const uploadLabel = document.getElementById('uploadLabel');
+
+// เมื่อเลือกไฟล์
+imageInput.addEventListener('change', function() {
+  const file = this.files[0];
+  if (file) {
+    previewImage.src = URL.createObjectURL(file);
+    previewImage.style.display = 'block';
+    removeBtn.style.display = 'inline-block';
+    uploadLabel.style.display = 'none'; // ซ่อน icon + กับข้อความ
+  }
+});
+
+// เมื่อกดปุ่มลบ
+removeBtn.addEventListener('click', function() {
+  previewImage.src = '';
+  previewImage.style.display = 'none';
+  imageInput.value = ''; // รีเซ็ต input
+  removeBtn.style.display = 'none';
+  uploadLabel.style.display = 'flex';
+});
+
+
+
+     document.getElementById("submitBtn").addEventListener("click", async (event) => {
+       event.preventDefault();
+
+
+        const formData = new FormData();
+        formData.append("name", document.getElementById("name").value);
+        formData.append("category", document.getElementById("category").value);
+        formData.append("price", parseFloat(document.getElementById("price").value));
+        formData.append("stock", parseInt(document.getElementById("stock").value));
+        formData.append("description", document.getElementById("description").value);
+        
+         const mainImageInput = document.getElementById("imageFile");
+        if (mainImageInput && mainImageInput.files.length > 0) {
+            formData.append("main_image", mainImageInput.files[0]);
+        }
+        /*
+       const productData = {
+         name: document.getElementById("name").value,
+         category: document.getElementById("category").value,
+         price: parseFloat(document.getElementById("price").value),
+         stock: parseInt(document.getElementById("stock").value),
+         status: "AVAILABLE",
+         description: document.getElementById("description").value
+       };
+       */
+
+       try {
+         const response = await fetch("/api/add", {
+           method: "POST",
+           //headers: { "Content-Type": "application/json" },
+           credentials: "include",
+           body: formData
+         });
+
+         if (!response.ok) {
+           const msg = await response.text();
+           alert("❌ เพิ่มสินค้าไม่สำเร็จ: " + msg);
+           return;
+         }
+
+         alert("✅ เพิ่มสินค้าเรียบร้อย!");
+         window.location.href = "/sellerTemp";
+       } catch (error) {
+         alert("เกิดข้อผิดพลาด: " + error.message);
+       }
+
+
+     });
+</script>
+</body>
+</html>

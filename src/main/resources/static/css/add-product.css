@@ -1,7 +1,14 @@
 /* ======= โครงหลัก ======= */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap');
+
+*{
+	font-family: "IBM Plex Sans Thai", sans-serif;
+}
+
+
 body {
   background-color: #f7f7f8;
-  font-family: "Prompt", sans-serif;
   color: #333;
 }
 

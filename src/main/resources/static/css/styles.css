@@ -1,63 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap');
+
+*{
+	font-family: "IBM Plex Sans Thai", sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
   overflow-x: hidden; 
 }
 
-/* ก้อนแรก */
+/*-------------------------------------------------------*/
+/*ส่วนหัวของ navbar*/
 .nav-top {
-    display: flex;
-  justify-content: space-between; /* โลโก้ซ้าย / ปุ่มขวา */
+  display: flex;
+  justify-content: flex-end;
   align-items: center;
   background-color: #1D1D1F;
+  border-bottom: 1px solid white;
   padding: 10px 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.left-logo {
+  position: absolute;
+  top: 7%;
+  left: 3%;
+  transform: translateY(-50%);
+  z-index: 5;
 }
 
 .left-logo img {
-  height: 45px;
+  height: clamp(50px, 7vw, 120px);
   width: auto;
-  vertical-align: middle;
+  object-fit: contain;
+  transition: all 0.3s ease;
 }
+
 .right-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  margin-right: 40px;
+}
+
+.cart-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color:white;
+  text-decoration: none;
+  padding: 3px 3px;
+  border-radius: 10px;
+  transition: material-symbols-outlined 1s ease;
+}
+
+.material-symbols-outlined {
+  font-size: 20px;
+  color: black;
+}
+
+.cart-icon:hover .material-symbols-outlined{
+  color: #C32032;
 }
 
 .btn {
+  font-size: 15px;
+  font-weight:450;
   text-decoration: none;
-  padding: 6px 12px;
+  padding: 3px 20px;
   background-color: #FFD140;
   color: rgb(0, 0, 0);
   border-radius: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .btn:hover {
   background-color: #555;
+  color: white;
 }
 
-/* ก้อนที่สอง */
-.logo {
-  height: 20px; 
-  vertical-align: middle; 
-  margin-right: 1
+
+@media (max-width: 768px) {
+  .left-logo {
+    top: 4%;
+  }
+  .right-buttons {
+    margin-right: 0px;
+  }
+
 }
+/*-------------------------------------------------------*/
+
+/*-------------------------------------------------------*/
+/*ส่วนท้ายของ navbar*/
 .nav-bottom {
   background-color: #1D1D1F;
   padding: 10px 0;
-  width: 100%;
-  position: sticky; 
-  top: 0;
-  z-index: 1000;
+  border-top: 1px solid white;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+  position: relative; 
 }
 
 .menu {
   list-style: none;
   display: flex;
   justify-content: center;
-  gap: 100px;
+  gap: 7vw;
   margin: 0;
   padding: 0;
+}
+
+.menu li{
+  font-size: 15px;
+  font-weight: 450;
 }
 
 .menu a {
@@ -71,41 +129,89 @@ body {
   color: #C32032;
 }
 
+@media (max-width: 768px) {
+  .menu {
+    gap: 6vw;
+  }
+}
+
+.search-bar-replacement {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0px 20px;
+  gap: 15px;
+}
+
+.nav-bottom.search-active .menu {
+  display: none;
+}
+
+.nav-bottom.search-active .search-bar-replacement {
+  display: flex;
+}
+
+.search-bar-replacement .search-input-container {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 25px;
+  padding: 0px 20px;
+  max-width: 600px;
+  width: 100%;
+  gap: 10px;
+}
+
+.search-bar-replacement .search-input-container .fa-magnifying-glass {
+  font-size: 15px;
+  color: #666;
+}
+
+.search-bar-replacement .search-input-container input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 8px;
+  font-size: 15px;
+  background-color: transparent;
+  color: #333;
+}
+
+.search-bar-replacement .search-input-container input::placeholder {
+  color: #999;
+}
+
+.search-close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: color 0.3s;
+}
+
+.search-close-btn:hover {
+  color: #C32032;
+}
+
+/*-------------------------------------------------------*/
+
+/*-------------------------------------------------------*/
+/*ส่วนหลัก*/
 main {
   text-align: center;
-  margin-top: 40px;
+  margin-top: 30px;
 }
+/*-------------------------------------------------------*/
 
-.nav-top .fa-cart-shopping {
-  font-size: 22px;       
-  color: #ffffff;            
-  margin-left: 10px;  
-  margin-top: 8px;  
-  vertical-align: middle; 
-  transition: color 0.3s; 
-}
-
-.nav-top .fa-cart-shopping:hover {
-  color: #c00; 
-}
-/* ✅ โลโก้ TU Store กลาง nav */
-.nav-logo-center {
-  background-color: #1D1D1F; /* ให้กลืนกับ nav */
-  text-align: center;
-  padding: 10px 0;
-}
-
-.nav-logo-center img {
-  height: 80px;
-  width: auto;
-  display: inline-block;
-}
-
-
+/*-------------------------------------------------------*/
+/*ข้อความ แสดงข้อมูลเว็บ*/
 .box-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -114,34 +220,81 @@ main {
   display: flex;
   justify-content: center;  
   align-items: center;      
-  flex-direction: column;   
-  padding: 20px;
-  margin: 20px;
-  border-radius: 10px;
-  height: 300px;            
-  text-align: center;
+  flex-direction: column;         
+  text-align: left;
+  margin-left: 30px;
 }
 
 .box h1 {
-  font-size: 36px;     
-  font-weight: 700;
-  margin: 10px 0;
+  font-size: 2.6em;     
+  font-weight: 600;
+  margin: -5px 0;
 }
 
 .box h1 span {
-  font-size: 0.9em;    
+  font-size: 0.8em;    
   font-weight: 500;    
   margin-left: 10px;   
   color: #333;
 }
 
 .banner {
-  width: 100%;
+  width: auto;
+  height: 100%;
   max-width: 520px;
-  height: auto;        
-  border-radius: 10px; 
+  max-height: 300px;        
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 20px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
+
+@media (max-width: 1200px) {
+  .box h1 {
+    font-size: 3.0vw;     
+  }
+
+  .box h1 span {
+    font-size: 2.5vw;    
+  }
+
+  .banner {
+    width: auto;
+    height: 100%;
+    max-width: 450px;
+    max-height: 230px;        
+  }
+}
+
+@media (max-width: 768px) {
+  .box {
+    margin-top: 30px;
+  }
+  .box-container {
+    grid-template-columns: 1fr;
+  }
+  .box h1 {
+    font-size: 5.5vw;     
+  }
+
+  .box h1 span {
+    font-size: 5vw;    
+  }
+
+  .banner {
+    margin-top: 20px;
+    width: auto;
+    height: 100%;
+    max-width: 480px;
+    max-height: 260px;        
+  }
+}
+
+/*-------------------------------------------------------*/
+
+/*-------------------------------------------------------*/
+/*ประเภทของสินค้า*/
 
 .category-con {
   margin-top: 50px;
@@ -168,7 +321,8 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 150px;
+  width: 170px;
+  height: 200px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
@@ -191,17 +345,14 @@ main {
 
 .category-item h3 {
   margin-top: 20px;
-  font-size: 14px;
+  font-size: 20px;
+  font-weight: 600;
 }
+
+/*-------------------------------------------------------*/
 
 .next-session {
-  margin-top: 50px;
-  text-align: center;
-  height: 100px;
-}
-
-.next {
-  margin-top: 50px;
+  margin-top: 30px;
   text-align: center;
   height: 100px;
 }
@@ -216,6 +367,10 @@ main {
   margin: 0 auto 20px auto;
 }
 
+/*-------------------------------------------------------*/
+
+/*-------------------------------------------------------*/
+/*รายการสินค้า*/
 .product-section {
   padding: 20px;
   max-width: 1200px;
@@ -251,9 +406,9 @@ main {
 
 .product-info {
   display: flex;
-  justify-content: space-between; /* ชื่อซ้าย ราคา ขวา */
+  justify-content: space-between; 
   align-items: center;
-  padding: 0 10px; /* เพิ่ม padding ด้านข้าง */
+  padding: 0 10px; 
   height: 40px; 
   background-color: #fff;
   font-weight: bold;
@@ -265,7 +420,10 @@ main {
   padding: 3px 8px;
   border-radius: 5px;
 }
+/*-------------------------------------------------------*/
 
+/*-------------------------------------------------------*/
+/*navล่าง*/
 .footer-content {
   background-color: #1D1D1F;
   color: #fff;
@@ -273,98 +431,10 @@ main {
   padding: 20px 0;
   margin-top: 40px;
 }
+/*-------------------------------------------------------*/
 
-/* Responsive */
-@media (max-width: 768px) {
-  .box-container {
-    grid-template-columns: 1fr;
-  }
-
-  .menu {
-    gap: 30px;
-  }
-
-  .category-con {
-    gap: 20px;
-  }
-
-  .banner {
-    max-width: 100%;
-  }
-}
-
-/* ======== CSS สำหรับแถบค้นหาแบบใหม่ ======== */
-
-/* ซ่อนเมนูเดิมเมื่อเปิดค้นหา */
-.nav-bottom.search-active .menu {
-  display: none;
-}
-
-/* แถบค้นหาใหม่ - ซ่อนไว้ตอนปกติ */
-.search-bar-replacement {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 10px 20px;
-  gap: 15px;
-}
-
-/* แสดงแถบค้นหาเมื่อ active */
-.nav-bottom.search-active .search-bar-replacement {
-  display: flex;
-}
-
-/* กล่อง input ค้นหา */
-.search-bar-replacement .search-input-container {
-  display: flex;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 25px;
-  padding: 0px 20px;
-  max-width: 600px;
-  width: 100%;
-  gap: 10px;
-}
-
-/* ไอคอนแว่นขยาย */
-.search-bar-replacement .search-input-container .fa-magnifying-glass {
-  font-size: 18px;
-  color: #666;
-}
-
-/* ช่อง input */
-.search-bar-replacement .search-input-container input {
-  flex: 1;
-  border: none;
-  outline: none;
-  padding: 8px;
-  font-size: 16px;
-  background-color: transparent;
-  color: #333;
-}
-
-/* placeholder */
-.search-bar-replacement .search-input-container input::placeholder {
-  color: #999;
-}
-
-/* ปุ่มปิด X */
-.search-close-btn {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 24px;
-  cursor: pointer;
-  padding: 5px 10px;
-  transition: color 0.3s;
-}
-
-.search-close-btn:hover {
-  color: #C32032;
-}
-
-/* ===== Popup ออกจากระบบ ===== */
+/*-------------------------------------------------------*/
+/*popup การ logout*/
 .logout-modal {
   position: fixed;
   top: 0;
@@ -453,7 +523,9 @@ main {
   font-size: 18px;
   cursor: pointer;
 }
+/*-------------------------------------------------------*/
 
+/*-------------------------------------------------------*/
 /*  ปุ่มชื่อบัญชีผู้ใช้  */
 .user-btn {
   background: none;
@@ -462,20 +534,19 @@ main {
   font-weight: 600;
   font-size: 15px;
   display: flex;
-  align-items: center;     /* จัดแนวกลางเหมือนกัน */
+  align-items: center;    
   gap: 10px;
   cursor: pointer;
   padding: 0;
 }
 .user-text {
-  line-height: 1;          /* ลดความสูงตัวอักษรให้ตรงกลาง */
+  line-height: 1;         
 }
 
 .user-btn:hover {
   opacity: 0.85;
 }
 
-/* วงกลมไอคอนเหลือง  */
 .user-icon {
   background-color: #f7c948;
   color: #1a1a1a;
@@ -492,31 +563,24 @@ main {
 .user-btn:hover .user-icon {
   background-color: #ffd84d;
 }
+/*-------------------------------------------------------*/
 
-/* ไอคอนตะกร้า */
-.cart-icon {
-  color: white;
-  font-size: 20px;
-  transition: 0.2s;
-}
-
-.cart-icon:hover {
-  color: #f7c948;
-}
-
+/*-------------------------------------------------------*/
+/*dropdown*/
 .dropdown {
-  position: absolute;
-  top: 60px;
+  position: fixed;
+  top: 70px;
   right: 20px;
   background-color: #fff;
   width: 300px;
   border-radius: 14px;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25);
   padding: 24px 0 20px;
   display: none;
   flex-direction: column;
   align-items: center;
-  z-index: 1000; /* เพิ่มบรรทัดนี้ให้ dropdown อยู่บนสุด */
+  z-index: 99999;
+  animation: fadeIn 0.25s ease-out;
 }
 
 .dropdown.active {
@@ -556,6 +620,58 @@ main {
   padding-bottom: 8px;
 }
 
+.dropdown-category { position: relative; }
+
+.dropdown-content {
+  position: absolute; top: calc(100% + 8px); left: 0;
+  width: 208px; height: 235px;
+  background-color: rgba(255,255,255,.9);
+  border-radius: 16px; overflow: hidden; text-align: center;
+  box-shadow: 0 8px 22px rgba(0,0,0,.18);
+  backdrop-filter: blur(10px);
+  z-index: 1001;
+  opacity: 0;
+  transform: translateY(-6px) scale(.98);
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s;
+}
+.dropdown-content.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+.dropdown-content a {
+  display: block; padding: 12px 16px;
+  text-decoration: none; color: #000;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+}
+.dropdown-content a:last-child { border-bottom: none; }
+.dropdown-content a:hover { background-color: rgba(0,0,0,.05); }
+
+@media (max-width: 480px) {
+  .dropdown-content { left: auto; right: 0; }
+}
+
+.overlay {
+  position: fixed; inset: 0;
+  background-color: rgba(0,0,0,.3);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity .25s ease, visibility 0s linear .25s;
+}
+.overlay.show {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transition: opacity .25s ease;
+}
+
+/*-------------------------------------------------------*/
+
 .info {
   width: 80%;
   margin-top: 6px;
@@ -582,28 +698,96 @@ main {
   cursor: pointer;
   transition: 0.2s;
 }
-
 .logout-btn:hover {
   background-color: #ffd84d;
 }
 
-/*  Dropdown Profile  */
-.dropdown {
+/* ===== Popup ออกจากระบบ ===== */
+.logout-modal {
   position: fixed;
-  top: 70px;
-  right: 20px;
-  background-color: #fff;
-  width: 300px;
-  border-radius: 14px;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25);
-  padding: 24px 0 20px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
   display: none;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  z-index: 99999; /* ดันให้อยู่บน nav-top และ nav-bottom ทั้งหมด */
+  z-index: 3000;
 }
 
-/* ===== Popup "ออกจากระบบสำเร็จแล้ว" ===== */
+.logout-modal.show {
+  display: flex;
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-content {
+  background: white;
+  border-radius: 14px;
+  padding: 28px 40px;
+  width: 360px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  position: relative;
+}
+
+.modal-content i.fa-circle-exclamation {
+  font-size: 48px;
+  color: #f7c948;
+  margin-bottom: 14px;
+}
+
+.modal-content p {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 10px 0 24px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.cancel-btn, .confirm-btn {
+  border: none;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 10px 26px;
+  cursor: pointer;
+  font-family: 'Prompt', sans-serif;
+}
+
+.cancel-btn {
+  background-color: #f5f5f5;
+  color: #333;
+}
+.confirm-btn {
+  background-color: #f7c948;
+  color: #000;
+}
+.cancel-btn:hover {
+  background-color: #e4e4e4;
+}
+.confirm-btn:hover {
+  background-color: #ffd84d;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  color: #555;
+  font-size: 18px;
+  cursor: pointer;
+}
 .logout-success {
   display: none;
   position: fixed;
@@ -613,15 +797,14 @@ main {
   height: 100%;
   background: rgba(0,0,0,0.35);
   backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  z-index: 99999;
   justify-content: center;
   align-items: center;
+  z-index: 99999;
 }
 
 .logout-success.active {
   display: flex;
-  animation: fadeInBg 0.3s ease;
+  animation: fadeIn 0.3s ease;
 }
 
 .success-content {
@@ -650,114 +833,7 @@ main {
   to { transform: scale(1); opacity: 1; }
 }
 
-@keyframes fadeInBg {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+/*-----------------------------------------------*/
 
-/* ===== แถบแดงหมวดหมู่สินค้าหน้า product เป็นแถบ dropdown ===== */
-.category-bar {
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: lighter;
-  background: linear-gradient(to right, #B0101B, #5D0F18);
-  color: white;
-  text-align: left;
-  position: relative;
-  z-index: 900;
-  transition: all 0.3s ease;
-  width: 100%;
-  padding: 20px 0; /* ✅ เพิ่มพื้นที่ด้านบน-ล่าง */
-}
 
-/* หัวข้อหมวดหมู่ (ปุ่มกด) */
-.category-header {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 40px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-}
 
-.category-header i {
-  transition: transform 0.3s ease;
-}
-
-/* พื้นที่ dropdown ที่ซ่อนอยู่ */
-.category-dropdown {
-  display: none;
-  background: linear-gradient(to right, #B0101B, #5D0F18);
-  padding: 20px 40px;
-  flex-wrap: wrap;
-  gap: 30px;
-  transition: max-height 1.2s ease, padding 1.2s ease; 
-}
-
-.category-dropdown.show {
-  display: flex;
-}
-
-.category-toggle {
-  color: #fff;
-  text-decoration: none;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;  /* เพิ่มบรรทัดนี้ถ้าอยากให้อยู่กึ่งกลางแนวนอน */
-  height: 50px;
-  margin-left: 200px;
-}
-
-/* ===== Dropdown หมวดหมู่สินค้า =====*/
-
-.dropdown-category {
-  position: relative;
-}
-
-.dropdown-content {
-  margin-top: 15px;
-  display: none; /* เริ่มต้นซ่อน */
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: rgba(255,255,255,0.9); /* ใส่ transparency */
-  width: 208px;
-  height: 235px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-  z-index: 1001;
-  border-radius: 16px;
-  backdrop-filter: blur(10px); /* ทำ effect liquid glass */
-  overflow: hidden;
-  text-align: center;
-}
-
-/* เส้นขั้นระหว่างลิงก์ */
-.dropdown-content a {
-  display: block;
-  padding: 12px 16px;
-  text-decoration: none;
-  color: black;
-  border-bottom: 1px solid rgba(0,0,0,0.1);
-}
-
-.dropdown-content a:last-child {
-  border-bottom: none; /* ลบเส้นล่างสุด */
-}
-
-.dropdown-content a:hover {
-  background-color: rgba(0,0,0,0.05);
-}
-/* ===== Overlay สำหรับ liquid glass ===== */
-.overlay {
-  display: none; /* เริ่มต้นซ่อน */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0,0,0,0.3); /* ทำมืด */
-  backdrop-filter: blur(5px); /* เบลอฉากหลัง */
-  z-index: 1000;
-}

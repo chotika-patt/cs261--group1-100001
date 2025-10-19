@@ -1,10 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&display=swap');
+
+*{
+	font-family: "IBM Plex Sans Thai", sans-serif;
+}
+
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
   background-color: #f7f7f7;
   overflow-x: hidden;
 }
-
+/*
 .nav-top {
   background-color: #1D1D1F;
   padding: 10px 20px;
@@ -14,6 +20,7 @@ body {
   justify-content: flex-end;
   gap: 10px;
 }
+  
 .btn {
   text-decoration: none;
   padding: 6px 12px;
@@ -30,6 +37,7 @@ body {
   background-color: #1D1D1F;
   padding: 10px 0;
 }
+  *//*
 .menu {
   list-style: none;
   display: flex;
@@ -43,7 +51,7 @@ body {
   color: #fff;
   font-size: 14px;
 }
-
+/*----------------------------------------*/
 /* Cart */
 .cart-container {
   max-width: 900px;
@@ -146,3 +154,4 @@ body {
   opacity: 0.5;
   text-align: end;
 }
+/*----------------------------------------*/

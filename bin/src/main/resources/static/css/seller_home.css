@@ -1,0 +1,427 @@
+/* seller_home.css */
+
+.seller-dashboard {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #eee;
+}
+
+.dashboard-header h1 {
+    font-size: 28px;
+    color: #333;
+    margin: 0;
+}
+
+.add-product-btn {
+    background-color: #C32032; /* สีแดงธีมหลัก */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-product-btn i {
+    margin-right: 8px;
+}
+
+.add-product-btn:hover {
+    background-color: #a51a28;
+}
+
+.product-management-section h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.product-management-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.product-card-seller {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-image-placeholder {
+    height: 180px;
+    background-color: #f0f0f0;
+}
+
+.product-info-seller {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    font-weight: bold;
+}
+
+.product-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background-color: #ddd;
+}
+
+.product-actions button {
+    padding: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.edit-btn {
+    background-color: #FFD140; /* สีเหลืองธีมหลัก */
+    color: #000;
+}
+.edit-btn:hover {
+    background-color: #e6bb2e;
+}
+
+.delete-btn {
+    background-color: #f7f7f7;
+    color: #C32032;
+}
+
+.delete-btn:hover {
+    background-color: #e0e0e0;
+}
+/* ====== ใช้โทนเดียวกับหน้า index ====== */
+
+/* ปุ่ม user เหมือนของหน้าแรก */
+.user-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.user-btn:hover {
+  opacity: 0.85;
+}
+
+.user-icon {
+  background-color: #f7c948;
+  color: #1a1a1a;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  transition: 0.2s;
+}
+.user-btn:hover .user-icon {
+  background-color: #ffd84d;
+}
+
+/* ===== Dropdown ===== */
+.dropdown {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  background-color: #fff;
+  width: 300px;
+  border-radius: 14px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25);
+  padding: 24px 0 20px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  z-index: 99999;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.dropdown.active {
+  display: flex;
+}
+
+.dropdown .close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 18px;
+  color: #555;
+  cursor: pointer;
+}
+
+.dropdown .avatar {
+  background-color: #f7c948;
+  color: #fff;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.dropdown h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 6px 0 10px;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+  width: 80%;
+  padding-bottom: 8px;
+}
+
+.info {
+  width: 80%;
+  margin-top: 6px;
+  color: #1a1a1a;
+  font-size: 14px;
+  text-align: left;
+}
+
+.info p {
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logout-btn {
+  margin-top: 16px;
+  background-color: #f7c948;
+  border: none;
+  color: #000;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 10px 30px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.logout-btn:hover {
+  background-color: #ffd84d;
+}
+
+/* ===== Popup ออกจากระบบ ===== */
+.logout-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+}
+
+.logout-modal.show {
+  display: flex;
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-content {
+  background: white;
+  border-radius: 14px;
+  padding: 28px 40px;
+  width: 360px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  position: relative;
+}
+
+.modal-content i.fa-circle-exclamation {
+  font-size: 48px;
+  color: #f7c948;
+  margin-bottom: 14px;
+}
+
+.modal-content p {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 10px 0 24px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.cancel-btn, .confirm-btn {
+  border: none;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 10px 26px;
+  cursor: pointer;
+  font-family: 'Prompt', sans-serif;
+}
+
+.cancel-btn {
+  background-color: #f5f5f5;
+  color: #333;
+}
+.confirm-btn {
+  background-color: #f7c948;
+  color: #000;
+}
+.cancel-btn:hover {
+  background-color: #e4e4e4;
+}
+.confirm-btn:hover {
+  background-color: #ffd84d;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  color: #555;
+  font-size: 18px;
+  cursor: pointer;
+}
+.logout-success {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(3px);
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.logout-success.active {
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
+
+.success-content {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  text-align: center;
+  padding: 40px 60px;
+  animation: scaleUp 0.3s ease;
+}
+
+.success-content i {
+  color: #ffd84d;
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.success-content p {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+
+
+
+
+
+
+/* ===== Popup เพิ่มสินค้า ===== */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.popup-overlay.active {
+  display: flex;
+}
+.popup-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 420px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+.popup-content h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.popup-content label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 600;
+}
+.popup-content input, 
+.popup-content select, 
+.popup-content textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.btn-confirm, .btn-cancel {
+  flex: 1;
+  margin: 0 5px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-confirm {
+  background-color: #C32032;
+  color: white;
+}
+.btn-cancel {
+  background-color: #f2f2f2;
+}
+.btn-confirm:hover { background-color: #a71a29; }
+.btn-cancel:hover { background-color: #e0e0e0; }

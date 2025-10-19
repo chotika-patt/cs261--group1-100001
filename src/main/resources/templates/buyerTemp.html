@@ -4,18 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TU Store</title>
-  <link rel="stylesheet" th:href="@{/css/styles.css}" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body>
   <!-- ======= Navbar บนสุด ======= -->
   <nav class="nav-top">
-
-      <div class="left-logo">
-          <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
-      </div>
-
       <div class="right-buttons">
       <div class="user-menu">
         <button class="user-btn" id="user-btn">
@@ -34,14 +30,18 @@
           <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
         </div>
       </div>
-      <a th:href="@{/cart}" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></a>
+      <a th:href="@{/cart}" class="cart-icon">
+        <span class="material-symbols-outlined">shopping_cart</span>
+      </a>
     </div>
   </nav>
+  <div class="left-logo">
+          <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+  </div>
 
   <!-- ======= Navbar ล่าง ======= -->
     <nav class="nav-bottom">
     <ul class="menu">
-        <li><a th:href="@{/buyerTemp}"><img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo" /></a></li>
         <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
 
         <li class="dropdown-category">

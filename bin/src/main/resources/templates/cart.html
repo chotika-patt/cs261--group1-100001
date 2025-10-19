@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ตะกร้าสินค้า</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/cart.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+<!-- ======= Navbar บนสุด ======= -->
+<nav class="nav-top">
+
+    <div class="left-logo">
+        <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+    </div>
+
+    <div class="right-buttons">
+        <div class="user-menu">
+            <button class="user-btn" id="user-btn">
+                <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
+                <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+            </button>
+
+            <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
+                <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
+                <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
+                <div class="info">
+                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
+                    <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
+                </div>
+                <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+            </div>
+        </div>
+        <a th:href="@{/cart}" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></a>
+    </div>
+</nav>
+
+  <nav class="nav-bottom">
+    <ul class="menu">
+        <li>
+            <a th:href="@{/buyerTemp}"><img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo"></a>
+        </li><li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
+
+        <li class="dropdown-category">
+        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+         <div class="overlay"></div> <!-- สำหรับ liquid glass -->
+         <div class="dropdown-content">
+            <a href="#">เสื้อ</a>
+            <a href="#">กระเป๋า</a>
+            <a href="#">เครื่องแบบนักศึกษา</a>
+            <a href="#">ของใช้ทั่วไป</a>
+            <a href="#">ของที่ระลึก</a>
+        </div>
+        </li>
+      <li><a href="#">เช็คสถานะ</a></li>
+      <li><a href="#">ติดต่อเรา</a></li>
+    </ul>
+  </nav>
+  
+  <!-- Main Cart -->
+  <main class="cart-container">
+    <h1>นี่คือรายการที่อยู่ในตะกร้าของคุณ</h1>
+    <p class="subtitle">รับบริการรับประกันคุณภาพทุกคำสั่งซื้อ</p>
+    <button class="pay-btn-top">ชำระเงิน</button>
+
+    <div class="cart-item">
+      <div class="cart-image">รูป</div>
+      <div class="cart-details">
+        <div class="row">
+          <span>ชื่อสินค้า</span>
+          <span class="price">ราคา</span>
+        </div>
+        <div class="row">รายละเอียด</div>
+        <div class="row">
+          <span>คาดการณ์วันที่จะจัดส่ง <small>(จัดส่ง 2-3 วัน)</small></span>
+          <span class="delivery">รับสินค้าด้วยตัวเอง</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="row">
+        <span>ยอดรวม</span>
+        <span>฿729.0</span>
+      </div>
+      <div class="row small">ค่าจัดส่ง <span>ฟรี</span></div>
+    </div>
+
+    <div class="total">
+      <span>ยอดชำระเงินของคุณ</span>
+      <span class="amount">฿729.0</span>
+    </div>
+    <a href="#"><p class="installment">฿729.0/เดือน เป็นเวลา 10 เดือน ดอกเบี้ย 0%</p></a>
+
+    <button class="pay-btn">ชำระเงิน</button>
+  </main>
+
+<!-- ======= Popup Logout ======= -->
+<div class="logout-modal" id="logout-modal">
+    <div class="modal-content">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <p>คุณต้องการออกจากระบบหรือไม่</p>
+        <div class="modal-buttons">
+            <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+            <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+        </div>
+        <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+    </div>
+</div>
+
+<div class="logout-success" id="logout-success">
+    <div class="success-content">
+        <i class="fa-solid fa-circle-check"></i>
+        <p>ออกจากระบบสำเร็จแล้ว</p>
+    </div>
+</div>
+<script>
+  const searchIcon = document.getElementById('search-icon');
+  const searchDropdown = document.getElementById('search-dropdown');
+
+  searchIcon.addEventListener('click', (event) => {
+    event.preventDefault(); 
+    // Toggle class ที่ body เพื่อควบคุม effect blur
+    document.body.classList.toggle('search-active'); 
+    
+    // Toggle class ที่แถบค้นหาเพื่อเปิด/ปิด
+    searchDropdown.classList.toggle('open');
+  });
+</script>
+<script>
+    // ===== แถบแดงหมวดหมู่สินค้าหน้า product เป็นแถบ dropdown =====
+  const toggle = document.querySelector('.dropdown-toggle');
+  const dropdown = document.querySelector('.dropdown-content');
+  const overlay = document.querySelector('.overlay');
+
+  toggle.addEventListener('click', function(e) {
+    e.preventDefault();
+    const isOpen = dropdown.style.display === 'block';
+    dropdown.style.display = isOpen ? 'none' : 'block';
+    overlay.style.display = isOpen ? 'none' : 'block';
+  });
+
+  overlay.addEventListener('click', function() {
+    dropdown.style.display = 'none';
+    overlay.style.display = 'none';
+  });
+</script>
+<!-- JS (dropdown/search/logout) -->
+<script th:src="@{/js/main.js}" defer></script>
+</body>
+</html>

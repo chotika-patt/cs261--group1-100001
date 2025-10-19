@@ -6,46 +6,69 @@
     <title>เพิ่มสินค้าใหม่ | TU Store</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" th:href="@{/css/add-product.css}">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body>
 <!-- ======= Navbar บนสุด ======= -->
 <nav class="nav-top">
-    <div class="left-logo">
-        <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
-    </div>
-    <div class="right-buttons">
-        <div class="user-menu">
-            <button class="user-btn" id="user-btn">
-                <span class="user-text" th:text="${session.username != null ? session.username : 'Guest'}">Guest</span>
-                <div class="user-icon"><i class="fa-solid fa-user"></i></div>
-            </button>
-            <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
-                <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
-                <div class="avatar"><i class="fa-solid fa-user"></i></div>
-                <h4 th:text="${session.username}">ชื่อบัญชีผู้ใช้</h4>
-                <div class="info">
-                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${session.email}">email</span></p>
-                    <p><i class="fa-solid fa-phone"></i> <span th:text="${session.phone}">08xxxxxxx</span></p>
-                </div>
-                <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
-            </div>
-        </div>
-        <a th:href="@{/cart}" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></a>
-    </div>
-</nav>
+      <div class="right-buttons">
+      <div class="user-menu">
+        <button class="user-btn" id="user-btn">
+          <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
+          <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+        </button>
 
-<!-- ======= Navbar ล่าง ======= -->
-<nav class="nav-bottom">
+        <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
+          <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
+          <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
+          <div class="info">
+            <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
+            <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
+          </div>
+          <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="left-logo">
+          <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+  </div>
+
+  <!-- ======= Navbar ล่าง ======= -->
+    <nav class="nav-bottom">
     <ul class="menu">
-        <li><a th:href="@{/sellerTemp}"><img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo" /></a></li>
-        <li><a th:href="@{/sellerTemp}">แดชบอร์ด</a></li>
-        <li><a href="#">จัดการสินค้า</a></li>
-        <li><a href="#">คำสั่งซื้อ</a></li>
-        <li><a href="#">ตั้งค่าร้านค้า</a></li>
-    </ul>
-</nav>
+        <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
+
+        <li class="dropdown-category">
+        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+        <div class="overlay"></div> <!-- สำหรับ liquid glass -->
+        <div class="dropdown-content">
+              <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+              <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+              <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+              <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+              <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
+        </div>
+      </li>
+      <li><a href="#">เช็คสถานะ</a></li>
+      <li><a href="#">ติดต่อเรา</a></li>
+      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+    </ul> 
+    <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
+    <div class="search-bar-replacement">
+      <div class="search-input-container">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+      </div>
+      <button class="search-close-btn" id="search-close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div id="search-results"></div>
+  </nav>
 
 <!-- ======= ฟอร์มเพิ่มสินค้า ======= -->
 <div class="product-container">
@@ -100,7 +123,8 @@
         <textarea id="description" placeholder="ใส่รายละเอียดสินค้านี้..."></textarea>
     </div>
 </div>
-
+<script th:src="@{/js/main.js}" defer></script>
+<script th:src="@{/js/search.js}" defer></script>
 <script>
     const imageInput = document.getElementById('imageFile');
 const previewImage = document.getElementById('previewImage');

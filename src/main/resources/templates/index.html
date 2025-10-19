@@ -7,46 +7,49 @@
 
     <!-- ✅ ใช้ dynamic path -->
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
 
 <nav class="nav-top">
-
-    <div class="left-logo">
-            <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
-    </div>
-
     <div class="right-buttons">
         <!-- ✅ แก้ให้ไปที่ /login -->
         <a th:href="@{/login}" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
-        <a th:href="@{/login}"><i class="fa-solid fa-cart-shopping"></i></a>
+        <a th:href="@{/login}" class="cart-icon">
+            <span class="material-symbols-outlined">shopping_cart</span>
+        </a>
     </div>
 </nav>
 
-
+<div class="left-logo">
+        <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+</div>
 
 <nav class="nav-bottom">
-    <ul class="menu">
-        <li><a th:href="@{/}"><img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo"></a></li>
-        <li><a th:href="@{/}">หน้าหลัก</a></li>
-        <li class="dropdown-category">
-            <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
-            <div class="overlay"></div>
-            <div class="dropdown-content">
-                <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
-                <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
-                <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
-                <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
-                <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
-            </div>
-        </li>
-        <li><a href="#">เช็คสถานะ</a></li>
-        <li><a href="#">ติดต่อเรา</a></li>
-        <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-    </ul>
+  <ul class="menu">
+    <li><a th:href="@{/}">หน้าหลัก</a></li>
 
-    <div class="search-bar-replacement">
+    <li class="dropdown-category">
+      <a href="#" class="dropdown-toggle">
+        หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i>
+      </a>
+      <div class="dropdown-content">
+        <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+        <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+        <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+        <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+        <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
+
+      </div>
+    </li>
+
+    <li><a th:href="@{/}">เช็คร้านค้า</a></li>
+    <li><a th:href="@{/}">ติดต่อเรา</a></li>
+    <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+  </ul>
+  <div class="overlay"></div>
+  <div class="search-bar-replacement">
         <div class="search-input-container">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
@@ -135,5 +138,24 @@
 
 <!-- ✅ เรียก JS แบบ dynamic -->
 <script th:src="@{/js/main.js}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    const overlay = document.querySelector('.overlay');
+
+    dropdownToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdownContent.classList.toggle('show');
+      overlay.classList.toggle('show');
+    });
+
+    overlay.addEventListener('click', function() {
+      dropdownContent.classList.remove('show');
+      overlay.classList.remove('show');
+    });
+  });
+</script>                              
+
 </body>
 </html>

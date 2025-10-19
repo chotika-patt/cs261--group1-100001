@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="th" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ</title>
+
+    <!-- ใช้ th:href ให้ dynamic -->
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+    <link th:href="@{/css/login-regis.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+<nav class="nav-bottom">
+    <ul class="menu">
+        <li>
+            <a th:href="@{/index}">
+                <img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo">
+            </a>
+        </li>
+        <li><a th:href="@{/index}">หน้าหลัก</a></li>
+        <li><a href="#">หมวดหมู่สินค้า</a></li>
+        <li><a href="#">เช็คสถานะ</a></li>
+        <li><a href="#">ติดต่อเรา</a></li>
+        <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+    </ul>
+</nav>
+
+<div class="login-page">
+    <div class="login-container">
+        <div class="login-box">
+
+            <!-- ปุ่มออก -->
+            <a th:href="@{/}" class="exit-btn close-login">
+                <i class="fa-solid fa-x"></i>
+            </a>
+
+            <h1>เข้าสู่ระบบ</h1>
+
+            <!-- ฟอร์มเข้าสู่ระบบ -->
+            <form th:action="@{/login}" method="post">
+                <label class="login-label" for="username">ชื่อผู้ใช้</label>
+                <input type="text" id="username" name="username" class="login-input" placeholder="ชื่อผู้ใช้" required>
+
+                <label class="login-label" for="password">รหัสผ่าน</label>
+                <input type="password" id="password" name="password" class="login-input" placeholder="รหัสผ่าน" required>
+
+                <p class="login-forgot-password">ลืมรหัสผ่าน</p>
+
+                <button class="login-submit-btn" type="submit" id="subBtn">เข้าสู่ระบบ</button><br>
+                <a class="regis" th:href="@{/register.html}">ลงทะเบียนเข้าใช้งาน</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- สคริปต์ -->
+<script th:src="@{/js/auth.js}"></script>
+</body>
+</html>
