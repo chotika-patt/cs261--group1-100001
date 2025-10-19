@@ -35,10 +35,21 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(HttpSession sessions, @RequestBody User user) {
+        // ✅ ตรวจสอบว่าข้อมูลครบไหม
+        if (user.getUsername() == null || user.getUsername().isBlank() ||
+                user.getPassword() == null || user.getPassword().isBlank()) {
+            return ResponseEntity
+                    .badRequest() // <-- นี่คือ status 400
+                    .body(Map.of("error", "ข้อมูลไม่ครบ กรุณากรอกชื่อผู้ใช้และรหัสผ่าน"));
+        }
+
         boolean valid = userService.login(user);
         if (!valid) {
-            return ResponseEntity.status(401).body(Map.of("error", "Invalid username or password"));
+            return ResponseEntity
+                    .status(401)
+                    .body(Map.of("error", "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"));
         }
+
         User dbUser = userService.findByUsername(user.getUsername());
         sessions.setAttribute("username", dbUser.getUsername());
         sessions.setAttribute("email", dbUser.getEmail());
@@ -52,6 +63,7 @@ public class UserController {
 
         return ResponseEntity.ok(resp);
     }
+
     @PostMapping("/logout")
     public ResponseEntity<String> logOut(HttpSession session) {
         session.invalidate();

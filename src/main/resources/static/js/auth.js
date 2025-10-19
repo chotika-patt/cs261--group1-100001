@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!username || !password) {
                 alert("กรุณากรอกชื่อผู้ใช้และรหัสผ่านให้ครบ");
-                return;
             }
 
             btn.disabled = true;
@@ -29,6 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (data.role === "SELLER") window.location.href = "sellerTemp";
                     else if (data.role === "CLIENT") window.location.href = "buyerTemp";
                     else window.location.href = "index";
+                } else if (response.status === 400) {
+                      alert("กรุณากรอกชื่อผู้ใช้และรหัสผ่านให้ครบ");
                 } else if (response.status === 401) {
                     alert("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
                 } else {
