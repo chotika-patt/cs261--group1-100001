@@ -6,41 +6,44 @@
     <title>Product Detail</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" th:href="@{/css/product-detail.css}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
-<!-- ======= Navbar บนสุด ======= -->
-<nav class="nav-top">
+    <!-- ======= Navbar บนสุด ======= -->
+    <nav class="nav-top">
+        <div class="right-buttons">
+            <a th:href="@{/login}" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
+            <a th:href="@{/login}" class="cart-icon">
+                <span class="material-symbols-outlined">shopping_cart</span>
+            </a>
+        </div>
+    </nav>
+
     <div class="left-logo">
-        <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+            <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
     </div>
 
-    <div class="right-buttons">
-        <!-- ✅ แก้ให้ไปที่ /login -->
-        <a th:href="@{/login}" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
-        <a th:href="@{/cart}"><i class="fa-solid fa-cart-shopping"></i></a>
-    </div>
-</nav>
-<!-- ======= Navbar ล่าง ======= -->
-<nav class="nav-bottom">
+    <!-- ======= Navbar ล่าง ======= -->
+    <nav class="nav-bottom">
     <ul class="menu">
         <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
+
         <li class="dropdown-category">
         <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
         <div class="overlay"></div> <!-- สำหรับ liquid glass -->
         <div class="dropdown-content">
-          <a href="#">เสื้อ</a>
-          <a href="#">กระเป๋า</a>
-          <a href="#">เครื่องแบบนักศึกษา</a>
-          <a href="#">ของใช้ทั่วไป</a>
-          <a href="#">ของที่ระลึก</a>
+              <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+              <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+              <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+              <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+              <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
         </div>
       </li>
       <li><a href="#">เช็คสถานะ</a></li>
       <li><a href="#">ติดต่อเรา</a></li>
       <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-    </ul>
-    
+    </ul> 
     <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
     <div class="search-bar-replacement">
       <div class="search-input-container">
@@ -52,7 +55,8 @@
       </button>
     </div>
     <div id="search-results"></div>
-</nav><br>
+  </nav>
+  <br>
 <div class="product-container">
     <div class="product-detail-photo">
         <img th:src="@{/img/sample-product.jpg}" alt="Product Image" />
@@ -63,7 +67,7 @@
             <h1 th:text="${product.name}">ชื่อสินค้า :</h1>
             <button class="add-to-cart-btn">เพิ่มลงตะกร้า</button>
         </div>
-        <p class="product-category">หมวดหมู่ :</p>
+        <p class="product-category">หมวดหมู่ : <span th:text="${product.category}">Category</span></p>
 
         <div class="product-options">
             <span class="option-label">สี :</span>

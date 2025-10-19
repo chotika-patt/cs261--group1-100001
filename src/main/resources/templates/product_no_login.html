@@ -4,101 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <title>Product Page</title>
 </head>
 <body>
-<!-- ======= Navbar บนสุด ======= -->
-<nav class="nav-top">
+    <!-- ======= Navbar บนสุด ======= -->
+    <nav class="nav-top">
+        <div class="right-buttons">
+            <a th:href="@{/login}" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
+            <a th:href="@{/login}" class="cart-icon">
+                <span class="material-symbols-outlined">shopping_cart</span>
+            </a>
+        </div>
+    </nav>
+
     <div class="left-logo">
             <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
     </div>
-    <div class="right-buttons">
-        <!-- ✅ แก้ให้ไปที่ /login -->
-        <a th:href="@{/login}" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
-        <a th:href="@{/login}"><i class="fa-solid fa-cart-shopping"></i></a>
-    </div>
-</nav>
-  <nav class="nav-bottom">
-    <ul class="menu">
-<<<<<<< HEAD
-        <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
-        <li class="dropdown-category">
-=======
-        <li>
-            <a th:href="@{/index}"><img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo"></a>
-        </li><li><a th:href="@{/index}">หน้าหลัก</a></li>
-      <li class="dropdown-category">
->>>>>>> 5e3d56673be7c23e91eec56d88450e63bb6ba498
-        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
-        <div class="overlay"></div> <!-- สำหรับ liquid glass -->
-        <div class="dropdown-content">
-                <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
-                <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
-                <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
-                <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
-                <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
+
+    <nav class="nav-bottom">
+        <ul class="menu">
+            <li><a th:href="@{/index}">หน้าหลัก</a></li>
+            <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+            <div class="overlay"></div> <!-- สำหรับ liquid glass -->
+            <div class="dropdown-content">
+                    <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+                    <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+                    <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+                    <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+                    <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
+            </div>
+        <li><a href="#">เช็คสถานะ</a></li>
+        <li><a href="#">ติดต่อเรา</a></li>
+        <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+        </ul>
+
+        <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
+        <div class="search-bar-replacement">
+        <div class="search-input-container">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
         </div>
-      </li>
-      <li><a href="#">เช็คสถานะ</a></li>
-      <li><a href="#">ติดต่อเรา</a></li>
-      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-    </ul>
-
-    <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
-    <div class="search-bar-replacement">
-      <div class="search-input-container">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
-      </div>
-      <button class="search-close-btn" id="search-close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-  </nav>
-
-  <!-- แถบหมวดหมู่สินค้า (Red Dropdown Bar) -->
-  <div class="category-dropdown">
-        <div class="category-con">
-            <div class="category-item">
-                <div class="category-box">
-                    <a th:href="@{'/category/' + 'SHIRT'}"><img th:src="@{/img/jersey.png}" alt="Category Shirt"></a>
-                </div>
-                <h3>เสื้อ</h3>
-            </div>
-            <div class="category-item">
-                <div class="category-box">
-                    <a th:href="@{'/category/' + 'BAG'}"><img th:src="@{/img/bag.png}" alt="Category Bag"></a>
-                </div>
-                <h3>กระเป๋า</h3>
-            </div>
-            <div class="category-item">
-                <div class="category-box">
-                    <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}"><img th:src="@{/img/uniform.png}" alt="Category Uniform"></a>
-                </div>
-                <h3>เครื่องแบบนักศึกษา</h3>
-            </div>
-            <div class="category-item">
-                <div class="category-box">
-                  <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}"><img th:src="@{/img/things.png}" alt="Category General Use"></a>
-                </div>
-                <h3>ของใช้ทั่วไป</h3>
-            </div>
-            <div class="category-item">
-                <div class="category-box">
-                  <a th:href="@{'/category/' + 'MEMORABILIA'}"><img th:src="@{/img/arttoy.png}" alt="Category Souvenir"></a>
-                </div>
-                <h3>ของที่ระลึก</h3>
-            </div>
+        <button class="search-close-btn" id="search-close">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
         </div>
-    </div>
-    </div>
-      <!-- แถบหมวดหมู่สินค้า (Red Dropdown Bar) -->
-  <div class="category-bar">
-    <div class="category-header" onclick="toggleCategoryDropdown()">
-      <a class="category-toggle"><span>หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></span></a>
-    </div>
+    </nav>
 
+    <!-- แถบหมวดหมู่สินค้า (Red Dropdown Bar) -->
+     <div class="category-bar">
+        <div class="category-header">
+        <a class="category-toggle"><span>หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></span></a>
+    </div>
     <div class="category-dropdown">
         <div class="category-con">
             <div class="category-item">
@@ -133,44 +91,48 @@
             </div>
         </div>
     </div>
-    </div>
-  <div class="product-section">
-    <div style="display: flex; align-items: baseline; justify-content: space-between;">
-      <h1 style="margin: 0;">รายการสินค้า</h1>
-    </div>
-    <br>
-      <div class="product-grid">
-          <div class="product-card" th:each="product : ${products}">
-              <div class="product-image">
-                  <img th:src="@{/img/placeholder.png}" alt="Product Image" />
-              </div>
-              <div class="product-info">
-                  <span class="product-name" th:text="${product.name}">Product Name</span>
-                  <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
-              </div>
-              <a th:href="@{'/product_detail/' + ${product.productId}}" class="view-detail-btn">ดูรายละเอียด</a>
-          </div>
-      </div>
-  </div>
-<!-- ======= Popup Logout ======= -->
-<div class="logout-modal" id="logout-modal">
-    <div class="modal-content">
-        <i class="fa-solid fa-circle-exclamation"></i>
-        <p>คุณต้องการออกจากระบบหรือไม่</p>
-        <div class="modal-buttons">
-            <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
-            <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+</div>
+    <div class="product-section">
+        <div class="product-header">
+            <h1>รายการสินค้า</h1>
+            <p><a th:href="@{/product_no_login}">ดูทั้งหมด</a></p>
         </div>
-        <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+        <br>
+        <div class="product-grid">
+            <a th:each="product : ${products}" 
+                th:href="@{'/product_detail/' + ${product.productId}}" 
+                class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img th:src="@{/img/placeholder.png}" alt="Product Image" />
+                    </div>
+                    <div class="product-info">
+                        <span class="product-name" th:text="${product.name}">Product Name</span>
+                        <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
+                    </div> 
+                </div>
+            </a>
+        </div>
     </div>
-</div>
+    <!-- ======= Popup Logout ======= -->
+    <div class="logout-modal" id="logout-modal">
+        <div class="modal-content">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <p>คุณต้องการออกจากระบบหรือไม่</p>
+            <div class="modal-buttons">
+                <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+                <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+            </div>
+            <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+        </div>
+    </div>
 
-<div class="logout-success" id="logout-success">
-    <div class="success-content">
-        <i class="fa-solid fa-circle-check"></i>
-        <p>ออกจากระบบสำเร็จแล้ว</p>
+    <div class="logout-success" id="logout-success">
+        <div class="success-content">
+            <i class="fa-solid fa-circle-check"></i>
+            <p>ออกจากระบบสำเร็จแล้ว</p>
+        </div>
     </div>
-</div>
-<script th:src="@{/js/main.js}" defer></script>
+    <script th:src="@{/js/main.js}" defer></script>
 </body>
 </html>

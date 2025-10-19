@@ -4,91 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <title>Product Page</title>
 </head>
 <body>
 <!-- ======= Navbar บนสุด ======= -->
-<nav class="nav-top">
-    <div class="left-logo">
-        <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
-    </div>
-    <div class="right-buttons">
-        <div class="user-menu">
-            <button class="user-btn" id="user-btn">
-                <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
-                <div class="user-icon"><i class="fa-solid fa-user"></i></div>
-            </button>
+  <nav class="nav-top">
+      <div class="right-buttons">
+      <div class="user-menu">
+        <button class="user-btn" id="user-btn">
+          <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
+          <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+        </button>
 
-            <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
-                <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
-                <div class="avatar"><i class="fa-solid fa-user"></i></div>
-                <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
-                <div class="info">
-                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
-                    <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
-                </div>
-                <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
-            </div>
+        <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
+          <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
+          <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
+          <div class="info">
+            <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
+            <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
+          </div>
+          <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
         </div>
-        <a th:href="@{/cart}" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></a>
+      </div>
+      <a th:href="@{/cart}" class="cart-icon">
+        <span class="material-symbols-outlined">shopping_cart</span>
+      </a>
     </div>
-</nav>
-  <nav class="nav-bottom">
-    <ul class="menu">
-<<<<<<< HEAD
-       <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
-      <li class="dropdown-category">
-=======
-        <li>
-            <a th:href="${session.username != null} ?
-                (${session.role} == 'CLIENT' ? @{/buyerTemp} :
-                (${session.role} == 'SELLER' ? @{/sellerTemp} : @{/}))
-              : @{/}">
-                <img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo">
-            </a>
-        </li>
+  </nav>
+  <div class="left-logo">
+          <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+  </div>
 
-        <li>
-            <a th:href="${session.username != null} ?
-                (${session.role} == 'CLIENT' ? @{/buyerTemp} :
-                (${session.role} == 'SELLER' ? @{/sellerTemp} : @{/}))
-              : @{/}">
-                หน้าหลัก
-            </a>
-        </li>
+  <!-- ======= Navbar ล่าง ======= -->
+    <nav class="nav-bottom">
+    <ul class="menu">
+        <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
 
         <li class="dropdown-category">
->>>>>>> 5e3d56673be7c23e91eec56d88450e63bb6ba498
         <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
         <div class="overlay"></div> <!-- สำหรับ liquid glass -->
         <div class="dropdown-content">
-                <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
-                <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
-                <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
-                <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
-                <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
+              <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+              <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+              <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+              <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+              <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
         </div>
       </li>
       <li><a href="#">เช็คสถานะ</a></li>
       <li><a href="#">ติดต่อเรา</a></li>
       <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-    </ul>
-
+    </ul> 
     <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
     <div class="search-bar-replacement">
       <div class="search-input-container">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+        <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
       </div>
       <button class="search-close-btn" id="search-close">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
+    <div id="search-results"></div>
   </nav>
 
   <div class="category-bar">
-    <div class="category-header" onclick="toggleCategoryDropdown()">
+    <div class="category-header">
       <a class="category-toggle"><span>หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></span></a>
     </div>
 
@@ -126,25 +110,29 @@
             </div>
         </div>
     </div>
+</div>
+<div class="product-section">
+        <div class="product-header">
+            <h1>รายการสินค้า</h1>
+            <p><a th:href="@{/product_no_login}">ดูทั้งหมด</a></p>
+        </div>
+        <br>
+        <div class="product-grid">
+            <a th:each="product : ${products}" 
+                th:href="@{'/product_detail/' + ${product.productId}}" 
+                class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img th:src="@{/img/placeholder.png}" alt="Product Image" />
+                    </div>
+                    <div class="product-info">
+                        <span class="product-name" th:text="${product.name}">Product Name</span>
+                        <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
+                    </div> 
+                </div>
+            </a>
+        </div>
     </div>
-  <div class="product-section">
-    <div style="display: flex; align-items: baseline; justify-content: space-between;">
-      <h1 style="margin: 0;">รายการสินค้า</h1>
-    </div>
-    <br>
-      <div class="product-grid">
-          <div class="product-card" th:each="product : ${products}">
-              <div class="product-image">
-                  <img th:src="@{/img/placeholder.png}" alt="Product Image" />
-              </div>
-              <div class="product-info">
-                  <span class="product-name" th:text="${product.name}">Product Name</span>
-                  <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
-              </div>
-              <a th:href="@{'/product_detail/' + ${product.productId}}" class="view-detail-btn">ดูรายละเอียด</a>
-          </div>
-      </div>
-  </div>
 <!-- ======= Popup Logout ======= -->
 <div class="logout-modal" id="logout-modal">
     <div class="modal-content">

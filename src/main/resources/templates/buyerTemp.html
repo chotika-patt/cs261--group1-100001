@@ -118,25 +118,28 @@
 
     <!-- Products -->
     <div class="product-section">
-      <div style="display: flex; align-items: baseline; justify-content: space-between;">
-        <h1 style="margin: 0;">รายการสินค้า</h1>
-        <p style="margin: 0; font-size: 16px; color: #666;"><a th:href="@{/product}">ดูทั้งหมด</a>
-        </p>
-      </div>
-      <br>
-        <div class="product-grid">
-            <div class="product-card" th:each="product : ${products}">
-                <div class="product-image">
-                    <img th:src="@{/img/placeholder.png}" alt="Product Image" />
-                </div>
-                <div class="product-info">
-                    <span class="product-name" th:text="${product.name}">Product Name</span>
-                    <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
-                </div>
-                <a th:href="@{'/product_detail/' + ${product.productId}}" class="view-detail-btn">ดูรายละเอียด</a>
-            </div>
+        <div class="product-header">
+            <h1>รายการสินค้า</h1>
+            <p><a th:href="@{/product_no_login}">ดูทั้งหมด</a></p>
         </div>
-  </main>
+        <br>
+        <div class="product-grid">
+            <a th:each="product : ${products}" 
+                th:href="@{'/product_detail/' + ${product.productId}}" 
+                class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img th:src="@{/img/placeholder.png}" alt="Product Image" />
+                    </div>
+                    <div class="product-info">
+                        <span class="product-name" th:text="${product.name}">Product Name</span>
+                        <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
+                    </div> 
+                </div>
+            </a>
+        </div>
+    </div>
+</main>
   
   <!-- ======= Footer ======= -->
   <footer>

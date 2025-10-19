@@ -11,6 +11,7 @@ body {
 
 /*-------------------------------------------------------*/
 /*ส่วนหัวของ navbar*/
+
 .nav-top {
   display: flex;
   justify-content: flex-end;
@@ -354,7 +355,7 @@ main {
 .next-session {
   margin-top: 30px;
   text-align: center;
-  height: 100px;
+  height: 10px;
 }
 
 .next-session::before {
@@ -371,6 +372,28 @@ main {
 
 /*-------------------------------------------------------*/
 /*รายการสินค้า*/
+.product-header{
+  display: flex; 
+  align-items: baseline; 
+  justify-content: space-between;
+}
+
+.product-header h1{
+  font-size: 24px;
+}
+
+.product-header a{
+   margin-top: 0px; 
+   font-size: 16px; 
+   text-decoration: none; 
+   color: #666;
+   transition: text-decoration 0.3s ease;;
+}
+
+.product-header a:hover{
+  text-decoration: underline;
+}
+
 .product-section {
   padding: 20px;
   max-width: 1200px;
@@ -386,7 +409,7 @@ main {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 20px;
-  justify-content: center;
+  place-items: center;
 }
 
 .product-card {
@@ -396,7 +419,8 @@ main {
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
-  height: 250px; 
+  height: 300px;
+  width: 190px;
 }
 
 .product-image {
@@ -420,6 +444,19 @@ main {
   padding: 3px 8px;
   border-radius: 5px;
 }
+
+.product-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.product-card-link:hover .product-card {
+  transform: scale(1.03);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  transition: 0.2s;
+}
+
 /*-------------------------------------------------------*/
 
 /*-------------------------------------------------------*/
@@ -428,8 +465,12 @@ main {
   background-color: #1D1D1F;
   color: #fff;
   text-align: center;
-  padding: 20px 0;
+  padding: 10px;
   margin-top: 40px;
+}
+
+.footer-content a{
+  color: #b0b0b0;
 }
 /*-------------------------------------------------------*/
 
@@ -834,6 +875,43 @@ main {
 }
 
 /*-----------------------------------------------*/
+/*dropdown รายการประเภทสินค้า แถบแดง*/
+.category-bar{
+  background: linear-gradient(135deg, #C32032 0%, #5D0F18 100%);
+}
 
+.category-header{
+  padding-top: 40px;
+  padding-left: 100px;
+}
 
+.category-item h3{
+  font-size: 20px;
+  color: white;
+  font-weight: 400;
+}
 
+.category-toggle { 
+  position: relative; 
+  cursor: pointer;
+  color: white;  
+  font-size: 24px;
+}
+
+.category-dropdown {
+  z-index: 1001;
+  height:0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s;
+}
+.category-dropdown.show {
+  height: auto;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+/*---------------------------------------------------------------------*/

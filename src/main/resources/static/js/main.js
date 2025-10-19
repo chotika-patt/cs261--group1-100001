@@ -141,12 +141,12 @@
     }
 
     // ===== Toggle Category Bar (แถบแดง) =====
-    function toggleCategoryDropdown() {
-      const bar = document.querySelector('.category-bar');
-      const categoryDropdown = document.querySelector('.category-dropdown');
-      
-      if (bar && categoryDropdown) {
-        categoryDropdown.classList.toggle('show');
-        bar.classList.toggle('active');
-      }
-    }
+document.addEventListener("DOMContentLoaded", function() {
+    const dropdownToggle = document.querySelector('.category-toggle');
+    const dropdownContent = document.querySelector('.category-dropdown');
+
+    dropdownToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdownContent.classList.toggle('show');
+    });
+  });

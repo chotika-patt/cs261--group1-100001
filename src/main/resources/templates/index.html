@@ -11,55 +11,55 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
+    <!-- ======= Navbar บนสุด ======= -->
+    <div class="nav-wrap">
+        <nav class="nav-top">
+            <div class="right-buttons">
+                <a th:href="@{/login}" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
+                <a th:href="@{/login}" class="cart-icon">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                </a>
+            </div>
+        </nav>
 
-<nav class="nav-top">
-    <div class="right-buttons">
-        <!-- ✅ แก้ให้ไปที่ /login -->
-        <a th:href="@{/login}" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
-        <a th:href="@{/login}" class="cart-icon">
-            <span class="material-symbols-outlined">shopping_cart</span>
-        </a>
-    </div>
-</nav>
-
-<div class="left-logo">
-        <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
-</div>
-
-<nav class="nav-bottom">
-  <ul class="menu">
-    <li><a th:href="@{/}">หน้าหลัก</a></li>
-
-    <li class="dropdown-category">
-      <a href="#" class="dropdown-toggle">
-        หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i>
-      </a>
-      <div class="dropdown-content">
-        <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
-        <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
-        <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
-        <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
-        <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
-
-      </div>
-    </li>
-
-    <li><a th:href="@{/}">เช็คร้านค้า</a></li>
-    <li><a th:href="@{/}">ติดต่อเรา</a></li>
-    <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-  </ul>
-  <div class="overlay"></div>
-  <div class="search-bar-replacement">
-        <div class="search-input-container">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+        <div class="left-logo">
+                <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
         </div>
-        <button class="search-close-btn" id="search-close">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-    </div>
-</nav>
 
+        <nav class="nav-bottom">
+            <ul class="menu">
+                <li><a th:href="@{/}">หน้าหลัก</a></li>
+
+                <li class="dropdown-category">
+                    <a href="#" class="dropdown-toggle">
+                        หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+                        <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+                        <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+                        <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+                        <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
+
+                    </div>
+                </li>
+
+                <li><a th:href="@{/}">เช็คร้านค้า</a></li>
+                <li><a th:href="@{/}">ติดต่อเรา</a></li>
+                <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+            </ul>
+            <div class="overlay"></div>
+            <div class="search-bar-replacement">
+                <div class="search-input-container">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+                </div>
+                <button class="search-close-btn" id="search-close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </nav>
+    </div>
 <main>
     <div class="box-container">
         <div class="box">
@@ -82,7 +82,7 @@
         </div>
         <div class="category-item">
             <div class="category-box">
-                <a th:href="@{'/category/' + 'SHIRT'}"><img th:src="@{/img/bag.png}" alt="Category Bag"></a>
+                <a th:href="@{'/category/' + 'BAG'}"><img th:src="@{/img/bag.png}" alt="Category Bag"></a>
             </div>
             <h3>กระเป๋า</h3>
         </div>
@@ -109,22 +109,25 @@
     <div class="next-session"></div>
 
     <div class="product-section">
-        <div style="display: flex; align-items: baseline; justify-content: space-between;">
-            <h1 style="margin: 0;">รายการสินค้า</h1>
-            <p style="margin: 0; font-size: 16px; color: #666;"><a style="text-decoration: none; color: #666;" th:href="@{/product_no_login}">ดูทั้งหมด</a></p>
+        <div class="product-header">
+            <h1>รายการสินค้า</h1>
+            <p><a th:href="@{/product_no_login}">ดูทั้งหมด</a></p>
         </div>
         <br>
         <div class="product-grid">
-            <div class="product-card" th:each="product : ${products}">
-                <div class="product-image">
-                    <img th:src="@{/img/placeholder.png}" alt="Product Image" />
+            <a th:each="product : ${products}" 
+                th:href="@{'/product_detail/' + ${product.productId}}" 
+                class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img th:src="@{/img/placeholder.png}" alt="Product Image" />
+                    </div>
+                    <div class="product-info">
+                        <span class="product-name" th:text="${product.name}">Product Name</span>
+                        <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
+                    </div> 
                 </div>
-                <div class="product-info">
-                    <span class="product-name" th:text="${product.name}">Product Name</span>
-                    <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
-                </div>
-                <a th:href="@{'/product_detail/' + ${product.productId}}" class="view-detail-btn">ดูรายละเอียด</a>
-            </div>
+            </a>
         </div>
     </div>
 </main>
