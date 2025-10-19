@@ -13,12 +13,38 @@
 <body>
 <!-- ======= Navbar บนสุด ======= -->
 <nav class="nav-top">
+<<<<<<< HEAD
       <div class="right-buttons">
       <div class="user-menu">
         <button class="user-btn" id="user-btn">
           <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
           <div class="user-icon"><i class="fa-solid fa-user"></i></div>
         </button>
+=======
+    <div class="left-logo">
+        <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+    </div>
+    <div class="right-buttons">
+        <div class="user-menu">
+            <button class="user-btn" id="user-btn">
+                <span class="user-text" th:text="${session.username != null ? session.username : 'Guest'}">Guest</span>
+                <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+            </button>
+            <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
+                <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
+                <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                <h4 th:text="${session.username}">ชื่อบัญชีผู้ใช้</h4>
+                <div class="info">
+                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${session.email}">email</span></p>
+                    <p><i class="fa-solid fa-phone"></i> <span th:text="${session.phone}">08xxxxxxx</span></p>
+                </div>
+                <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+            </div>
+        </div>
+        <!-- <a th:href="@{/cart}" class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></a> -->
+    </div>
+</nav>
+>>>>>>> 5e3d56673be7c23e91eec56d88450e63bb6ba498
 
         <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
           <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
@@ -69,6 +95,26 @@
     </div>
     <div id="search-results"></div>
   </nav>
+
+<!-- ======= Popup Logout ======= -->
+<div class="logout-modal" id="logout-modal">
+<div class="modal-content">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <p>คุณต้องการออกจากระบบหรือไม่</p>
+    <div class="modal-buttons">
+    <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+    <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+    </div>
+    <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+</div>
+</div>
+
+<div class="logout-success" id="logout-success">
+<div class="success-content">
+    <i class="fa-solid fa-circle-check"></i>
+    <p>ออกจากระบบสำเร็จแล้ว</p>
+</div>
+  </div>
 
 <!-- ======= ฟอร์มเพิ่มสินค้า ======= -->
 <div class="product-container">
@@ -202,5 +248,6 @@ removeBtn.addEventListener('click', function() {
 
      });
 </script>
+  <script th:src="@{/js/main.js}" defer></script>
 </body>
 </html>

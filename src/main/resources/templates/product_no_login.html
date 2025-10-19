@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,8 +21,15 @@
 </nav>
   <nav class="nav-bottom">
     <ul class="menu">
+<<<<<<< HEAD
         <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
         <li class="dropdown-category">
+=======
+        <li>
+            <a th:href="@{/index}"><img class="logo" th:src="@{/img/Emblem_of_Thammasat_University.svg.png}" alt="TU Logo"></a>
+        </li><li><a th:href="@{/index}">หน้าหลัก</a></li>
+      <li class="dropdown-category">
+>>>>>>> 5e3d56673be7c23e91eec56d88450e63bb6ba498
         <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
         <div class="overlay"></div> <!-- สำหรับ liquid glass -->
         <div class="dropdown-content">

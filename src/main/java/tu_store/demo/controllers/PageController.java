@@ -250,5 +250,17 @@ public class PageController {
         return "product";
     }
 
+    @GetMapping("/product_no_login")
+    public String productNoLoginPage(Model model) {
+        List<Product> products = productRepository.findAll();
+        model.addAttribute("products", products);
+        model.addAllAttributes(Map.of(
+                "username", "Guest",
+                "email", "-",
+                "phone", "-"
+        ));
+        return "product_no_login"; // ✅ ชี้ไปที่ templates/product_no_login.html
+    }
+
 }
 

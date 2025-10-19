@@ -111,8 +111,9 @@ document.getElementById("buyerForm").addEventListener("submit", async (event) =>
     const result = await response.text();
     alert(result);
 
+    if(result != "CLIENT registered successfully.") return;
     // 4️⃣ ไปหน้า login
-    window.location.href = "login.html";
+    window.location.href = "login";
 
   } catch (error) {
     alert("เกิดข้อผิดพลาด: " + error.message);

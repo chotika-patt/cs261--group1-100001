@@ -20,6 +20,7 @@
           <div class="user-icon"><i class="fa-solid fa-user"></i></div>
         </button>
 
+<<<<<<< HEAD
         <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
           <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
           <div class="avatar"><i class="fa-solid fa-user"></i></div>
@@ -29,6 +30,29 @@
             <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
           </div>
           <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+=======
+    <div class="left-logo">
+        <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+    </div>
+
+    <div class="right-buttons">
+        <div class="user-menu">
+            <button class="user-btn" id="user-btn">
+                <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
+                <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+            </button>
+
+            <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
+                <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
+                <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                <h4 th:text="${session.username}">ชื่อบัญชีผู้ใช้</h4>
+                <div class="info">
+                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${session.email}">username@gmail.com</span></p>
+                    <p><i class="fa-solid fa-phone"></i> <span th:text="${session.phone}">xxx-xxx-xxxx</span></p>
+                </div>
+                <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+            </div>
+>>>>>>> 5e3d56673be7c23e91eec56d88450e63bb6ba498
         </div>
       </div>
       <a th:href="@{/cart}" class="cart-icon">
@@ -130,6 +154,41 @@
         <p>ออกจากระบบสำเร็จแล้ว</p>
     </div>
 </div>
+<<<<<<< HEAD
+=======
+<!-- <script>
+  const searchIcon = document.getElementById('search-icon');
+  const searchDropdown = document.getElementById('search-dropdown');
+
+  searchIcon.addEventListener('click', (event) => {
+    event.preventDefault(); 
+    // Toggle class ที่ body เพื่อควบคุม effect blur
+    document.body.classList.toggle('search-active'); 
+    
+    // Toggle class ที่แถบค้นหาเพื่อเปิด/ปิด
+    searchDropdown.classList.toggle('open');
+  });
+</script>
+<script>
+    // ===== แถบแดงหมวดหมู่สินค้าหน้า product เป็นแถบ dropdown =====
+  const toggle = document.querySelector('.dropdown-toggle');
+  const dropdown = document.querySelector('.dropdown-content');
+  const overlay = document.querySelector('.overlay');
+
+  toggle.addEventListener('click', function(e) {
+    e.preventDefault();
+    const isOpen = dropdown.style.display === 'block';
+    dropdown.style.display = isOpen ? 'none' : 'block';
+    overlay.style.display = isOpen ? 'none' : 'block';
+  });
+
+  overlay.addEventListener('click', function() {
+    dropdown.style.display = 'none';
+    overlay.style.display = 'none';
+  });
+</script> -->
+<!-- JS (dropdown/search/logout) -->
+>>>>>>> 5e3d56673be7c23e91eec56d88450e63bb6ba498
 <script th:src="@{/js/main.js}" defer></script>
 <script th:src="@{/js/search.js}" defer></script>
 </body>
