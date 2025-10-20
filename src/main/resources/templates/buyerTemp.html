@@ -93,7 +93,7 @@
         </div>
         <div class="category-item">
             <div class="category-box">
-                <a th:href="@{'/category/' + 'SHIRT'}"><img th:src="@{/img/bag.png}" alt="Category Bag"></a>
+                <a th:href="@{'/category/' + 'BAG'}"><img th:src="@{/img/bag.png}" alt="Category Bag"></a>
             </div>
             <h3>กระเป๋า</h3>
         </div>
@@ -130,7 +130,7 @@
                 class="product-card-link">
                 <div class="product-card">
                     <div class="product-image">
-                        <img th:src="@{/img/placeholder.png}" alt="Product Image" />
+                        <img th:if="${product.main_image != null}" th:src="@{/product_img/{file}(file=${product.main_image})}" alt="Product Image" style="width:200px;height:auto;">
                     </div>
                     <div class="product-info">
                         <span class="product-name" th:text="${product.name}">Product Name</span>

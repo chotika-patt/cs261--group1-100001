@@ -60,7 +60,7 @@
   <br>
 <div class="product-container">
     <div class="product-detail-photo">
-        <img th:src="@{/img/sample-product.jpg}" alt="Product Image" />
+        <img th:if="${product.main_image != null}" th:src="@{/product_img/{file}(file=${product.main_image})}" alt="Product Image" style="width:200px;height:auto;">
     </div>
 
     <div class="product-detail-main">
