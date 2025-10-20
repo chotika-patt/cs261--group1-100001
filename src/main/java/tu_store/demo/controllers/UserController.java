@@ -1,6 +1,7 @@
 package tu_store.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +11,13 @@ import tu_store.demo.models.UserRole;
 import tu_store.demo.services.UserService;
 
 import java.util.Map;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+
 
 
 @RestController
@@ -27,11 +35,58 @@ public class UserController {
         return userService.register(user);
     }
     @PostMapping("/register/seller")
-    public Long registerSeller(@RequestBody User user) {
-        user.setRole(UserRole.SELLER);
-        User savedUser = userService.registerReturnUser(user); 
-        return savedUser.getUser_id();
+    public ResponseEntity<?> registerSeller(@RequestBody User user) {
+
+        // ตรวจว่าอีเมลลงท้าย @dome.tu.ac.th หรือไม่
+        if (user.getEmail() == null || !user.getEmail().endsWith("@dome.tu.ac.th")) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "status", "400",
+                    "error", "โปรดใช้อีเมล @dome.tu.ac.th เท่านั้นในการสมัครผู้ขาย"
+            ));
+        }
+        String tuApiUrl = "https://restapi.tu.ac.th/api/v1/auth/Ad/verify";
+        String tuApiToken = "YOUR_TU_API_TOKEN"; // <-- ต้องขอจาก TU (มีคีย์ของระบบ)
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Application-Key", tuApiToken);
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            Map<String, String> requestBody = Map.of(
+                    "username", user.getEmail(),
+                    "password", user.getPassword()
+            );
+
+            HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
+            ResponseEntity<String> response = restTemplate.postForEntity(tuApiUrl, entity, String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                user.setRole(UserRole.SELLER);
+                User savedUser = userService.registerReturnUser(user);
+                return ResponseEntity.ok(Map.of(
+                        "status", "200",
+                        "message", "สมัครผู้ขายสำเร็จและยืนยันกับ TU API แล้ว",
+                        "user_id", savedUser.getUser_id()
+                ));
+            } else {
+                //  ถ้าไม่ผ่าน
+                return ResponseEntity.status(401).body(Map.of(
+                        "status", "401",
+                        "error", "ข้อมูลไม่ตรงกับระบบ TU "
+                ));
+            }
+
+        } catch (Exception e) {
+            // กรณีเชื่อมต่อ TU API ไม่ได้
+            return ResponseEntity.status(500).body(Map.of(
+                    "status", "500",
+                    "error", "ไม่สามารถเชื่อมต่อกับระบบ TU API ได้"
+            ));
+        }
     }
+
+
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(HttpSession sessions, @RequestBody User user) {
@@ -73,5 +128,9 @@ public class UserController {
     @PostMapping("/upload")
     public String uploadData(@RequestBody User user) {
         return "Success" ;
-    }    
+    }
+
+
+
 }
+
