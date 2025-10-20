@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: tu-store-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:sqlserver://db:1433;databaseName=TUStore;encrypt=true;trustServerCertificate=true;useUnicode=true;characterEncoding=UTF-8"
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: YourStrong@Passw0rd
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_APPLICATION_NAME: tu-store
+      SPRING_THYMELEAF_CACHE: "false"
+    volumes:
+      - app_uploads:/app/uploads  # เปลี่ยนเป็น Docker volume
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-db
+    environment:
+      SA_PASSWORD: "YourStrong@Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+volumes:
+  sql_data:
+  app_uploads:  # ประกาศ volume สำหรับไฟล์อัพโหลด

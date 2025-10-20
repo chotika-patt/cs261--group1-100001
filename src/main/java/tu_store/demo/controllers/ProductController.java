@@ -65,56 +65,63 @@ public class ProductController {
 
     }
     @PostMapping("/add")
-    public ResponseEntity<?> addProduct(
-            HttpSession session,
-            @RequestParam String name,
-            @RequestParam Category category,
-            @RequestParam long price,
-            @RequestParam int stock,
-            @RequestParam String description,
-            @RequestParam(required = false) MultipartFile main_image) {
+public ResponseEntity<?> addProduct(
+        HttpSession session,
+        @RequestParam String name,
+        @RequestParam Category category,
+        @RequestParam long price,
+        @RequestParam int stock,
+        @RequestParam String description,
+        @RequestParam(required = false) MultipartFile main_image) {
 
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
-            return ResponseEntity.status(401).body("Please login as seller.");
-        }
-
-        User user = userRepository.findByUsername(username);
-        if (user.getVerified() == null || !user.getVerified()) {
-            return ResponseEntity.status(403).body("Your account has not been verified yet.");
-        }
-
-        try {
-            Product product = new Product();
-            product.setName(name);
-            product.setCategory(category);
-            product.setPrice(price);
-            product.setStock(stock);
-            product.setDescription(description);
-
-            if (main_image != null && !main_image.isEmpty()) {
-                String fileName = System.currentTimeMillis() + "_" + main_image.getOriginalFilename();
-
-                // สร้าง directory ถ้ายังไม่มี
-                Path uploadPath = Paths.get(uploadDirProduct).toAbsolutePath().normalize();
-                Files.createDirectories(uploadPath);
-
-                Path filePath = uploadPath.resolve(fileName);
-                main_image.transferTo(filePath.toFile());
-
-                // ❌ เก็บ full path → แก้เป็นเก็บเฉพาะชื่อไฟล์
-                product.setMain_image(fileName);
-            }
-
-
-            ProductResponse saved = productService.addProductDTO(product, username);
-            return ResponseEntity.ok(saved);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("เกิดข้อผิดพลาด: " + e.getMessage());
-        }
+    String username = (String) session.getAttribute("username");
+    if (username == null) {
+        return ResponseEntity.status(401).body("Please login as seller.");
     }
+
+    User user = userRepository.findByUsername(username);
+    if (user.getVerified() == null || !user.getVerified()) {
+        return ResponseEntity.status(403).body("Your account has not been verified yet.");
+    }
+
+    try {
+        Product product = new Product();
+        product.setName(name);
+        product.setCategory(category);
+        product.setPrice(price);
+        product.setStock(stock);
+        product.setDescription(description);
+
+        // บันทึก product ก่อน เพื่อให้ได้ ID
+        ProductResponse saved = productService.addProductDTO(product, username);
+
+        if (main_image != null && !main_image.isEmpty()) {
+            String ext = "";
+            String originalName = main_image.getOriginalFilename();
+            int i = originalName.lastIndexOf('.');
+            if (i > 0) ext = originalName.substring(i + 1);
+
+            String fileName = "product_seller_" + saved.getProduct_id()  + (ext.isEmpty() ? "" : "." + ext);
+
+            Path uploadPath = Paths.get(uploadDirProduct).toAbsolutePath().normalize();
+            Files.createDirectories(uploadPath);
+
+            Path filePath = uploadPath.resolve(fileName);
+            main_image.transferTo(filePath.toFile());
+
+            // อัปเดตชื่อไฟล์ใน product
+            product.setMain_image(fileName);
+            productService.addProductDTO(product, username); // update
+        }
+
+        return ResponseEntity.ok(saved);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500).body("เกิดข้อผิดพลาด: " + e.getMessage());
+    }
+}
+
 
     @GetMapping("/products/{id}")
     public ResponseEntity<?> getProdctById(@PathVariable Long id) {

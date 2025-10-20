@@ -5,8 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # คัดลอกไฟล์ .jar ที่ build แล้วเข้า container
-COPY target/*.jar app.jar
-
+COPY target/demo-0.0.1-SNAPSHOT.jar app.jar
 # เปิด port ให้เข้าถึงจากภายนอก
 EXPOSE 8080
 
