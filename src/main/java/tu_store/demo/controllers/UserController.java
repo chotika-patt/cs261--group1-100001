@@ -73,5 +73,5 @@ public class UserController {
     @PostMapping("/upload")
     public String uploadData(@RequestBody User user) {
         return "Success" ;
-    }    
+    } 
 }
