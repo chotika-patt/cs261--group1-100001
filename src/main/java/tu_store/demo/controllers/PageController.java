@@ -268,5 +268,10 @@ public class PageController {
         return "product_no_login"; // ✅ ชี้ไปที่ templates/product_no_login.html
     }
 
+    //---------ลิงก์ไปหน้า ลืมรหัส--------------
+    @GetMapping("/forget-password")
+    public String showForgetPasswordPage() {
+        return "forget-password";
+    }
 }
 
