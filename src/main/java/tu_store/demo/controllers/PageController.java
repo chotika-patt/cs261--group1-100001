@@ -269,9 +269,9 @@ public class PageController {
     }
 
     //---------ลิงก์ไปหน้า ลืมรหัส--------------
-    @GetMapping("/forget-password")
+    @GetMapping("/forget_password")
     public String showForgetPasswordPage() {
-        return "forget-password";
+        return "forget_password";
     }
 }
 

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import tu_store.demo.models.*;
 import tu_store.demo.repositories.UserRepository;
+import tu_store.demo.services.CartItemService;
 import tu_store.demo.services.CartService;
 import tu_store.demo.services.UserService;
 
@@ -46,9 +47,7 @@ public class AddToCartController {
     Long userId = userService.getUserIdBySession(session);
     
         if (userId == null) return ResponseEntity.status(401).body("Please login first.");
-
-        cartService.addItemByUserId(userId, item);
-
+    
         return ResponseEntity.ok(getCart(session));
     }
 

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tu_store.demo.dto.ProductResponse;
+import tu_store.demo.models.CartItem;
 import tu_store.demo.models.Category;
 import tu_store.demo.models.Product;
 import tu_store.demo.models.ProductStatus;
@@ -79,5 +80,4 @@ public class ProductService {
         Product saved = addProduct(product, username);  // ใช้ method เดิม
         return createProductResponse(saved);
     }
-    
 }
