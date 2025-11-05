@@ -120,10 +120,21 @@ public class PageController {
     public String sellerTempPage(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
         User seller = userService.findByUsername(username);
-
+       
+        if (username == null) {
+            return "redirect:/";
+        }
+        
+        String verifiedStatus;
+        if (Boolean.TRUE.equals(seller.getVerified())) {
+            verifiedStatus = "Official Seller ✅";
+        } else {
+            verifiedStatus = "ยังไม่ได้รับการยืนยัน ⚪";
+        }
         model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("email", session.getAttribute("email"));
         model.addAttribute("phone", session.getAttribute("phone"));
+        model.addAttribute("verifiedStatus", verifiedStatus);
         List<Product> products = productRepository.findBySeller(seller);
         model.addAttribute("products", products);
         return "sellerTemp"; // ✅ ชี้ไปที่ templates/sellerTemp.html

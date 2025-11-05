@@ -20,7 +20,6 @@
           <span class="user-text" th:text="${session.username}">Seller Name</span>
           <div class="user-icon"><i class="fa-solid fa-user"></i></div>
         </button>
-
         <div class="dropdown" id="user-dropdown">
           <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
           <div class="avatar"><i class="fa-solid fa-user"></i></div>
@@ -28,7 +27,13 @@
           <div class="info">
             <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">seller_email@example.com</span></p>
             <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">08xxxxxxxx</span></p>
-          </div>
+            <p>
+                <i class="fa-solid fa-check-circle"></i>
+                <span th:text="${verifiedStatus}"
+                th:style="${verifiedStatus} == 'Official Seller' ? 'font-weight:bold;color:green;' : 'font-weight:bold;color:gray;'">
+                </span>
+            </p>
+
           <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
         </div>
       </div>
