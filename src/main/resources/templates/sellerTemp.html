@@ -27,12 +27,13 @@
           <div class="info">
             <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">seller_email@example.com</span></p>
             <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">08xxxxxxxx</span></p>
-            <p>
-                <i class="fa-solid fa-check-circle"></i>
-                <span th:text="${verifiedStatus}"
-                th:style="${verifiedStatus} == 'Official Seller' ? 'font-weight:bold;color:green;' : 'font-weight:bold;color:gray;'">
-                </span>
+            <p class="status">
+                <i class="fa-solid"
+                     th:classappend="${verifiedStatus == 'อนุมัติการขายแล้ว'} ? 'fa-circle-check text-green' : 'fa-circle-xmark text-red'"></i>
+                <span>สถานะ : </span>
+                <span th:text="${verifiedStatus}"></span>
             </p>
+           
 
           <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
         </div>

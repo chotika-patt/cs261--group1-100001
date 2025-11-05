@@ -127,9 +127,9 @@ public class PageController {
         
         String verifiedStatus;
         if (Boolean.TRUE.equals(seller.getVerified())) {
-            verifiedStatus = "Official Seller ✅";
+            verifiedStatus = "อนุมัติการขายแล้ว";
         } else {
-            verifiedStatus = "ยังไม่ได้รับการยืนยัน ⚪";
+            verifiedStatus = "ยังไม่อนุมัติการขาย";
         }
         model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("email", session.getAttribute("email"));
