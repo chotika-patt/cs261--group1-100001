@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="th" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>รายละเอียดสินค้า | TU Store</title>
+
+    <link rel="icon" type="image/png" href="/img/Logo.png">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/payment.css}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+<!--  Navbar บนสุด  -->
+<nav class="nav-top">
+    <div class="right-buttons">
+        <div class="user-menu">
+            <button class="user-btn" id="user-btn">
+                <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
+                <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+            </button>
+
+            <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
+                <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
+                <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
+                <div class="info">
+                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
+                    <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
+                </div>
+                <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+            </div>
+        </div>
+        <a th:href="@{/cart}" class="cart-icon">
+            <span class="material-symbols-outlined">shopping_cart</span>
+        </a>
+    </div>
+</nav>
+<div class="left-logo">
+    <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+</div>
+
+
+
+<!--  Navbar ล่าง  -->
+<nav class="nav-bottom">
+    <ul class="menu">
+        <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
+        <li class="dropdown-category">
+            <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+            <div class="overlay"></div>
+            <div class="dropdown-content">
+                <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+                <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+                <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+                <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+                <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
+            </div>
+        </li>
+        <li><a href="#">เช็คสถานะ</a></li>
+        <li><a href="#">ติดต่อเรา</a></li>
+        <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+    </ul>
+</nav>
+
+<br>
+
+
+<!--  ส่วนเลือกการชำระเงิน  -->
+<main class="payment-container">
+    <h1>เลือกวิธีการชำระเงิน</h1>
+
+    <div class="payment-box">
+        <button class="method">QR Payment</button>
+
+        <div class="method">
+            <button><i class="fa-brands fa-cc-visa"></i></button>
+            <div>
+                <b>Pay by card</b>
+                <p>To pay, please enter your VISA, MasterCard or Maestro payment card information.</p>
+            </div>
+        </div>
+
+        <div class="method">
+            <i class="fa-solid fa-building-columns"></i>
+            <div>
+                <b>Pay via internet banking</b>
+                <p>Do you have access to internet banking and want to pay immediately? Just select your bank and make the payment.</p>
+            </div>
+        </div>
+        <!-- Popup แจ้งเตือนระบบยังไม่รองรับ -->
+        <div class="unsupported-popup" id="unsupportedPopup" style="display:none;">
+            <div class="unsupported-card">
+                <p>ระบบยังไม่รองรับการชำระเงินด้วยวิธีนี้<br>กรุณาชำระเงินด้วยวิธีอื่น</p>
+                <button id="closeUnsupportedBtn" class="btn-close">ตกลง</button>
+            </div>
+        </div>
+
+    </div>
+    <!--  QR Payment Popup -->
+    <div class="qr-popup" id="qrPopup">
+        <div class="qr-card">
+            <img src="/img/qrcode.jpg" alt="QR Code">
+            <h2>โปรดชำระเงินภายในเวลา</h2>
+            <p class="countdown"><span id="countdown">60</span> วินาที</p>
+            <p class="desc">เมื่อชำระเงินเสร็จสิ้นแล้ว กรุณารอการยืนยัน</p>
+            <div class="button-group">
+                <button id="confirmBtn" class="btn-confirm">ยืนยันการชำระเงิน</button>
+                <button id="newQRBtn" class="btn-newqr" style="display:none;">สร้าง QR ใหม่</button>
+            </div>
+        </div>
+
+        <!--  Loading -->
+        <div class="loading-card" id="loadingCard" style="display:none;">
+            <div class="spinner"></div>
+            <p>กำลังดำเนินการ</p>
+        </div>
+
+        <!--  Success -->
+        <div class="result-card success" id="successCard" style="display:none;">
+            <div class="icon success-icon"><i class="fa-solid fa-check"></i></div>
+            <h3 class="title">Payment Success!</h3>
+            <p class="amount">350 Baht</p>
+
+            <div class="detail-list">
+                <p><span>หมายเลขคำสั่งซื้อ</span><b>000085752257</b></p>
+                <p><span>เวลาที่ชำระเงิน</span><b>25-02-2023, 13:22:16</b></p>
+                <p><span>วิธีชำระเงิน</span><b>QR payment</b></p>
+                <p><span>ชื่อผู้ซื้อ</span><b>Antonio Roberto</b></p>
+                <p><span>ราคารวม</span><b>350 THB</b></p>
+                <button class="redirect-btn" id="successRedirectBtn">กลับไปหน้าหลัก</button>
+            </div>
+        </div>
+
+
+        <!--  Fail -->
+        <div class="result-card fail" id="failCard" style="display:none;">
+            <div class="icon fail-icon"><i class="fa-solid fa-xmark"></i></div>
+            <h3 class="title">Payment Fail!</h3>
+            <p class="amount">350 THB</p>
+            <p class="error-text">กรุณาทำรายการใหม่อีกครั้ง</p>
+
+            <div class="detail-list">
+                <p><span>หมายเลขคำสั่งซื้อ</span><b>000085752257</b></p>
+                <p><span>เวลาที่ชำระเงิน</span><b>25-02-2023, 13:22:16</b></p>
+                <p><span>วิธีชำระเงิน</span><b>QR payment</b></p>
+                <p><span>ชื่อผู้ซื้อ</span><b>Antonio Roberto</b></p>
+                <p><span>ราคารวม</span><b>350 BTH</b></p>
+                <button class="redirect-btn retry" id="failRedirectBtn">ลองอีกครั้ง</button>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+<script th:src="@{/js/main.js}" defer></script>
+<script th:src="@{/js/payment.js}" defer></script>
+<script th:src="@{/js/search.js}" defer></script>
+</body>
+</html>
+
