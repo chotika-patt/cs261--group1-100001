@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="th" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Status - TU Store</title>
+    <link rel="icon" type="image/png" href="/img/Logo.png">
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/order-status.css}">
+    <link rel="stylesheet" th:href="@{/css/order-detail.css}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+<nav class="nav-top" th:replace="~{buyerTemp :: .nav-top}"></nav>
+<div class="left-logo" th:replace="~{buyerTemp :: .left-logo}"></div>
+
+<nav class="nav-bottom" th:replace="~{buyerTemp :: .nav-bottom}"></nav>
+<h1 class="page-title">รายละเอียดคำสั่งซื้อ</h1>
+
+    <!-- Card -->
+    <section class="order-detail-card">
+      <div class="order-date">วันที่ทำรายการสั่งซื้อ : <strong>5 - 11 - 2025</strong></div>
+
+      <!-- ร้านค้า -->
+      <div class="shop-row">
+        <span class="shop-icon material-symbols-outlined">storefront</span>
+        <span class="shop-name">ชุมนุมเชียร์มหาวิทยาลัยธรรมศาสตร์</span>
+      </div>
+
+      <!-- สรุปรายการสินค้า + ผู้รับ -->
+      <div class="summary-grid">
+    <div class="thumb">
+      <img src="images/polo-thammasat.jpg"/>
+    </div>
+
+    <div class="summary-content">
+
+      <div class="detail-item">
+        <span class="detail-label">ชื่อสินค้า</span>
+        <span class="detail-value">เสื้อเชียร์งานฟุตบอลสามัคคี จุฬาฯ ธรรมศาสตร์ ปี 2567 - GOLDEN SEED POLO SHIRT</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">รายละเอียด</span>
+        <span class="detail-value">ขนาด (M), สี (แดง) x1</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">ราคา</span>
+        <span class="detail-value">฿350.00</span>
+      </div>
+
+      <hr class="detail-divider">
+
+      <div class="detail-item">
+        <span class="detail-label">ผู้รับ</span>
+        <span class="detail-value">เดรช เดซส์</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">โทร</span>
+        <span class="detail-value">066 111 1111</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">ที่อยู่</span>
+        <span class="detail-value">99/99 ซอย 11 ถนนแฟนคลับ ตำบลทดสอบ อำเภอหลงทาง จังหวัดปทุมธานี 12121</span>
+      </div>
+
+    </div>
+    </div>
+      <!-- ช่องทางชำระเงิน -->
+     <div class="payment-box">
+  
+  <div class="detail-item">
+    <span class="detail-label">ช่องทางชำระเงิน</span>
+    <span class="detail-value">พร้อมเพย์</span>
+  </div>
+
+  <div class="detail-item">
+    <span class="detail-label">สถานะการชำระเงิน</span>
+    <span class="detail-value">ยังไม่ชำระเงิน (เมื่อวันที่ 5 - 11 - 2025)</span>
+  </div>
+
+</div>
+
+      <!-- สถานะคำสั่งซื้อ -->
+      <div class="status-steps">
+        <div class="step active">
+          <span class="icon material-symbols-outlined">account_balance_wallet</span>
+          <span class="text">รอการชำระ</span>
+        </div>
+        <div class="step">
+          <span class="icon material-symbols-outlined">redeem</span>
+          <span class="text">เตรียมการจัดส่ง</span>
+        </div>
+        <div class="step">
+          <span class="icon material-symbols-outlined">local_shipping</span>
+          <span class="text">ที่ต้องได้รับ</span>
+        </div>
+        <div class="step">
+          <span class="icon material-symbols-outlined">task_alt</span>
+          <span class="text">สำเร็จ</span>
+        </div>
+      </div>
+
+      <div class="cta">
+        <a href="#" class="btn btn-primary">ไปชำระเงิน <span class="material-symbols-outlined">chevron_right</span></a>
+      </div>
+    </section>
+
+
+
+<script th:src="@{/js/main.js}" defer></script>
+<script th:src="@{/js/search.js}" defer></script>
+</body>
+</html>

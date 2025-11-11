@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="th" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Status - TU Store</title>
+    <link rel="icon" type="image/png" href="/img/Logo.png">
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/order-status.css}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+<nav class="nav-top" th:replace="~{buyerTemp :: .nav-top}"></nav>
+<div class="left-logo" th:replace="~{buyerTemp :: .left-logo}"></div>
+
+<nav class="nav-bottom" th:replace="~{buyerTemp :: .nav-bottom}"></nav>
+<div class="page-header-bar"><h1 style="color: white;">รายการคำสั่งซื้อของฉัน</h1></div>
+
+<main></main>
+
+<!-- ORDERED LIST (บน) -->
+<div class="ordered-list">
+    <div class="head-order-list">
+        <h3>รายการคำสั่งซื้อล่าสุด</h3>
+        <span><h3>รายการทั้งหมด &gt;</h3></span>
+    </div>
+
+    <!-- content ของ ordered-list -->
+    <div class="ordered-list__content">
+        <div class="ordered-items">
+            <article class="order-card order-item" data-demo="true" data-status="payment">
+  <div class="order-card__meta">
+    <span class="shop-icon material-symbols-outlined" aria-hidden="true">storefront</span>
+    <div class="shop-name">ชุมนุมเชียร์แห่งมหาวิทยาลัยธรรมศาสตร์</div>
+  </div>
+
+  <div class="order-card__body">
+   <div class="product-thumb-box" role="img" aria-label="รูปสินค้า (รอการอัปโหลด)">
+  <div class="icon" aria-hidden="true">
+    <span class="material-symbols-outlined">image</span>
+    <small>รอรูปสินค้า</small>
+  </div>
+</div>
+    <div class="product-info">
+      <div class="product-title">
+        <a style = "text-decoration: none;"th:href="@{/order-detail-waiting}">เสื้อเชียร์งานฟุตบอลสานสัมพันธ์ จุฬาฯ ธรรมศาสตร์ ปี 2567 - GOLDEN SEED POLO SHIRT</a>
+      </div>
+      <div class="product-meta">ขนาด (M), สี (แดง) x1 <div class="price">฿350.00</div></div>
+
+      <div class="order-status-line">
+        สถานะคำสั่งซื้อ : <span class="status status--pending">รอการชำระเงิน</span>
+      </div>
+
+    </div>
+  </div>
+</article>
+        </div>
+
+        <!-- empty state ของกล่องบน -->
+        <div class="empty-state is-hidden" role="status" aria-live="polite">
+            <div class="empty-state__content">
+                <span class="empty-state__icon material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                <p class="empty-state__text">ไม่พบรายการคำสั่งซื้อสินค้า</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<!-- ORDER STATUS (ล่าง) -->
+<div class="order-status">
+    <div class="head-order-list">สถานะคำสั่งซื้อ</div>
+
+    <div class="status-switch-container">
+        <div class="status-switch">
+            <a href="#" class="switch-tab active" data-status="payment">ที่ต้องชำระ</a>
+            <a href="#" class="switch-tab" data-status="preparing">ที่ต้องจัดส่ง</a>
+            <a href="#" class="switch-tab" data-status="delivery">ที่ต้องได้รับ</a>
+            <a href="#" class="switch-tab" data-status="finish">สำเร็จ</a>
+        </div>
+    </div>
+
+    <!-- container สำหรับรายการจริงของกล่องล่าง -->
+    <div class="orders-list">
+        
+    </div>
+
+    <!-- empty state ของกล่องล่าง -->
+    <div class="empty-state is-hidden" role="status" aria-live="polite">
+        <div class="empty-state__content">
+            <span class="empty-state__icon material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+            <p class="empty-state__text">ไม่พบรายการคำสั่งซื้อสินค้า</p>
+        </div>
+    </div>
+</div>
+
+<!-- modals / overlays -->
+<div class="logout-modal" id="logout-modal" th:replace="~{buyerTemp :: #logout-modal}"></div>
+<div class="logout-success" id="logout-success" th:replace="~{buyerTemp :: #logout-success}"></div>
+<div id="filter-overlay" class="overlay-container" th:replace="~{buyerTemp :: #filter-overlay}"></div>
+
+<!-- SCRIPTS -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const statusSwitch = document.querySelector('.status-switch');
+    if (!statusSwitch) return;
+
+    const tabs = statusSwitch.querySelectorAll('.switch-tab');
+    const slider = statusSwitch.querySelector('.switch-slider');
+
+    function moveSlider(targetTab) {
+        tabs.forEach(tab => tab.classList.remove('active'));
+        targetTab.classList.add('active');
+
+        // ถ้าไม่มี slider (safety) ให้เลิกไม่ต้องพยายามเข้าถึง style
+        if (!slider) return;
+
+        const targetRect = targetTab.getBoundingClientRect();
+        const switchRect = statusSwitch.getBoundingClientRect();
+
+        const newLeft = targetRect.left - switchRect.left + statusSwitch.scrollLeft;
+        const newWidth = targetRect.width;
+
+        slider.style.width = `${newWidth}px`;
+        slider.style.left = `${newLeft}px`;
+    }
+
+    const initialActiveTab = statusSwitch.querySelector('.switch-tab.active');
+    if (initialActiveTab) {
+        setTimeout(() => {
+            moveSlider(initialActiveTab);
+        }, 50);
+    }
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            moveSlider(e.currentTarget);
+            // เพิ่ม logic โหลดข้อมูลตามสถานะได้ที่นี่
+        });
+    });
+
+    window.addEventListener('resize', () => {
+        const currentActiveTab = statusSwitch.querySelector('.switch-tab.active');
+        if (currentActiveTab) moveSlider(currentActiveTab);
+    });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // ฟังก์ชันที่รับ selector ของ container เพื่อเช็คว่า empty หรือไม่
+  function updateEmptyStateFor(containerSelector, itemsSelector) {
+    const container = document.querySelector(containerSelector);
+    if (!container) return;
+    const itemsContainer = container.querySelector(itemsSelector);
+    const empty = container.querySelector('.empty-state');
+    if (!empty) return;
+    const hasItems = itemsContainer && itemsContainer.querySelector('.order-item') !== null;
+    if (hasItems) empty.classList.add('is-hidden'); else empty.classList.remove('is-hidden');
+  }
+
+  // เรียกทั้งสองกล่อง
+  updateEmptyStateFor('.ordered-list', '.ordered-items'); // กล่องบน
+  updateEmptyStateFor('.order-status', '.orders-list');   // กล่องล่าง
+
+  // ถ้าใช้ AJAX ให้เรียก updateEmptyStateFor อีกครั้งหลัง render
+});
+</script>
+<script>
+  (function () {
+    const TARGET_URL = 'order-detail-waiting.html';
+
+    // คลิกที่ .product-title แล้วไปหน้าเป้าหมาย
+    document.addEventListener('click', function (e) {
+      const el = e.target.closest('.product-title');
+      if (!el) return;
+      // กันกรณีคลิกลิงก์/ปุ่มย่อยข้างใน (เผื่ออนาคต)
+      const interactive = e.target.closest('a, button, [role="button"], input, select, textarea, label');
+      if (interactive) return;
+      window.location.href = TARGET_URL;
+    });
+
+    // เสริมการเข้าถึง (keyboard + screen reader)
+    document.querySelectorAll('.product-title').forEach(el => {
+      el.setAttribute('role', 'link');
+      el.setAttribute('tabindex', '0');
+      el.setAttribute('aria-label', el.textContent.trim() || 'เปิดรายละเอียดคำสั่งซื้อ');
+    });
+
+    // รองรับ Enter/Space
+    document.addEventListener('keydown', function (e) {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.product-title[role="link"]')) {
+        e.preventDefault();
+        window.location.href = TARGET_URL;
+      }
+    });
+  })();
+</script>
+
+
+<script th:src="@{/js/main.js}" defer></script>
+<script th:src="@{/js/search.js}" defer></script>
+</body>
+</html>

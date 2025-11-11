@@ -64,6 +64,7 @@
       <div class="search-input-container">
         <i class="fa-solid fa-magnifying-glass"></i>
         <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+        <div id="search-suggestions" class="suggestions-list"></div>
       </div>
       <button class="search-close-btn" id="search-close">
         <i class="fa-solid fa-xmark"></i>
@@ -117,7 +118,17 @@
             <h1>รายการสินค้า</h1>
             <p><a th:href="@{/product_no_login}">ดูทั้งหมด</a></p>
         </div>
-        <br>
+        <div id="filter-tags-container" class="filter-tags-container"></div>
+    <div id="search-loading" class="search-loading-container">
+        <div class="loader"></div>
+        <p>กำลังดำเนินการ</p>
+    </div>
+
+    <div id="search-not-found" class="search-not-found-container" style="display: none;">
+        <i class="fa-solid fa-circle-xmark"></i>
+        <p>ค้นหา: <strong id="search-query-text">(คำค้นหา)</strong></p>
+        <h2>ไม่พบสินค้า</h2>
+    </div>
         <div class="product-grid">
             <a th:each="product : ${products}" 
                 th:href="@{'/product_detail/' + ${product.productId}}" 
@@ -154,5 +165,8 @@
     </div>
 </div>
 <script th:src="@{/js/main.js}" defer></script>
+<script th:src="@{/js/main.js}" defer></script>
+<script th:src="@{/js/search.js}" defer></script>
+
 </body>
 </html>
