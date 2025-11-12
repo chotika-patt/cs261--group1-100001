@@ -24,10 +24,15 @@ public class CartService {
     // @Autowired
     // private CartItemRepository cartItemRepository;
 
+    @Autowired
+    private UserRepository userRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
 
-    public Cart createCart(User user){
-        Cart cart = cartRepository.findFirstByUserUserId(user.getUser_id());
+    public Cart getOrCreateCart(User user){   
+        if(user == null) return null;  
+        Cart cart = cartRepository.findFirstByUserUserIdAndIsActiveTrue(user.getUser_id());
 
         if(cart == null){
             cart = new Cart(user);
@@ -35,8 +40,8 @@ public class CartService {
         }
         return cart;
     }
-    public Cart createCart(String sessionId){
-        Cart cart = cartRepository.findFirstBySessionId(sessionId);
+    public Cart getOrCreateCart(String sessionId){
+        Cart cart = cartRepository.findFirstBySessionIdAndIsActiveTrue(sessionId);
 
         if(cart == null){
             cart = new Cart(sessionId);
@@ -66,7 +71,7 @@ public class CartService {
         return response;
     }
     public CartDto createCartResponseByUserId(Long id){
-        Cart cart = cartRepository.findFirstByUserUserId(id);
+        Cart cart = getOrCreateCart(userRepository.findFirstByUserId(id));
         if(cart == null) return null;
 
         return createCartResponse(cart);
@@ -102,7 +107,7 @@ public class CartService {
         addItemToCart(cart, cartItemService.createItem(cart, product, qty));
     }
     public void addItemByUserId(Long id, CartItemDto dto){
-        Cart cart = cartRepository.findFirstByUserUserId(id);
+        Cart cart = getOrCreateCart(userRepository.findFirstByUserId(id));
         if(cart == null) return;
 
         addItemToCart(cart, dto);
@@ -117,7 +122,7 @@ public class CartService {
         cartItemService.removeItem(cart, item);
     }
     public void removeItemByUserId(Long id, CartItemDto dto){
-        Cart cart = cartRepository.findFirstByUserUserId(id);
+        Cart cart = cartRepository.findFirstByUserUserIdAndIsActiveTrue(id);
 
         if(cart == null) return;
         removeItem(cart, dto);
@@ -130,7 +135,7 @@ public class CartService {
         cartItemService.setQuantity(newItem, dto.getQuantity());
     }
     public void setItemQuantityByUserId(Long id, CartItemDto dto){
-        Cart cart = cartRepository.findFirstByUserUserId(id);
+        Cart cart = getOrCreateCart(userRepository.findFirstByUserId(id));
         if(cart == null) return;
 
         setItemQuantity(cart, dto);

@@ -47,7 +47,9 @@ public class AddToCartController {
     Long userId = userService.getUserIdBySession(session);
     
         if (userId == null) return ResponseEntity.status(401).body("Please login first.");
-    
+        
+        cartService.addItemByUserId(userId, item);;
+
         return ResponseEntity.ok(getCart(session));
     }
 
