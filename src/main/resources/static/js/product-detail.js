@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     //  ตั้งค่า stock mock
-    let stock = 5; // <-- mock ก่อน (รอเชื่อม backend)
+    let stock = 0; // <-- mock ก่อน (รอเชื่อม backend)
     const stockCountEl = document.getElementById("stock-count");
     const stockStatusText = document.getElementById("stock-status-text");
     const addCartBtn = document.querySelector(".add-cart-btn");

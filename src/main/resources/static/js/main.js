@@ -157,16 +157,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })();
 
-  const redirectToSearch = () => {
-    const keyword = searchInput.value.trim();
+  const searchInput = document.querySelector('.search-input-container input');
+
+const redirectToSearch = () => {
+  const keyword = searchInput?.value?.trim();
+  if (keyword) {
     const searchUrl = `/product_no_login?q=${encodeURIComponent(keyword)}`;
     window.location.href = searchUrl;
-  };-
-  searchInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault(); 
-      redirectToSearch(); 
-    }
-  });
+  }
+};
+
+searchInput?.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") redirectToSearch();
+});
 
 }); // 👈 ปิด DOMContentLoaded ตัวแม่
