@@ -56,6 +56,12 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = true)
     private ProductGroup productGroup;
+    
+    @Column(name = "rating_average", nullable = true)
+    private Double ratingAvg = 0.0;
+
+    @Column(name = "rating_count", nullable = true)
+    private Integer ratingCount = 0;
 
     public Product() {}
 
@@ -171,5 +177,11 @@ public class Product {
        this.description = description;
     }
 
+    public void setRatingAvg(Double ratingAvg) {
+        this.ratingAvg = ratingAvg;
+    }
 
+    public void setRatingCount(Integer ratingCount) {
+        this.ratingCount = ratingCount;
+    }
 }

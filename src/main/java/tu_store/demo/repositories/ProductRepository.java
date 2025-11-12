@@ -34,4 +34,6 @@ List<Product> searchProducts(
   List<Product> findAllBySellerUserId(Long id);
   List<Product> findBySeller(User seller);
   List<Product> findByCategory(Category category);
+
+  List<Product> findAllByRatingAvgIsNullOrRatingCountIsNull();
 }

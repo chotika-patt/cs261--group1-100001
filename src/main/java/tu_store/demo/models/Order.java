@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import tu_store.demo.models.enums.OrderStatus;
 
@@ -29,13 +31,13 @@ public class Order {
     @Column(nullable = false)
     private OrderStatus status = OrderStatus.PENDING;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
     @Column(name = "total_price", nullable = false)
     private double totalPrice;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private ShipmentTracking shipmentTracking;
 
     public Order(){}
@@ -79,5 +81,10 @@ public class Order {
 
     public Long getUserId() {
         return user.getUser_id();
+    }
+
+    @JsonIgnore
+    public User getUser() {
+        return user;
     }
 }

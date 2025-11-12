@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import tu_store.demo.models.*;
 import tu_store.demo.models.enums.OrderStatus;
 import tu_store.demo.models.enums.ShipmentTrackingStatus;
@@ -35,6 +36,10 @@ public class OrderService {
     @Autowired
     private ShipmentTrackingService shipmentTrackingService;
 
+    @Autowired
+    private OrderStatusLogService orderStatusLogService;
+
+    @Transactional
     public Order createOrder(Cart cart){
         Order order = orderRepository.findFirstByCartCartId(cart.getCartId());
 
@@ -51,6 +56,8 @@ public class OrderService {
             order.setTotalPrice(calculateTotalPrice(order));
             order.setStatus(OrderStatus.PENDING);
             orderRepository.save(order);
+
+            orderStatusLogService.createOrderLog(order, null, OrderStatus.PENDING);
         }
         return order;
     }
@@ -60,6 +67,7 @@ public class OrderService {
         return orderRepository.findAllByUserUserId(id);
     }
 
+    @Transactional
     public void checkoutByUserId(Long id){
         Cart cart = cartRepository.findFirstByUserUserIdAndIsActiveTrue(id);
     
@@ -85,12 +93,14 @@ public class OrderService {
         return orderRepository.findFirstByOrderId(id);
     }
 
+    @Transactional
     public Order updateStatus(Order order, OrderStatus status){
         if(order == null || status == null) return null;
         if(order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.COMPLETED) return null;
 
 
         if(status == OrderStatus.PAID) {
+            orderStatusLogService.createOrderLog(order, status);
             order.setStatus(status);
 
             ShipmentTracking st = shipmentTrackingService.getOrCreateShipmentTracking(order);
@@ -100,6 +110,7 @@ public class OrderService {
                 return null;
             }
 
+            orderStatusLogService.createOrderLog(order, status);
             order.setStatus(status);
         }
 
@@ -118,6 +129,7 @@ public class OrderService {
         return null;
     }
 
+    @Transactional
     public void cancelOrderByUserId(Long userId, Long orderId) {
         Order order = orderRepository.findFirstByOrderId(orderId);
         
@@ -129,6 +141,7 @@ public class OrderService {
             throw new IllegalStateException("Cannot cancel completed order");
         }
 
+        orderStatusLogService.createOrderLog(order, OrderStatus.CANCELLED);
         order.setStatus(OrderStatus.CANCELLED);
 
         ShipmentTracking st = order.getShipmentTracking();

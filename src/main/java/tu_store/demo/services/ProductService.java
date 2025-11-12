@@ -3,16 +3,21 @@ package tu_store.demo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import tu_store.demo.dto.ProductResponse;
 import tu_store.demo.models.CartItem;
 import tu_store.demo.models.Category;
 import tu_store.demo.models.Product;
 import tu_store.demo.models.ProductStatus;
+import tu_store.demo.models.Review;
 import tu_store.demo.models.User;
 import tu_store.demo.models.UserRole;
 import tu_store.demo.repositories.ProductRepository;
+import tu_store.demo.repositories.ReviewRepository;
 import tu_store.demo.repositories.UserRepository;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +25,9 @@ import java.util.List;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -79,5 +87,32 @@ public class ProductService {
     public ProductResponse addProductDTO(Product product, String username){
         Product saved = addProduct(product, username);  // ใช้ method เดิม
         return createProductResponse(saved);
+    }
+
+    @Transactional
+    public void updateProductRatingById(Long productId) {
+        List<Review> reviews = reviewRepository.findAllByProductProductId(productId);
+
+        int count = reviews.size();
+        double avg = 0;
+
+        if (count > 0) {
+            avg = reviews.stream()
+                .mapToDouble(Review::getRating)
+                .sum();
+
+            avg = avg / count;
+            avg = Math.round(avg * 100.0) / 100.0;
+        }
+        
+
+        Product product = productRepository.findFirstByProductId(productId);
+
+        if(product == null) return;
+
+        product.setRatingCount(count);
+        product.setRatingAvg(avg);
+
+        productRepository.save(product);
     }
 }

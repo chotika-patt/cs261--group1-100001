@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import tu_store.demo.dto.CartItemDto;
 import tu_store.demo.dto.CartDto;
 import tu_store.demo.models.*;
@@ -30,6 +31,7 @@ public class CartService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Transactional
     public Cart getOrCreateCart(User user){   
         if(user == null) return null;  
         Cart cart = cartRepository.findFirstByUserUserIdAndIsActiveTrue(user.getUser_id());
@@ -40,6 +42,7 @@ public class CartService {
         }
         return cart;
     }
+    @Transactional
     public Cart getOrCreateCart(String sessionId){
         Cart cart = cartRepository.findFirstBySessionIdAndIsActiveTrue(sessionId);
 

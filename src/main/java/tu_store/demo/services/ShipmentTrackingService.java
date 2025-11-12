@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import tu_store.demo.models.*;
 import tu_store.demo.models.enums.OrderStatus;
 import tu_store.demo.models.enums.ShipmentTrackingStatus;
@@ -20,6 +21,7 @@ public class ShipmentTrackingService {
     @Autowired
     private ShipmentTrackingRepository shipmentTrackingRepository;
 
+    @Transactional
     public ShipmentTracking getOrCreateShipmentTracking(Order order){
         if(order == null) return null;
         if(order.getStatus() == OrderStatus.PENDING) throw new IllegalStateException("Cannot update shipment before payment");
@@ -38,6 +40,7 @@ public class ShipmentTrackingService {
         return st;
     }
 
+    @Transactional
     public ShipmentTracking updateStatus(Order order, ShipmentTrackingStatus status) {
         ShipmentTracking st = order.getShipmentTracking();
         if(st == null) return null;
@@ -57,6 +60,7 @@ public class ShipmentTrackingService {
         orderRepository.save(order);
         return st;
     }
+    @Transactional
     public ShipmentTracking updateStatus(Order order) {
         ShipmentTracking st = order.getShipmentTracking();
         if(st == null) return null;
