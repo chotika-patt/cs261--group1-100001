@@ -45,7 +45,7 @@ public class PageController {
     }
     @GetMapping("/register")
     public String gotoRegister(){
-        return "register.html";
+        return "register";
     }
     @GetMapping("/login")
     public String showLoginPage() {
