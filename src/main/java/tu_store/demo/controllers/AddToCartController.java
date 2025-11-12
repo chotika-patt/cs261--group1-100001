@@ -44,11 +44,17 @@ public class AddToCartController {
 
     @PostMapping("/add")
     public ResponseEntity<?> add(HttpSession session, @RequestBody CartItemDto item){
-    Long userId = userService.getUserIdBySession(session);
-    
-        if (userId == null) return ResponseEntity.status(401).body("Please login first.");
-        
-        cartService.addItemByUserId(userId, item);;
+        Long userId = userService.getUserIdBySession(session);
+        if (userId == null) return ResponseEntity.status(401).body(Map.of("error", "UNAUTHORIZED", "message", "Please login first."));
+
+        if (item == null || item.getProductId() == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "INVALID_REQUEST", "message", "productId is required"));
+        }
+        if (item.getQuantity() <= 0) {
+            return ResponseEntity.badRequest().body(Map.of("error", "INVALID_REQUEST", "message", "quantity must be > 0"));
+        }
+
+        cartService.addItemByUserId(userId, item);
 
         return ResponseEntity.ok(getCart(session));
     }
@@ -56,8 +62,16 @@ public class AddToCartController {
     @PostMapping("/set")
     public ResponseEntity<?> setQty(HttpSession session, @RequestBody CartItemDto item){
         Long userId = userService.getUserIdBySession(session);
-        
-        if (userId == null) return ResponseEntity.status(401).body("Please login first.");
+        if (userId == null) return ResponseEntity.status(401).body(Map.of("error", "UNAUTHORIZED", "message", "Please login first."));
+
+        if (item == null || item.getProductId() == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "INVALID_REQUEST", "message", "productId is required"));
+        }
+
+        // allow setting to 0 to remove item
+        if (item.getQuantity() < 0) {
+            return ResponseEntity.badRequest().body(Map.of("error", "INVALID_REQUEST", "message", "quantity must be >= 0"));
+        }
 
         cartService.setItemQuantityByUserId(userId, item);
 
@@ -67,8 +81,11 @@ public class AddToCartController {
     @PostMapping("/remove")
     public ResponseEntity<?> remove(HttpSession session, @RequestBody CartItemDto item){
         Long userId = userService.getUserIdBySession(session);
-        
-        if (userId == null) return ResponseEntity.status(401).body("Please login first.");
+        if (userId == null) return ResponseEntity.status(401).body(Map.of("error", "UNAUTHORIZED", "message", "Please login first."));
+
+        if (item == null || item.getProductId() == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "INVALID_REQUEST", "message", "productId is required"));
+        }
 
         cartService.removeItemByUserId(userId, item);
 
