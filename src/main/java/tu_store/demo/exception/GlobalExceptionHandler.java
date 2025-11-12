@@ -1,33 +1,26 @@
 package tu_store.demo.exception;
 
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import tu_store.demo.dto.ErrorResponse;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import tu_store.demo.dto.ApiError;
+import tu_store.demo.exception.ApiException;
 
-import java.time.Instant;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleAllException(Exception ex) {
-        ErrorResponse errorResponse =  new ErrorResponse(
-                500,
-                "Internal Server Error: " + ex.getMessage(),
-                Instant.now().toString()
-        );
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<ApiError> handleApiException(ApiException ex){
+        ApiError err = new ApiError(ex.getErrorCode(), ex.getMessage(), ex.getDetails());
+        return ResponseEntity.status(ex.getStatus()).body(err);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleBadRequest(IllegalArgumentException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(
-                400,
-                ex.getMessage(),
-                Instant.now().toString()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiError> handleUnknown(Exception ex){
+        ex.printStackTrace();
+        ApiError err = new ApiError("INTERNAL_ERROR", "Internal server error");
+        return ResponseEntity.status(500).body(err);
     }
 }

@@ -115,4 +115,9 @@ public class ProductService {
 
         productRepository.save(product);
     }
+
+    public Product getProductEntityById(Long id) {
+        if (id == null) return null;
+        return productRepository.findFirstByProductId(id);
+    }
 }

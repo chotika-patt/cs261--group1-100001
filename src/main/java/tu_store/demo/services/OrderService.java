@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import tu_store.demo.dto.CartItemDto;
+import tu_store.demo.dto.OrderDraftResponse;
 import tu_store.demo.models.*;
 import tu_store.demo.models.enums.OrderStatus;
 import tu_store.demo.models.enums.ShipmentTrackingStatus;
@@ -169,5 +171,46 @@ public class OrderService {
         price = price + vat;
 
         return price;
+    }
+
+    public OrderDraftResponse createOrderDraftResponse(Order order) {
+        if (order == null) return null;
+
+        OrderDraftResponse resp = new OrderDraftResponse();
+        resp.setOrderId(order.getOrderId());
+        resp.setStatus(order.getStatus() != null ? order.getStatus().name() : "DRAFT");
+
+        List<CartItemDto> items = new ArrayList<>();
+        int totalQuantity = 0;
+        double totalAmount = 0.0;
+
+        List<OrderItem> orderItems = order.getItems();
+        if (orderItems != null) {
+            for (OrderItem oi : orderItems) {
+                CartItemDto dto = new CartItemDto();
+                dto.setProductId(oi.getProductId());
+                dto.setQuantity(oi.getQuantity());
+
+                // compute unit price (OrderItem stores totalPrice)
+                if (oi.getQuantity() > 0) {
+                    long unitPrice = Math.round(oi.getTotalPrice() / oi.getQuantity());
+                    dto.setPrice(unitPrice);
+                } else {
+                    dto.setPrice(0);
+                }
+
+                items.add(dto);
+
+                totalQuantity += oi.getQuantity();
+                totalAmount += oi.getTotalPrice();
+            }
+        }
+
+        resp.setItems(items);
+        resp.setTotalItems(items.size());
+        resp.setTotalQuantity(totalQuantity);
+        resp.setTotalAmount(totalAmount);
+
+        return resp;
     }
 }
