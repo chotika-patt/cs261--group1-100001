@@ -31,9 +31,9 @@
             <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
               <p class="status">
                   <i class="fa-solid"
-                     th:classappend="${session.status == 'อนุมัติการขายแล้ว'} ? 'fa-circle-check text-green' : 'fa-circle-xmark text-red'"></i>
+                     th:classappend="${verifiedStatus == 'อนุมัติการขายแล้ว'} ? 'fa-circle-check text-green' : 'fa-circle-xmark text-red'"></i>
                   <span>สถานะ : </span>
-                  <span th:text="${session.status}">ยังไม่อนุมัติการขาย</span>
+                  <span th:text="${verifiedStatus}"></span>
               </p>
           </div>
           <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
@@ -216,6 +216,8 @@ removeBtn.addEventListener('click', function() {
 
      });
 </script>
-  <script th:src="@{/js/main.js}" defer></script>
+<script th:src="@{/js/main.js}" defer></script>
+<script th:src="@{/js/auth.js}" defer></script>
+<script th:src="@{/js/sellerTemp.js}" defer></script>
 </body>
 </html>
