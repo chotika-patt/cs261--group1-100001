@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import tu_store.demo.repositories.ProductRepository;
 import tu_store.demo.repositories.UserRepository;
 import tu_store.demo.services.UserService;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @Controller
@@ -278,7 +280,6 @@ public class PageController {
         ));
         return "product_no_login"; // ✅ ชี้ไปที่ templates/product_no_login.html
     }
-
     //---------ลิงก์ไปหน้า ลืมรหัส--------------
     @GetMapping("/forget_password")
     public String showForgetPasswordPage() {

@@ -83,6 +83,11 @@ public class UserController {
     @PostMapping("/upload")
     public String uploadData(@RequestBody User user) {
         return "Success" ;
-    } 
+    }  
+    @PostMapping("/forget_password")
+    public String postMethodName(@RequestBody User user) {
+        return "Check your email we send OTP";
+    }
+    
 }
 
