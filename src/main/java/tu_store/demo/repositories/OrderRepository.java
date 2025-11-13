@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface OrderRepository extends JpaRepository<Order, Long>  {
     Order findFirstByCartCartId(Long id);
     Order findFirstByOrderId(Long id);
-    Order findFirstByUserUserId(Long id);
 
-    List<Order> findAllByUserUserId(Long id);
+    List<Order> findAllByBuyerUserId(Long id);
 }

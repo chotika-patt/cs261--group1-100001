@@ -4,33 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
-import tu_store.demo.dto.CartDto;
 import tu_store.demo.dto.CartItemDto;
 import tu_store.demo.dto.ProductResponse;
 import tu_store.demo.dto.ReviewImageDto;
 import tu_store.demo.dto.ReviewRequest;
 import tu_store.demo.dto.ReviewResponse;
-import tu_store.demo.models.Cart;
-import tu_store.demo.models.CartItem;
-import tu_store.demo.models.Category;
-import tu_store.demo.models.Order;
-import tu_store.demo.models.OrderStatusLog;
-import tu_store.demo.models.Product;
-import tu_store.demo.models.ProductStatus;
-import tu_store.demo.models.Review;
-import tu_store.demo.models.ReviewImage;
-import tu_store.demo.models.User;
-import tu_store.demo.models.UserRole;
-import tu_store.demo.repositories.OrderRepository;
-import tu_store.demo.repositories.ProductRepository;
-import tu_store.demo.repositories.ReviewRepository;
-import tu_store.demo.repositories.UserRepository;
+import tu_store.demo.models.*;
+import tu_store.demo.repositories.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ReviewService {
+
     @Autowired
     private ProductRepository productRepository;
 
@@ -46,7 +33,6 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
-
     @Transactional
     public Review createReview(ReviewRequest reviewRequest) {
         if(reviewRequest == null) return null;
@@ -58,7 +44,7 @@ public class ReviewService {
 
         Review newReview = new Review();
         newReview.setOrder(order);
-        newReview.setBuyer(order.getUser());
+        newReview.setBuyer(order.getBuyer());  // ←❗ เปลี่ยนจาก getUser()
         newReview.setProduct(product);
         newReview.setComment(reviewRequest.getComment());
         newReview.setRating(reviewRequest.getRating());
@@ -71,14 +57,12 @@ public class ReviewService {
         }
 
         newReview.setImages(newImages);
-
         reviewRepository.save(newReview);
         
         productService.updateProductRatingById(product.getProductId());
 
         return newReview;
     }
-
 
     public ReviewResponse createReviewResponse(Review review){
         if(review == null) return null;
