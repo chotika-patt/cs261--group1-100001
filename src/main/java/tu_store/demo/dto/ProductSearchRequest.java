@@ -1,4 +1,4 @@
-package tu_store.demo.dto;
+/*package tu_store.demo.dto;
 
 import tu_store.demo.models.Category;
 import tu_store.demo.models.ProductStatus;
@@ -45,4 +45,4 @@ public class ProductSearchRequest {
     public void setMaxPrice(Long maxPrice) {
         this.maxPrice = maxPrice;
     }
-}
+}*/

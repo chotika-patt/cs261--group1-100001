@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpSession;
 import tu_store.demo.dto.AddToCartRequest;
 import tu_store.demo.dto.ProductResponse;
-import tu_store.demo.dto.ProductSearchRequest;
 import tu_store.demo.models.Cart;
 import tu_store.demo.models.Category;
 import tu_store.demo.models.Product;
@@ -48,7 +47,7 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-    @PostMapping("/search")
+    /*@PostMapping("/search")
     public ResponseEntity<?> searchProducts(@RequestBody ProductSearchRequest searchRequest){
         var results = productService.search(
                 searchRequest.getName(),
@@ -63,7 +62,7 @@ public class ProductController {
 
     return ResponseEntity.ok(results);
 
-    }
+    }*/
     @PostMapping("/add")
 public ResponseEntity<?> addProduct(
         HttpSession session,
@@ -123,7 +122,7 @@ public ResponseEntity<?> addProduct(
 }
 
 
-    @GetMapping("/products/{id}")
+    @GetMapping("/products/{id:\\d+}")
     public ResponseEntity<?> getProdctById(@PathVariable Long id) {
         ProductResponse response = productService.getProductResponseById(id);
         if (response == null) return ResponseEntity.status(404).body("Product not found");
