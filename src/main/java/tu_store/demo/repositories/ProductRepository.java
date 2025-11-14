@@ -10,6 +10,7 @@ import tu_store.demo.models.ProductStatus;
 import tu_store.demo.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -36,4 +37,6 @@ List<Product> searchProducts(
   List<Product> findByCategory(Category category);
 
   List<Product> findAllByRatingAvgIsNullOrRatingCountIsNull();
+
+  Optional<Product> findByProductIdAndSellerUserId(Long productId, Long sellerId);
 }

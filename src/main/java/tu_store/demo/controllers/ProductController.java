@@ -2,13 +2,9 @@ package tu_store.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
@@ -20,6 +16,7 @@ import tu_store.demo.models.Category;
 import tu_store.demo.models.Product;
 import tu_store.demo.models.User;
 import tu_store.demo.repositories.CartRepository;
+import tu_store.demo.repositories.ProductRepository;
 import tu_store.demo.repositories.UserRepository;
 import tu_store.demo.services.ProductService;
 
@@ -29,7 +26,8 @@ import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
-import org.springframework.web.bind.annotation.RequestParam;
+import java.util.Optional;
+
 import tu_store.demo.services.UserService;
 
 
@@ -41,6 +39,9 @@ public class ProductController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Value("${file.upload-dir-product}")
     private String uploadDirProduct;
@@ -134,5 +135,104 @@ public ResponseEntity<?> addProduct(
     public ResponseEntity<?> getProdctsByUserId(@PathVariable Long userId) {
         List <ProductResponse> responseList = productService.getAllProductsResponseByUserId(userId);
         return ResponseEntity.ok(responseList);
+    }
+
+    //DELETE Product
+    @DeleteMapping("seller/product/{id}")
+    public ResponseEntity<?> deleteProductByIdFromSeller(
+            @PathVariable Long id,
+            HttpSession session) {
+
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("❌ Please login as seller first.");
+        }
+
+        User seller = userRepository.findByUsername(username);
+        if (seller == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("❌ Seller not found.");
+        }
+
+
+        Optional<Product> optionalProduct = productRepository.findByProductIdAndSellerUserId(id, seller.getUser_id());
+        if (optionalProduct.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("❌ Product not found or you don’t have permission to delete it.");
+        }
+        productRepository.deleteById(id);
+
+        return ResponseEntity.ok("✅ Product ID " + id + " deleted successfully.");
+    }
+
+    @PutMapping("seller/product/{id}")
+    public ResponseEntity<?> updateProductBySeller(
+            @PathVariable Long id,
+            HttpSession session,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Category category,
+            @RequestParam(required = false) Long price,
+            @RequestParam(required = false) Integer stock,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) MultipartFile main_image) {
+
+        // 1️⃣ ตรวจสอบว่า seller login
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("❌ Please login as seller first.");
+        }
+
+        // 2️⃣ ดึง seller
+        User seller = userRepository.findByUsername(username);
+        if (seller == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("❌ Seller not found.");
+        }
+
+        // 3️⃣ ตรวจสอบว่าเป็นสินค้าของ seller จริง
+        Optional<Product> optionalProduct = productRepository.findByProductIdAndSellerUserId(id, seller.getUser_id());
+        if (optionalProduct.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("❌ Product not found or you don’t have permission to update it.");
+        }
+
+        Product product = optionalProduct.get();
+
+        // 4️⃣ อัปเดตเฉพาะ field ที่ส่งมา
+        if (name != null && !name.isEmpty()) product.setName(name);
+        if (category != null) product.setCategory(category);
+        if (price != null) product.setPrice(price);
+        if (stock != null) product.setStock(stock);
+        if (description != null && !description.isEmpty()) product.setDescription(description);
+
+        // 5️⃣ อัปโหลดรูปใหม่ (ถ้ามี)
+        try {
+            if (main_image != null && !main_image.isEmpty()) {
+                String ext = "";
+                String originalName = main_image.getOriginalFilename();
+                int i = originalName.lastIndexOf('.');
+                if (i > 0) ext = originalName.substring(i + 1);
+
+                String fileName = "product_seller_" + product.getProductId() + (ext.isEmpty() ? "" : "." + ext);
+                Path uploadPath = Paths.get(uploadDirProduct).toAbsolutePath().normalize();
+                Files.createDirectories(uploadPath); // สร้างโฟลเดอร์ถ้ายังไม่มี
+                Path filePath = uploadPath.resolve(fileName);
+                main_image.transferTo(filePath.toFile());
+
+                product.setMain_image(fileName);
+            }
+
+            // 6️⃣ บันทึกข้อมูล
+            productRepository.save(product);
+
+            return ResponseEntity.ok("✅ Product ID " + id + " updated successfully.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("❌ Error while updating product: " + e.getMessage());
+        }
     }
 }
