@@ -124,6 +124,8 @@
             <h3>ของที่ระลึก</h3>
         </div>
     </div>
+    
+    <div class="next-session"></div>
 
     <!-- Products -->
     <div class="product-section">
@@ -138,7 +140,7 @@
                 class="product-card-link">
                 <div class="product-card">
                     <div class="product-image">
-                        <img th:if="${product.main_image != null}" th:src="@{/product_img/{file}(file=${product.main_image})}" alt="Product Image" style="width:200px;height:auto;">
+                        <img th:if="${product.main_image != null}" th:src="@{/product_img/{file}(file=${product.main_image})}" alt="Product Image">
                     </div>
                     <div class="product-info">
                         <span class="product-name" th:text="${product.name}">Product Name</span>
