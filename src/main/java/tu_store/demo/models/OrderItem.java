@@ -23,11 +23,11 @@ public class OrderItem {
     private int quantity;
 
     // ราคาต่อชิ้นตอนซื้อ (สำคัญมาก)
-    @Column(name = "price", nullable = false)
+    @Column(name = "price", nullable = true)
     private long price;
 
     // ราคารวม = price × quantity
-    @Column(name = "total_price", nullable = false)
+    @Column(name = "total_price", nullable = true)
     private double totalPrice;
 
     public OrderItem() {}

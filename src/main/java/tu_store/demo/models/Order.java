@@ -27,12 +27,12 @@ public class Order {
 
     // ผู้ซื้อ
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "buyer_id", nullable = false)
+    @JoinColumn(name = "buyer_id", nullable = true)
     private User buyer;
 
     // ผู้ขาย (ร้าน)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_id", nullable = false)
+    @JoinColumn(name = "seller_id", nullable = true)
     private User seller;
 
     // Cart (ของระบบเดิม)
@@ -40,11 +40,11 @@ public class Order {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @Column(name = "total_price", nullable = false)
+    @Column(name = "total_price", nullable = true)
     private double totalPrice;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private OrderStatus status = OrderStatus.PENDING;
 
     @Column(name = "payment_method", length = 50)

@@ -81,4 +81,8 @@ public class ShipmentTracking {
     public String getTrackingNumber() {
         return trackingNumber;
     }
+
+    public Long getOrderId() {
+        return order.getOrderId();
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import tu_store.demo.dto.ClientShipmentTrackingResponse;
 import tu_store.demo.models.*;
 import tu_store.demo.models.enums.OrderStatus;
 import tu_store.demo.models.enums.ShipmentTrackingStatus;
@@ -39,6 +40,27 @@ public class ShipmentTrackingService {
         shipmentTrackingRepository.save(st);
         return st;
     }
+
+    public ClientShipmentTrackingResponse createClientShipmentTrackingResponse(ShipmentTracking st){
+        if(st == null) return null;
+        ClientShipmentTrackingResponse response = new ClientShipmentTrackingResponse();
+
+        response.setDeliveredAt(st.getDeliveredAt());
+        response.setOrderId(st.getOrderId());
+        response.setStatus(st.getStatus());
+        response.setTrackingNumber(st.getTrackingNumber());
+        response.setShippedAt(st.getShippedAt());
+        
+        return response; 
+    }
+
+    public ClientShipmentTrackingResponse createClientShipmentTrackingResponseByOrderIdAndUserId(Long id, Long userId){
+        ShipmentTracking st = shipmentTrackingRepository.findFirstByOrderOrderIdAndOrderBuyerUserId(id, userId);
+        if(st == null) return null;
+
+        return createClientShipmentTrackingResponse(st);
+    }
+
 
     @Transactional
     public ShipmentTracking updateStatus(Order order, ShipmentTrackingStatus status) {

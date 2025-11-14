@@ -5,10 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import tu_store.demo.dto.CartItemDto;
+import tu_store.demo.dto.ClientOrderItemResponse;
+import tu_store.demo.dto.ClientOrderResponse;
+import tu_store.demo.dto.ClientShipmentTrackingResponse;
 import tu_store.demo.dto.OrderDraftResponse;
 import tu_store.demo.models.*;
 import tu_store.demo.models.enums.OrderStatus;
@@ -78,6 +83,68 @@ public class OrderService {
         }
 
         return order;
+    }
+    // -----------------------------------------------------
+    // CREATE ORDER RESPONSE FOR CONTROLLER
+    // -----------------------------------------------------
+    public ClientOrderResponse createClientOrderResponse(Order order){
+        if(order == null) return null;
+        ClientOrderResponse response = new ClientOrderResponse();
+        response.setCreatedAt(order.getCreatedAt());
+        response.setOrderId(order.getOrderId());
+        response.setTotalPrice(order.getTotalPrice());
+        response.setStatus(order.getStatus());
+
+        ShipmentTracking st = order.getShipmentTracking();
+        if(st != null){
+            response.setTrackingCode(st.getTrackingNumber());
+        }
+        else{
+            response.setTrackingCode("");
+        }
+        
+        Integer q = 0;
+
+
+        List<ClientOrderItemResponse> items = new ArrayList<>();
+
+        for(OrderItem item : order.getItems()){
+            ClientOrderItemResponse itemDto = orderItemService.createClientOrderItemResponse(item);
+            items.add(itemDto);
+
+            q = itemDto.getQuantity() + q;
+        }
+
+        response.setQuantity(q);
+        response.setItems(items);
+
+        return response;
+    }
+    public ClientOrderResponse createClientOrderResponseByIdAndUserId(Long id, Long userId){
+        Order order = orderRepository.findFirstByOrderIdAndBuyerUserId(id, userId);
+        if(order == null) return null;
+
+        return createClientOrderResponse(order);
+    }
+    public Page<ClientOrderResponse> getClientOrderPageResponse(Long clientId, Pageable pageable){
+        Page<Order> orders;
+
+        orders = orderRepository.findAllByBuyerUserId(clientId, pageable);
+
+        return orders.map(this::createClientOrderResponse);
+    }
+    public Page<ClientOrderResponse> getClientOrderPageResponseWithStatus(Long clientId, String status, Pageable pageable){
+        if(status == null) return getClientOrderPageResponse(clientId, pageable) ;
+
+        Page<Order> orders;
+
+        orders = orderRepository.findAllByBuyerUserIdAndStatus(clientId, status.toUpperCase(), pageable);
+
+        return orders.map(this::createClientOrderResponse);
+    }
+
+    public ClientShipmentTrackingResponse getClientShipmentTrackingResponseByOrderIdAndUserId(Long id, Long userId){
+        return shipmentTrackingService.createClientShipmentTrackingResponseByOrderIdAndUserId(id, userId);
     }
 
     // -----------------------------------------------------

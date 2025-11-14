@@ -147,4 +147,22 @@ public class UserService {
         }
         return userRepository.save(newUser); // คืนค่า User ที่บันทึกแล้ว (มี user_id)
     }
+
+    public boolean isSellerById(Long id){
+        User user = userRepository.findFirstByUserId(id);
+
+        if(user == null) return false;
+        if(user.getRole() == UserRole.SELLER) return true;
+
+        return false;
+    }
+    
+    public boolean isbuyerById(Long id){
+        User user = userRepository.findFirstByUserId(id);
+
+        if(user == null) return false;
+        if(user.getRole() == UserRole.CLIENT) return true;
+
+        return false;
+    }
 }

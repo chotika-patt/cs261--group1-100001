@@ -25,32 +25,32 @@ public class Product {
     private Long productId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_id", nullable = false)
+    @JoinColumn(name = "seller_id", nullable = true)
     @JsonIgnoreProperties({
             "password", "verify_document", "studentID", "phone", "role",
             "createdAt", "user_id", "hibernateLazyInitializer", "handler"
     })
     private User seller;
 
-    @Column(nullable = false, length = 255, columnDefinition = "NVARCHAR(255)")
+    @Column(nullable = true, length = 255, columnDefinition = "NVARCHAR(255)")
     private String name;
 
     @Lob
     @Column(columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private long price;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private int stock;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Category category;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private ProductStatus status;
 
     @Column(length = 255)
@@ -64,7 +64,7 @@ public class Product {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     // ⭐ NEW: sold_count สำหรับ sorting/filter
-    @Column(name = "sold_count", nullable = false)
+    @Column(name = "sold_count", nullable = true)
     private Integer soldCount = 0;
 
     @ManyToOne
