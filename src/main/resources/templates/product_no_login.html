@@ -53,51 +53,11 @@
         </div>
     </nav>
 
-    <!-- แถบหมวดหมู่สินค้า (Red Dropdown Bar) -->
-     <div class="category-bar">
-        <div class="category-header">
-        <a class="category-toggle"><span>หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></span></a>
-    </div>
-    <div class="category-dropdown">
-        <div class="category-con">
-            <div class="category-item">
-                <div class="category-box">
-                    <a th:href="@{'/category/' + 'SHIRT'}"><img th:src="@{/img/jersey.png}" alt="Category Shirt"></a>
-                </div>
-                <h3>เสื้อ</h3>
-            </div>
-            <div class="category-item">
-                <div class="category-box">
-                    <a th:href="@{'/category/' + 'BAG'}"><img th:src="@{/img/bag.png}" alt="Category Bag"></a>
-                </div>
-                <h3>กระเป๋า</h3>
-            </div>
-            <div class="category-item">
-                <div class="category-box">
-                    <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}"><img th:src="@{/img/uniform.png}" alt="Category Uniform"></a>
-                </div>
-                <h3>เครื่องแบบนักศึกษา</h3>
-            </div>
-            <div class="category-item">
-                <div class="category-box">
-                  <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}"><img th:src="@{/img/things.png}" alt="Category General Use"></a>
-                </div>
-                <h3>ของใช้ทั่วไป</h3>
-            </div>
-            <div class="category-item">
-                <div class="category-box">
-                  <a th:href="@{'/category/' + 'MEMORABILIA'}"><img th:src="@{/img/arttoy.png}" alt="Category Souvenir"></a>
-                </div>
-                <h3>ของที่ระลึก</h3>
-            </div>
-        </div>
-    </div>
-</div>
     <div class="product-section">
         <div class="product-header">
-            <h1>รายการสินค้า</h1>
-            <p><a th:href="@{/product_no_login}">ดูทั้งหมด</a></p>
+            <h1 id="page-title">รายการสินค้าทั้งหมด</h1>
         </div>
+
         <br>
         <div class="product-grid">
             <a th:each="product : ${products}" 
@@ -105,7 +65,7 @@
                 class="product-card-link">
                 <div class="product-card">
                     <div class="product-image">
-                        <img th:if="${product.main_image != null}" th:src="@{/product_img/{file}(file=${product.main_image})}" alt="Product Image" style="width:200px;height:auto;">
+                        <img th:if="${product.main_image != null}" th:src="@{/product_img/{file}(file=${product.main_image})}" alt="Product Image">
                     </div>
                     <div class="product-info">
                         <span class="product-name" th:text="${product.name}">Product Name</span>
@@ -135,5 +95,37 @@
         </div>
     </div>
     <script th:src="@{/js/main.js}" defer></script>
+    <script>
+        // element h1 ที่เราจะเปลี่ยนข้อความ
+        const titleEl = document.getElementById('page-title');
+
+        // เอา path ปัจจุบัน เช่น /category/SHIRT
+        const path = window.location.pathname;
+
+        // ถ้าเป็นหน้า category/*
+        if (path.startsWith('/category/')) {
+            const code = path.split('/').pop();   // ได้ code เช่น SHIRT
+
+            // map code → ชื่อภาษาไทย
+            const categoryMap = {
+            'SHIRT': 'เสื้อ',
+            'BAG': 'กระเป๋า',
+            'STUDENT_UNIFORM': 'เครื่องแบบนักศึกษา',
+            'GENERAL_PURPOSE': 'ของใช้ทั่วไป',
+            'MEMORABILIA': 'ของที่ระลึก'
+            };
+
+            if (categoryMap[code]) {
+            titleEl.textContent = categoryMap[code];   // เช่น "เสื้อ"
+            } else {
+            titleEl.textContent = 'รายการสินค้าทั้งหมด';
+            }
+
+        } else {
+            // กรณีอื่น ๆ เช่น /index หรือ /product_no_login
+            titleEl.textContent = 'รายการสินค้าทั้งหมด';
+        }
+    </script>
+
 </body>
 </html>

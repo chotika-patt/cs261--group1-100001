@@ -1,5 +1,11 @@
 package tu_store.demo.controllers;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -8,29 +14,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
-import tu_store.demo.dto.AddToCartRequest;
 import tu_store.demo.dto.ProductResponse;
 import tu_store.demo.dto.ProductSearchRequest;
-import tu_store.demo.models.Cart;
 import tu_store.demo.models.Category;
 import tu_store.demo.models.Product;
 import tu_store.demo.models.User;
-import tu_store.demo.repositories.CartRepository;
 import tu_store.demo.repositories.UserRepository;
 import tu_store.demo.services.ProductService;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.Principal;
-import java.util.List;
-import java.util.Map;
-import org.springframework.web.bind.annotation.RequestParam;
-import tu_store.demo.services.UserService;
 
 
 @RestController
