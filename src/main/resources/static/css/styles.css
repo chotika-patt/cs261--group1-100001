@@ -143,6 +143,7 @@ body {
   width: 100%;
   padding: 0px 20px;
   gap: 15px;
+  position: relative;
 }
 
 .nav-bottom.search-active .menu {
@@ -1191,6 +1192,25 @@ main {
   flex-wrap: wrap;
   gap: 8px;
   flex: 1;
+}
+.search-filter-btn {
+    position: absolute;
+    right: 20px; 
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+    background: none;
+    border: none;
+    color: #fff; 
+    font-size: 1rem; 
+    cursor: pointer;
+    transition: 0.3s;
+    white-space: nowrap; 
+}
+
+.search-filter-btn:hover {
+    color: #ccc;
+    transform: scale(1.05)
 }
 
 /* ---------- CAT BUTTONS ---------- */
