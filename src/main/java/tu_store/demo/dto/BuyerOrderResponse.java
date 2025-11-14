@@ -8,7 +8,7 @@ import java.util.List;
 import tu_store.demo.models.enums.OrderStatus;
 import tu_store.demo.models.enums.PaymentStatus;
 
-public class ClientOrderResponse {
+public class BuyerOrderResponse {
     private Long orderId;
     private OrderStatus status;
     private PaymentStatus paymentStatus;
@@ -16,17 +16,17 @@ public class ClientOrderResponse {
     private String trackingCode;
     private Double totalPrice;
 
-    private List<ClientOrderItemResponse> items = new ArrayList<>();
+    private List<BuyerOrderItemResponse> items = new ArrayList<>();
 
     private LocalDateTime createdAt;
 
-    public ClientOrderResponse(){}
+    public BuyerOrderResponse(){}
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public void setItems(List<ClientOrderItemResponse> items) {
+    public void setItems(List<BuyerOrderItemResponse> items) {
         this.items = items;
     }
 
@@ -58,7 +58,7 @@ public class ClientOrderResponse {
         return createdAt;
     }
 
-    public List<ClientOrderItemResponse> getItems() {
+    public List<BuyerOrderItemResponse> getItems() {
         return items;
     }
 

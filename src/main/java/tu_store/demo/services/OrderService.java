@@ -11,10 +11,13 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import tu_store.demo.dto.CartItemDto;
-import tu_store.demo.dto.ClientOrderItemResponse;
-import tu_store.demo.dto.ClientOrderResponse;
-import tu_store.demo.dto.ClientShipmentTrackingResponse;
+import tu_store.demo.dto.BuyerOrderItemResponse;
+import tu_store.demo.dto.BuyerOrderResponse;
+import tu_store.demo.dto.ShipmentTrackingResponse;
 import tu_store.demo.dto.OrderDraftResponse;
+import tu_store.demo.dto.SellerOrderItemResponse;
+import tu_store.demo.dto.SellerOrderResponse;
+import tu_store.demo.dto.SellerOrderSummaryResponse;
 import tu_store.demo.models.*;
 import tu_store.demo.models.enums.OrderStatus;
 import tu_store.demo.models.enums.ShipmentTrackingStatus;
@@ -85,11 +88,11 @@ public class OrderService {
         return order;
     }
     // -----------------------------------------------------
-    // CREATE ORDER RESPONSE FOR CONTROLLER
+    // CREATE BUYER ORDER RESPONSE FOR CONTROLLER
     // -----------------------------------------------------
-    public ClientOrderResponse createClientOrderResponse(Order order){
+    public BuyerOrderResponse createClientOrderResponse(Order order){
         if(order == null) return null;
-        ClientOrderResponse response = new ClientOrderResponse();
+        BuyerOrderResponse response = new BuyerOrderResponse();
         response.setCreatedAt(order.getCreatedAt());
         response.setOrderId(order.getOrderId());
         response.setTotalPrice(order.getTotalPrice());
@@ -106,10 +109,10 @@ public class OrderService {
         Integer q = 0;
 
 
-        List<ClientOrderItemResponse> items = new ArrayList<>();
+        List<BuyerOrderItemResponse> items = new ArrayList<>();
 
         for(OrderItem item : order.getItems()){
-            ClientOrderItemResponse itemDto = orderItemService.createClientOrderItemResponse(item);
+            BuyerOrderItemResponse itemDto = orderItemService.createClientOrderItemResponse(item);
             items.add(itemDto);
 
             q = itemDto.getQuantity() + q;
@@ -120,20 +123,20 @@ public class OrderService {
 
         return response;
     }
-    public ClientOrderResponse createClientOrderResponseByIdAndUserId(Long id, Long userId){
+    public BuyerOrderResponse createClientOrderResponseByIdAndUserId(Long id, Long userId){
         Order order = orderRepository.findFirstByOrderIdAndBuyerUserId(id, userId);
         if(order == null) return null;
 
         return createClientOrderResponse(order);
     }
-    public Page<ClientOrderResponse> getClientOrderPageResponse(Long clientId, Pageable pageable){
+    public Page<BuyerOrderResponse> getClientOrderPageResponse(Long clientId, Pageable pageable){
         Page<Order> orders;
 
         orders = orderRepository.findAllByBuyerUserId(clientId, pageable);
 
         return orders.map(this::createClientOrderResponse);
     }
-    public Page<ClientOrderResponse> getClientOrderPageResponseWithStatus(Long clientId, String status, Pageable pageable){
+    public Page<BuyerOrderResponse> getClientOrderPageResponseWithStatus(Long clientId, String status, Pageable pageable){
         if(status == null) return getClientOrderPageResponse(clientId, pageable) ;
 
         Page<Order> orders;
@@ -143,9 +146,131 @@ public class OrderService {
         return orders.map(this::createClientOrderResponse);
     }
 
-    public ClientShipmentTrackingResponse getClientShipmentTrackingResponseByOrderIdAndUserId(Long id, Long userId){
+    public ShipmentTrackingResponse getClientShipmentTrackingResponseByOrderIdAndUserId(Long id, Long userId){
         return shipmentTrackingService.createClientShipmentTrackingResponseByOrderIdAndUserId(id, userId);
     }
+
+    public Page<BuyerOrderResponse> getClientOrderPageResponseWithFilters(
+        Long userId,
+        String search,
+        OrderStatus status,
+        LocalDateTime startDate,
+        LocalDateTime endDate,
+        Pageable pageable
+    ){
+        Page<Order> orders;
+
+        orders = orderRepository.findAllByBuyerIdWithFilters(userId, search, status, startDate, endDate, pageable);
+
+        return orders.map(this::createClientOrderResponse);
+    }
+
+    // -----------------------------------------------------
+    // CREATE SELLER ORDER RESPONSE FOR CONTROLLER
+    // -----------------------------------------------------
+    public SellerOrderResponse createSellerOrderResponse(Order order){
+        if(order == null) return null;
+        SellerOrderResponse response = new SellerOrderResponse();
+        response.setCreatedAt(order.getCreatedAt());
+        response.setOrderId(order.getOrderId());
+        response.setTotalPrice(order.getTotalPrice());
+        response.setStatus(order.getStatus());
+
+        User buyer = order.getBuyer();
+        if(buyer != null) response.setBuyerId(order.getBuyer().getUser_id());
+
+        ShipmentTracking st = order.getShipmentTracking();
+        if(st != null){
+            response.setTrackingCode(st.getTrackingNumber());
+        }
+        else{
+            response.setTrackingCode("");
+        }
+        
+        Integer q = 0;
+
+
+        List<SellerOrderItemResponse> items = new ArrayList<>();
+
+        for(OrderItem item : order.getItems()){
+            SellerOrderItemResponse itemDto = orderItemService.createSellerOrderItemResponse(item);
+            items.add(itemDto);
+
+            q = itemDto.getQuantity() + q;
+        }
+
+        response.setQuantity(q);
+        response.setItems(items);
+
+        return response;
+    }
+    public SellerOrderResponse createSellerOrderResponseByIdAndUserId(Long id, Long userId){
+        Order order = orderRepository.findFirstByOrderIdAndSellerUserId(id, userId);
+        if(order == null) return null;
+
+        return createSellerOrderResponse(order);
+    }
+    public Page<SellerOrderResponse> getSellerOrderPageResponse(Long clientId, Pageable pageable){
+        Page<Order> orders;
+
+        orders = orderRepository.findAllBySellerUserId(clientId, pageable);
+
+        return orders.map(this::createSellerOrderResponse);
+    }
+    public Page<SellerOrderResponse> getSellerOrderPageResponseWithStatus(Long clientId, String status, Pageable pageable){
+        if(status == null) return getSellerOrderPageResponse(clientId, pageable) ;
+
+        Page<Order> orders;
+
+        orders = orderRepository.findAllByBuyerUserIdAndStatus(clientId, status.toUpperCase(), pageable);
+
+        return orders.map(this::createSellerOrderResponse);
+    }
+
+    public ShipmentTrackingResponse getSellerShipmentTrackingResponseByOrderIdAndUserId(Long id, Long userId){
+        return shipmentTrackingService.createSellerShipmentTrackingResponseByOrderIdAndUserId(id, userId);
+    }
+
+    public Page<SellerOrderResponse> getSellerOrderPageResponseWithFilters(
+        Long userId,
+        String search,
+        OrderStatus status,
+        LocalDateTime startDate,
+        LocalDateTime endDate,
+        Pageable pageable
+    ){
+        Page<Order> orders;
+
+        orders = orderRepository.findAllBySellerIdWithFilters(userId, search, status, startDate, endDate, pageable);
+
+        return orders.map(this::createSellerOrderResponse);
+    }
+    public SellerOrderSummaryResponse createSellerOrderSummaryResponseBySellerIdWithFilters(
+        Long userId,
+        String search,
+        OrderStatus status,
+        LocalDateTime startDate,
+        LocalDateTime endDate)
+    {
+        SellerOrderSummaryResponse summary = new SellerOrderSummaryResponse();
+        Double totalSales = 0.0;
+        Double pendingPayments = 0.0;
+
+        if(status == null){
+            totalSales = orderRepository.totalPriceFiltered(userId, search, OrderStatus.COMPLETED, startDate, endDate);
+            pendingPayments = orderRepository.totalPriceFiltered(userId, search, OrderStatus.PENDING, startDate, endDate);
+        }else if(status == OrderStatus.COMPLETED){
+            totalSales = orderRepository.totalPriceFiltered(userId, search, OrderStatus.COMPLETED, startDate, endDate);
+        }else if(status == OrderStatus.PENDING){
+            pendingPayments = orderRepository.totalPriceFiltered(userId, search, OrderStatus.PENDING, startDate, endDate);
+        }
+
+        summary.setTotalOrders(orderRepository.totalOrdersFiltered(userId, search, status, startDate, endDate));
+        summary.setTotalSales(totalSales);
+        summary.setPendingPayments(pendingPayments);
+        return summary;
+    }
+
 
     // -----------------------------------------------------
     // GET ORDERS BY BUYER
