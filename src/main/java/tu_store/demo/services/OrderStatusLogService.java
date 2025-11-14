@@ -13,55 +13,42 @@ import tu_store.demo.repositories.*;
 
 @Service
 public class OrderStatusLogService {
+
     @Autowired
     private OrderStatusLogRepository orderStatusLogRepository;
 
-    @Autowired
-    private OrderItemService orderItemService;
-
-    @Autowired
-    private CartService cartService;
-
-    @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-
-
     public OrderStatusLog createOrderLog(Order order, OrderStatus prevStatus, OrderStatus newStatus){
         if(order == null || newStatus == null) return null;
-        if (prevStatus == newStatus) return null;
+        if(prevStatus == newStatus) return null;
 
-        OrderStatusLog orderLog = new OrderStatusLog();
-        orderLog.setOrder(order);
-        orderLog.setOldStatus(prevStatus);
-        orderLog.setNewStatus(newStatus);
-        orderLog.setUpdatedAt(LocalDateTime.now());
-
-        orderStatusLogRepository.save(orderLog);
-
-        return orderLog;
+        OrderStatusLog log = new OrderStatusLog();
+        log.setOrder(order);
+        log.setOldStatus(prevStatus);
+        log.setNewStatus(newStatus);
+        log.setUpdatedAt(LocalDateTime.now());
+        return orderStatusLogRepository.save(log);
     }
-    public OrderStatusLog createOrderLog(Order order, OrderStatus newStatus){
-        if(order == null) return null;
-        OrderStatus prevStatus = order.getStatus();
 
-        return createOrderLog(order, prevStatus, newStatus);
+    public OrderStatusLog createOrderLog(Order order, OrderStatus newStatus){
+        return createOrderLog(order, order.getStatus(), newStatus);
     }
 
     public List<OrderStatusLog> getLatest100Logs(){
-       return orderStatusLogRepository.findTop100ByOrderByUpdatedAtDesc();
+        return orderStatusLogRepository.findTop100ByOrderByUpdatedAtDesc();
     }
 
-    public List<OrderStatusLog> getAllLogsByOrderId(Long id){
-       return orderStatusLogRepository.findAllByOrderOrderId(id);
+    public List<OrderStatusLog> getLogsByOrderId(Long orderId){
+        return orderStatusLogRepository.findAllByOrderOrderId(orderId);
     }
 
-    public List<OrderStatusLog> getAllLogsByUserId(Long id){
-       return orderStatusLogRepository.findAllByOrderUserUserId(id);
+    // ⭐⭐ Buyer ดู only ของตัวเอง
+    public List<OrderStatusLog> getLogsForBuyer(Long buyerId){
+        return orderStatusLogRepository.findAllByOrderBuyerUserId(buyerId);
+    }
+
+    // ⭐⭐ Seller ดู only ของร้านตัวเอง
+    public List<OrderStatusLog> getLogsForSeller(Long sellerId){
+        return orderStatusLogRepository.findAllByOrderSellerUserId(sellerId);
     }
 }
+

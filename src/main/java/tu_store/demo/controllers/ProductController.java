@@ -54,9 +54,11 @@ public class ProductController {
         var results = productService.search(
                 searchRequest.getName(),
                 searchRequest.getCategory(),
-                searchRequest.getStatus(),
                 searchRequest.getMinPrice(),
-                searchRequest.getMaxPrice()
+                searchRequest.getMaxPrice(),
+                searchRequest.getRating(),     // ⭐ new
+                searchRequest.getInStock(),    // ⭐ new
+                searchRequest.getSort()        // ⭐ new
         );
     if (results.isEmpty()){
         return ResponseEntity.ok(Map.of("message", "Nothing match your search terms, please try again."));

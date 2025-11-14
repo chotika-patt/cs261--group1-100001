@@ -1,16 +1,21 @@
 package tu_store.demo.dto;
 
 import tu_store.demo.models.Category;
-import tu_store.demo.models.ProductStatus;
 
 public class ProductSearchRequest {
+
     private String name;
     private Category category;
-    private ProductStatus status;
+
     private Long minPrice;
     private Long maxPrice;
 
-    //Getters & Setters
+    private Double rating;      // ⭐ new
+    private Boolean inStock;    // ⭐ new
+    private String sort;        // ⭐ new
+
+    // ======== Getters & Setters ========
+
     public String getName() {
         return name;
     }
@@ -25,13 +30,6 @@ public class ProductSearchRequest {
         this.category = category;
     }
 
-    public ProductStatus getStatus() {
-        return status;
-    }
-    public void setStatus(ProductStatus status) {
-        this.status = status;
-    }
-
     public Long getMinPrice() {
         return minPrice;
     }
@@ -44,5 +42,26 @@ public class ProductSearchRequest {
     }
     public void setMaxPrice(Long maxPrice) {
         this.maxPrice = maxPrice;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
+    public Boolean getInStock() {
+        return inStock;
+    }
+    public void setInStock(Boolean inStock) {
+        this.inStock = inStock;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 }
