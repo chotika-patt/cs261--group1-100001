@@ -84,8 +84,8 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getLatest100AndCreateResponses());
     }
 
-    // ✅ Create review แบบ form-data (มีรูปได้)
-    @PostMapping("{productId}")
+     // ✅ Create review แบบ form-data (มีรูปได้)
+    @PostMapping("/{productId}")
     public ResponseEntity<?> addReview(
             @PathVariable Long productId,
             HttpSession session,
@@ -93,39 +93,43 @@ public class ReviewController {
             @RequestParam String comment,
             @RequestParam(required = false) MultipartFile image) {
 
-        User user = getSessionUser(session);
-        if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        // เช็ค login
+        String username = (String) session.getAttribute("username");
+        if (username == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body("❌ Please login first.");
 
+        User user = userRepository.findByUsername(username);
+        if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("❌ User not found.");
+
+        // ดึงสินค้า
         Product product = productRepository.findFirstByProductId(productId);
-        if(product == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        if (product == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body("❌ Product not found.");
 
-        if(comment == null || comment.trim().isEmpty() || comment.length() > 1000)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("❌ Invalid comment");
-
-        if(rating < 0 || rating > 5)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("❌ Rating must be between 0 and 5");
-
-        if(reviewRepository.existsByBuyerUserIdAndProductProductId(user.getUser_id(), productId))
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("❌ You already reviewed this product");
-
+        // เช็คว่า user ซื้อสินค้านี้แล้วหรือยัง
         Order order = orderRepository.findPurchasedOrder(productId, user.getUser_id());
-        if(order == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        if (order == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body("❌ You haven't purchased this product");
 
+        // เช็คว่าเคยรีวิวสินค้านี้หรือยัง
+        if (reviewRepository.existsByBuyerUserIdAndProductProductId(user.getUser_id(), productId)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("❌ You already reviewed this product");
+        }
+
+        // สร้าง ReviewRequest DTO
         ReviewRequest reviewRequest = new ReviewRequest();
         reviewRequest.setOrderId(order.getOrderId());
         reviewRequest.setProductId(productId);
         reviewRequest.setRating(rating);
         reviewRequest.setComment(comment);
 
-        Review review = reviewService.createReview(reviewRequest);
+        // สร้างรีวิว
+        var review = reviewService.createReview(reviewRequest);
 
-        if(image != null && !image.isEmpty()){
+        // ถ้ามีรูป
+        if (image != null && !image.isEmpty()) {
             reviewService.saveReviewImage(review, image, uploadDirRev);
         }
 
