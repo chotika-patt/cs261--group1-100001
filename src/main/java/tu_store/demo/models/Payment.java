@@ -1,34 +1,35 @@
 package tu_store.demo.models;
 
 import jakarta.persistence.*;
+import tu_store.demo.models.enums.OrderStatus;
+
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "payments")
 public class Payment {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
 
     private Long orderId;
+    private Long userId;
+    private String provider;
+    private String method;
+    private double amount;
+    private String currency = "THB";
 
-    private Double amount;
+    @Column(nullable=false)
+    private OrderStatus status; // INIT, PENDING, PAID, FAILED, CANCELLED, EXPIRED
 
-    @Enumerated(EnumType.STRING)
-    private PaymentStatus status;
+    private String paymentRef;
+    private String idempotencyKey;
 
-    private String channel;
+    @Lob
+    private String metadata;
 
-    private String providerRef;
+    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
-    private LocalDateTime expiresAt;
-
-    private LocalDateTime createdAt;
-
-    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
-    private List<PaymentLog> logs;
 
     // ---------------- Getters & Setters ----------------
     public Long getPaymentId() { return paymentId; }
@@ -40,28 +41,34 @@ public class Payment {
     public Double getAmount() { return amount; }
     public void setAmount(Double amount) { this.amount = amount; }
 
-    public PaymentStatus getStatus() { return status; }
-    public void setStatus(PaymentStatus status) { this.status = status; }
-
-    public String getChannel() { return channel; }
-    public void setChannel(String channel) { this.channel = channel; }
-
-    public String getProviderRef() { return providerRef; }
-    public void setProviderRef(String providerRef) { this.providerRef = providerRef; }
-
-    public LocalDateTime getExpiresAt() { return expiresAt; }
-    public void setExpiresAt(LocalDateTime expiresAt) { this.expiresAt = expiresAt; }
+    public OrderStatus getStatus() { return status; }
+    public void setStatus(OrderStatus status) { this.status = status; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public List<PaymentLog> getLogs() { return logs; }
-    public void setLogs(List<PaymentLog> logs) { this.logs = logs; }
-}
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
-enum PaymentStatus {
-    PENDING,
-    SUCCESS,
-    FAILED,
-    CANCELLED
+    public String getProvider() { return provider; }
+    public void setProvider(String provider) { this.provider = provider; }
+
+    public String getMethod() { return method; }
+    public void setMethod(String method) { this.method = method; }
+
+    public String getIdempotencyKey() { return idempotencyKey; }
+    public void setIdempotencyKey(String idempotencyKey) { this.idempotencyKey = idempotencyKey; }
+
+    public String getMetadata() { return metadata; }
+    public void setMetadata(String metadata) { this.metadata = metadata; }
+
+    public String getCurrency() { return currency; }
+    public void setCurrency(String currency) { this.currency = currency; }
+
+    public String getPaymentRef() { return paymentRef; }
+    public void setPaymentRef(String paymentRef) { this.paymentRef = paymentRef; }
+
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
+
 }

@@ -93,7 +93,7 @@ public class OrderService {
     @Transactional
     public void checkoutByUserId(Long id){
         Cart cart = cartRepository.findFirstByUserUserIdAndIsActiveTrue(id);
-    
+
         if (cart == null || cart.getItems().isEmpty()) {
             return;
         }
@@ -154,7 +154,7 @@ public class OrderService {
 
         if(order.getStatus() == OrderStatus.PENDING){
             return updateStatus(order, OrderStatus.PAID);
-        } 
+        }
         else if(order.getStatus() == OrderStatus.PAID){
             return updateStatus(order, OrderStatus.COMPLETED);
         }
@@ -168,7 +168,7 @@ public class OrderService {
     @Transactional
     public void cancelOrderByUserId(Long userId, Long orderId) {
         Order order = orderRepository.findFirstByOrderId(orderId);
-        
+
         if(order == null) return;
         if(!order.getBuyer().getUser_id().equals(userId)) return;
         if(order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.COMPLETED) return;
@@ -241,5 +241,52 @@ public class OrderService {
         resp.setTotalAmount(totalAmount);
 
         return resp;
+    }
+
+    @Transactional
+    public void updateStatusToPaid(Long orderId, String paymentRef) {
+        if (orderId == null) throw new IllegalArgumentException("orderId required");
+
+        Order order = orderRepository.findFirstByOrderId(orderId);
+        if (order == null) throw new IllegalArgumentException("order not found");
+
+        if (order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.COMPLETED) {
+            throw new IllegalStateException("cannot mark paid on cancelled/completed order");
+        }
+
+        if (order.getStatus() == OrderStatus.PAID) {
+            ShipmentTracking stExisting = order.getShipmentTracking();
+            if (stExisting == null) {
+                ShipmentTracking st = shipmentTrackingService.getOrCreateShipmentTracking(order);
+                order.setShipmentTracking(st);
+                orderRepository.save(order);
+            }
+            return;
+        }
+
+        order.setStatus(OrderStatus.PAID);
+        orderRepository.save(order);
+
+        try {
+            ShipmentTracking st = shipmentTrackingService.getOrCreateShipmentTracking(order);
+            order.setShipmentTracking(st);
+            orderRepository.save(order);
+        } catch (Exception e) {
+
+        }
+
+        orderStatusLogService.createOrderLog(order, OrderStatus.PAID);
+
+        for (OrderItem item : order.getItems()) {
+            Product product = item.getProduct();
+            if (product != null) {
+                int remaining = product.getStock() - item.getQuantity();
+                if (remaining < 0) remaining = 0;
+                product.setStock(remaining);
+                productRepository.save(product);
+            }
+        }
+
+        orderRepository.save(order);
     }
 }
