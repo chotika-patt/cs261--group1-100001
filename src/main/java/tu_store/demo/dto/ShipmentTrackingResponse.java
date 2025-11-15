@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import tu_store.demo.models.enums.ShipmentTrackingStatus;
 
-public class ClientShipmentTrackingResponse {
+public class ShipmentTrackingResponse {
     private Long OrderId;
 
     private String trackingNumber;
@@ -14,7 +14,7 @@ public class ClientShipmentTrackingResponse {
 
     private ShipmentTrackingStatus status;
 
-    public ClientShipmentTrackingResponse(){}
+    public ShipmentTrackingResponse(){}
 
     public void setDeliveredAt(LocalDateTime deliveredAt) {
         this.deliveredAt = deliveredAt;

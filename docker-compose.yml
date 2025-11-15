@@ -25,7 +25,7 @@ services:
       SA_PASSWORD: "YourStrong@Passw0rd"
       ACCEPT_EULA: "Y"
     ports:
-      - "1433:1433"
+      - "1434:1433"
     volumes:
       - sql_data:/var/opt/mssql
 

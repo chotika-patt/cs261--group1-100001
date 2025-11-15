@@ -2,7 +2,8 @@ package tu_store.demo.services;
 
 import org.springframework.stereotype.Service;
 
-import tu_store.demo.dto.ClientOrderItemResponse;
+import tu_store.demo.dto.BuyerOrderItemResponse;
+import tu_store.demo.dto.SellerOrderItemResponse;
 import tu_store.demo.models.CartItem;
 import tu_store.demo.models.Order;
 import tu_store.demo.models.OrderItem;
@@ -16,11 +17,24 @@ public class OrderItemService {
     }
 
     // -----------------------------------------------------
-    // CREATE ORDER RESPONSE FOR CONTROLLER
+    // CREATE BUYER ORDER RESPONSE FOR CONTROLLER
     // -----------------------------------------------------
 
-    public ClientOrderItemResponse createClientOrderItemResponse(OrderItem item){
-        ClientOrderItemResponse response = new ClientOrderItemResponse();
+    public BuyerOrderItemResponse createClientOrderItemResponse(OrderItem item){
+        BuyerOrderItemResponse response = new BuyerOrderItemResponse();
+        response.setProductId(item.getProductId());
+        response.setQuantity(item.getQuantity());
+        response.setTotalPrice(item.getTotalPrice());
+
+        return response;
+    }
+
+    // -----------------------------------------------------
+    // CREATE SELLER ORDER RESPONSE FOR CONTROLLER
+    // -----------------------------------------------------
+
+    public SellerOrderItemResponse createSellerOrderItemResponse(OrderItem item){
+        SellerOrderItemResponse response = new SellerOrderItemResponse();
         response.setProductId(item.getProductId());
         response.setQuantity(item.getQuantity());
         response.setTotalPrice(item.getTotalPrice());

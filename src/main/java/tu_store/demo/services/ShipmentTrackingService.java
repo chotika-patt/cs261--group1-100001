@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
-import tu_store.demo.dto.ClientShipmentTrackingResponse;
+import tu_store.demo.dto.ShipmentTrackingResponse;
 import tu_store.demo.models.*;
 import tu_store.demo.models.enums.OrderStatus;
 import tu_store.demo.models.enums.ShipmentTrackingStatus;
@@ -41,9 +41,9 @@ public class ShipmentTrackingService {
         return st;
     }
 
-    public ClientShipmentTrackingResponse createClientShipmentTrackingResponse(ShipmentTracking st){
+    public ShipmentTrackingResponse createShipmentTrackingResponse(ShipmentTracking st){
         if(st == null) return null;
-        ClientShipmentTrackingResponse response = new ClientShipmentTrackingResponse();
+        ShipmentTrackingResponse response = new ShipmentTrackingResponse();
 
         response.setDeliveredAt(st.getDeliveredAt());
         response.setOrderId(st.getOrderId());
@@ -54,11 +54,17 @@ public class ShipmentTrackingService {
         return response; 
     }
 
-    public ClientShipmentTrackingResponse createClientShipmentTrackingResponseByOrderIdAndUserId(Long id, Long userId){
+    public ShipmentTrackingResponse createClientShipmentTrackingResponseByOrderIdAndUserId(Long id, Long userId){
         ShipmentTracking st = shipmentTrackingRepository.findFirstByOrderOrderIdAndOrderBuyerUserId(id, userId);
         if(st == null) return null;
 
-        return createClientShipmentTrackingResponse(st);
+        return createShipmentTrackingResponse(st);
+    }
+    public ShipmentTrackingResponse createSellerShipmentTrackingResponseByOrderIdAndUserId(Long id, Long userId){
+        ShipmentTracking st = shipmentTrackingRepository.findFirstByOrderOrderIdAndOrderSellerUserId(id, userId);
+        if(st == null) return null;
+
+        return createShipmentTrackingResponse(st);
     }
 
 

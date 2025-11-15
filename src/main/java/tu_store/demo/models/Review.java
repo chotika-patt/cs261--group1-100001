@@ -51,7 +51,7 @@ public class Review {
     }
 
     public Review(){}
-
+    
     public void setBuyer(User buyer) {
         this.buyer = buyer;
     }

@@ -12,4 +12,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ShipmentTrackingRepository extends JpaRepository<ShipmentTracking, Long>  {
     ShipmentTracking findFirstByOrderOrderIdAndOrderBuyerUserId(Long orderId, Long userId);
+    
+    ShipmentTracking findFirstByOrderOrderIdAndOrderSellerUserId(Long orderId, Long userId);
 }

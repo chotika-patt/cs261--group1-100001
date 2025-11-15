@@ -157,7 +157,7 @@ public class UserService {
         return false;
     }
     
-    public boolean isbuyerById(Long id){
+    public boolean isBuyerById(Long id){
         User user = userRepository.findFirstByUserId(id);
 
         if(user == null) return false;

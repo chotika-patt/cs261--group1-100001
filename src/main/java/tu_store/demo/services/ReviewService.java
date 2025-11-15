@@ -2,16 +2,22 @@ package tu_store.demo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
 import jakarta.transaction.Transactional;
-import tu_store.demo.dto.CartItemDto;
-import tu_store.demo.dto.ProductResponse;
 import tu_store.demo.dto.ReviewImageDto;
 import tu_store.demo.dto.ReviewRequest;
 import tu_store.demo.dto.ReviewResponse;
-import tu_store.demo.models.*;
-import tu_store.demo.repositories.*;
+import tu_store.demo.models.Review;
+import tu_store.demo.models.ReviewImage;
+import tu_store.demo.models.Product;
+import tu_store.demo.models.Order;
+import tu_store.demo.repositories.ProductRepository;
+import tu_store.demo.repositories.OrderRepository;
+import tu_store.demo.repositories.ReviewRepository;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,51 +50,66 @@ public class ReviewService {
 
         Review newReview = new Review();
         newReview.setOrder(order);
-        newReview.setBuyer(order.getBuyer());  // ←❗ เปลี่ยนจาก getUser()
+        newReview.setBuyer(order.getBuyer());
         newReview.setProduct(product);
         newReview.setComment(reviewRequest.getComment());
         newReview.setRating(reviewRequest.getRating());
 
         List<ReviewImage> newImages = new ArrayList<>();
-        if (reviewRequest.getImages() != null) {
-            for(ReviewImageDto images : reviewRequest.getImages()){
-                newImages.add(reviewImageService.creatReviewImage(newReview, images));
+        if(reviewRequest.getImages() != null){
+            for(ReviewImageDto dto : reviewRequest.getImages()){
+                newImages.add(reviewImageService.creatReviewImage(newReview, dto));
             }
         }
 
         newReview.setImages(newImages);
         reviewRepository.save(newReview);
-        
+
         productService.updateProductRatingById(product.getProductId());
 
         return newReview;
     }
 
-    public ReviewResponse createReviewResponse(Review review){
-        if(review == null) return null;
+    public void saveReviewImage(Review review, MultipartFile image, String uploadDir){
+        try {
+            String originalName = image.getOriginalFilename();
+            String ext = "";
+            int dot = originalName != null ? originalName.lastIndexOf('.') : -1;
+            if(dot > 0) ext = originalName.substring(dot + 1);
 
-        ReviewResponse response = new ReviewResponse();
-        response.setComment(review.getComment());
-        response.setProductId(review.getProduct().getProductId());
-        response.setCreatedAt(review.getCreatedAt());
-        response.setHasImages(review.isHasImages());
-        response.setRating(review.getRating());
+            String fileName = "review_" + review.getReviewId() + (ext.isEmpty() ? "" : "." + ext);
 
-        return response;
+            Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+            Files.createDirectories(uploadPath);
+
+            Path filePath = uploadPath.resolve(fileName);
+            image.transferTo(filePath.toFile());
+
+            ReviewImage reviewImage = new ReviewImage();
+            reviewImage.setReview(review);
+            reviewImage.setFilePath(fileName);
+            review.getImages().add(reviewImage);
+
+            reviewRepository.save(review);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public List<ReviewResponse> getLatest100AndCreateResponses(){
         List<Review> reviews = reviewRepository.findTop100ByOrderByCreatedAtDesc();
-
-        if(reviews == null || reviews.isEmpty()) return null;
-
         List<ReviewResponse> responses = new ArrayList<>();
-
-        for(Review review : reviews){
-            responses.add(createReviewResponse(review));
+        if(reviews != null){
+            for(Review r : reviews){
+                ReviewResponse res = new ReviewResponse();
+                res.setProductId(r.getProduct().getProductId());
+                res.setRating(r.getRating());
+                res.setComment(r.getComment());
+                res.setCreatedAt(r.getCreatedAt());
+                res.setHasImages(r.isHasImages());
+                responses.add(res);
+            }
         }
-
         return responses;
     }
-    
 }

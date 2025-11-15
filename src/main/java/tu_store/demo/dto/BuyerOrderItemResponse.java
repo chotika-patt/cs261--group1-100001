@@ -3,14 +3,14 @@ package tu_store.demo.dto;
 import jakarta.persistence.Column;
 import tu_store.demo.models.Product;
 
-public class ClientOrderItemResponse {
+public class BuyerOrderItemResponse {
     private Long productId;
 
     private Integer quantity;
 
     private Double totalPrice;
 
-    public ClientOrderItemResponse(){}
+    public BuyerOrderItemResponse(){}
 
     public void setProductId(Long productId) {
         this.productId = productId;
