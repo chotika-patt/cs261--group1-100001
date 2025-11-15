@@ -165,4 +165,13 @@ public class UserService {
 
         return false;
     }
+
+    public boolean isVerifiedSellerById(Long id){
+        User user = userRepository.findFirstByUserId(id);
+
+        if(user == null) return false;
+        if(user.getRole() == UserRole.SELLER && user.getVerified() == true) return true;
+
+        return false;
+    }
 }

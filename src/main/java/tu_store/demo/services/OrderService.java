@@ -316,46 +316,62 @@ public class OrderService {
     // -----------------------------------------------------
     // UPDATE STATUS
     // -----------------------------------------------------
-    @Transactional
-    public Order updateStatus(Order order, OrderStatus status){
+    public Boolean updateStatus(Order order, ShipmentTrackingStatus status){
         if(order == null || status == null) return null;
-        if(order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.COMPLETED) return null;
+        if(order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.COMPLETED) return false;
+        
+        ShipmentTracking st = order.getShipmentTracking();
+        if(st == null) return false;
 
-        if(status == OrderStatus.PAID) {
+        if(status == ShipmentTrackingStatus.SHIPPED) {
+            if(st.getStatus() != ShipmentTrackingStatus.PREPARING) return false;
 
-            orderStatusLogService.createOrderLog(order, status);
-            order.setStatus(status);
+            st.setStatus(status);
 
-            ShipmentTracking st = shipmentTrackingService.getOrCreateShipmentTracking(order);
-            order.setShipmentTracking(st);
+        } else if(status == ShipmentTrackingStatus.DELIVERED) {
+            if(st.getStatus() != ShipmentTrackingStatus.SHIPPED) return false;
 
-        } else if(status == OrderStatus.COMPLETED) {
+            st.setStatus(status);
 
-            if(order.getShipmentTracking() == null ||
-               order.getShipmentTracking().getStatus() != ShipmentTrackingStatus.DELIVERED){
-                return null;
-            }
-
-            orderStatusLogService.createOrderLog(order, status);
-            order.setStatus(status);
+            orderStatusLogService.createOrderLog(order, OrderStatus.COMPLETED);
+            order.setStatus(OrderStatus.COMPLETED);
         }
 
         orderRepository.save(order);
-        return order;
+        return true;
     }
 
-    public Order updateStatus(Order order){
-        if(order == null) return null;
 
-        if(order.getStatus() == OrderStatus.PENDING){
-            return updateStatus(order, OrderStatus.PAID);
-        }
-        else if(order.getStatus() == OrderStatus.PAID){
-            return updateStatus(order, OrderStatus.COMPLETED);
-        }
+    public void updateStatusTest(Order order, OrderStatus status){
+        if(order == null || status == null) return;
 
-        return null;
+        orderStatusLogService.createOrderLog(order, status);
+        order.setStatus(status);
+
+
+        if (order.getStatus() == OrderStatus.PAID) {
+            ShipmentTracking stExisting = order.getShipmentTracking();
+            if (stExisting == null) {
+                ShipmentTracking st = shipmentTrackingService.getOrCreateShipmentTracking(order);
+                order.setShipmentTracking(st);
+                orderRepository.save(order);
+            }
+            return;
+        }
     }
+
+    // public Boolean updateStatus(Order order){
+    //     if(order == null) return null;
+
+    //     if(order.getStatus() == OrderStatus.PENDING){
+    //         return updateStatus(order, OrderStatus.PAID);
+    //     } 
+    //     else if(order.getStatus() == OrderStatus.PAID){
+    //         return updateStatus(order, OrderStatus.COMPLETED);
+    //     }
+
+    //     return null;
+    // }
 
     // -----------------------------------------------------
     // CANCEL ORDER

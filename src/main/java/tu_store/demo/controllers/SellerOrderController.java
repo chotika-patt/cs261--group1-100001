@@ -29,11 +29,13 @@ import tu_store.demo.exception.ApiException;
 import tu_store.demo.models.Order;
 import tu_store.demo.models.UserRole;
 import tu_store.demo.models.enums.OrderStatus;
+import tu_store.demo.models.enums.ShipmentTrackingStatus;
 import tu_store.demo.services.CartService;
 import tu_store.demo.services.OrderService;
 import tu_store.demo.services.ShipmentTrackingService;
 import tu_store.demo.services.UserService;
 import org.springframework.http.HttpStatus;
+
 
 
 @RestController
@@ -155,4 +157,42 @@ public class SellerOrderController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> setOrderStatus(HttpSession session, @PathVariable Long id, @RequestBody Map<String, String> body) {
+        Long userId = userService.getUserIdBySession(session);
+        if(userId == null) throw new ApiException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "Please login first.");
+
+        if (!userService.isSellerById(userId)) throw new ApiException(HttpStatus.FORBIDDEN, "INVALID_ROLE"
+        , "User does not have seller permissions.");
+
+        if (!userService.isVerifiedSellerById(userId)) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "UNVERIFIED_SELLER", "Your account has not been verified yet.");
+        }
+
+        Order order = orderService.getOrderById(id);
+        if(order == null) return ResponseEntity.status(404).body("Order not found");
+
+        String status = body.get("newStatus");
+        if (status == null || status.isEmpty()) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "MISSING_NEW_STATUS", "Missing newStatus");
+        }
+
+        ShipmentTrackingStatus orderSTStatusEnum = null;
+        try {
+            orderSTStatusEnum = ShipmentTrackingStatus.valueOf(status); // convert string -> enum
+        } catch (IllegalArgumentException e) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "BAD_REQUEST",
+                    "Invalid status value. Allowed: " + Arrays.toString(ShipmentTrackingStatus.values()));
+        }
+        
+        if(orderService.updateStatus(order, orderSTStatusEnum) == false) throw new ApiException(
+            HttpStatus.BAD_REQUEST,
+            "INVALID_STATUS_FLOW",
+            "Cannot change order status from " + order.getShipmentTracking().getStatus() + " to " + orderSTStatusEnum
+        );
+
+        return ResponseEntity.ok(shipmentTrackingService.createShipmentTrackingResponse(order.getShipmentTracking()));
+    }
+
 }

@@ -207,7 +207,18 @@ public class OrderController {
 
         if(order == null) return ResponseEntity.ok("Wrong order Id");
 
-        orderService.updateStatus(order);
+        // Convert OrderStatus
+        OrderStatus orderStatusEnum = null;
+        if (status != null && !status.isEmpty()) {
+            try {
+                orderStatusEnum = OrderStatus.valueOf(status); // convert string -> enum
+            } catch (IllegalArgumentException e) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "BAD_REQUEST",
+                        "Invalid status value. Allowed: " + Arrays.toString(OrderStatus.values()));
+            }
+        }
+
+        orderService.updateStatusTest(order, orderStatusEnum);
 
         Sort sort = Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, pageSize, sort);
