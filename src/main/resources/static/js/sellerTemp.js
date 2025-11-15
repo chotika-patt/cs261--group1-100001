@@ -1,4 +1,26 @@
+async function confirmDelete(productId) {
+    if (confirm("⚠️ คุณแน่ใจหรือไม่ว่าต้องการลบสินค้านี้?")) {
+        try {
+            const response = await fetch(`api/seller/product/${productId}`, {
+                method: 'DELETE',
+                credentials: 'include'  // ใช้ session
+            });
+
+            const msg = await response.text();
+            if (response.ok) {
+                alert(msg);
+                // ลบ row ของ product ในตาราง หรือ reload หน้า
+                location.reload();
+            } else {
+                alert("❌ ลบสินค้าไม่สำเร็จ: " + msg);
+            }
+        } catch (err) {
+            alert("❌ เกิดข้อผิดพลาด: " + err.message);
+        }
+    }
+}
 // ================= Add Product Popup =================
+
 const addPopup = document.getElementById("add-product-popup");
 const addOpenBtn = document.querySelector(".add-product-btn");
 const addCloseBtn = document.getElementById("close-popup");

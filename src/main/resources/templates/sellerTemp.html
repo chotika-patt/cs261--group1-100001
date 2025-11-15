@@ -89,7 +89,7 @@
             </div>
             <div class="product-actions">
                 <button class="edit-btn" th:onclick="'location.href=\'/product_edit/' + ${product.productId} + '\';'">แก้ไข</button>
-                <button class="delete-btn" th:onclick="'location.href=\'/product_delete/' + ${product.productId} + '\';'">ลบ</button>
+                <button class="delete-btn"th:onclick="'confirmDelete(' + ${product.productId} + ')'">ลบ</button>
             </div>
         </div>
     </div>
