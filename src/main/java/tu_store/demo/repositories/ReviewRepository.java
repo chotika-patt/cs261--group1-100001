@@ -12,4 +12,5 @@ import tu_store.demo.models.Review;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findAllByProductProductId(Long id);
     List<Review> findTop100ByOrderByCreatedAtDesc();
+    boolean existsByBuyerUserIdAndProductProductId(Long userId, Long productId);
 }

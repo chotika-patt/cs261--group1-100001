@@ -54,7 +54,7 @@ public class UploadController {
             }
 
             // 🧩 5. ตั้งชื่อไฟล์ไม่ซ้ำ (เช่น seller123.pdf)
-            String newFileName = "seller_" + user.getUser_id() + "_" + fileName;
+            String newFileName = "seller_doc_" + user.getUser_id() + "_" + fileName;
             Path filePath = uploadPath.resolve(newFileName);
 
             // 🧩 6. บันทึกไฟล์ลงโฟลเดอร์

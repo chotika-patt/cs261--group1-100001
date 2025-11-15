@@ -168,6 +168,7 @@ public ResponseEntity<?> addProduct(
         return ResponseEntity.ok("✅ Product ID " + id + " deleted successfully.");
     }
 
+    
     @PutMapping("seller/product/{id}")
     public ResponseEntity<?> updateProductBySeller(
             @PathVariable Long id,
