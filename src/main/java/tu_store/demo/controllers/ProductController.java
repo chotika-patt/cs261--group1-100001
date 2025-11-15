@@ -8,6 +8,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpSession;
 import tu_store.demo.dto.ProductResponse;
 import tu_store.demo.dto.ProductSearchRequest;
+import tu_store.demo.dto.ReviewResponse;
+import tu_store.demo.exception.ApiException;
 import tu_store.demo.models.Category;
 import tu_store.demo.models.Product;
 import tu_store.demo.models.User;
@@ -23,11 +29,15 @@ import tu_store.demo.repositories.CartRepository;
 import tu_store.demo.repositories.ProductRepository;
 import tu_store.demo.repositories.UserRepository;
 import tu_store.demo.services.ProductService;
+import tu_store.demo.services.ReviewService;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -46,6 +56,9 @@ public class ProductController {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ReviewService reviewService;
 
     @Value("${file.upload-dir-product}")
     private String uploadDirProduct;
@@ -240,5 +253,68 @@ public ResponseEntity<?> addProduct(
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("❌ Error while updating product: " + e.getMessage());
         }
+    }
+
+
+    
+
+    @GetMapping("/{productId}/reviews")
+    public ResponseEntity<?> getReviews(
+            @PathVariable Long productId,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Integer minRating,
+            @RequestParam(required = false) Integer maxRating,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "createdAt:desc") String sort,
+            @RequestParam(required = false) String dateRange,
+            HttpSession session
+    ){
+        Product product = productService.getProductEntityById(productId);
+        if (product == null) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "PRODUCT_NOT_FOUND", "Product not found");
+        }
+
+        // Convert Date
+        LocalDateTime startDate = null;
+        LocalDateTime endDate = null;
+        if (dateRange != null) {
+            String[] parts = dateRange.split(",");
+            if (parts.length != 2) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "BAD_REQUEST",
+                        "Invalid dateRange format. Use: yyyy-MM-dd,yyyy-MM-dd");
+            }
+
+            try {
+                startDate = LocalDate.parse(parts[0]).atStartOfDay();
+                endDate = LocalDate.parse(parts[1]).atTime(23, 59, 59);
+            } catch (DateTimeParseException e) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "BAD_REQUEST",
+                        "Invalid date format. Use: yyyy-MM-dd,yyyy-MM-dd");
+            }
+        }
+
+        // Convert sort
+        String sortField = "createdAt";
+        Sort.Direction direction = Sort.Direction.DESC;
+
+        if (sort.contains(":")) {
+            String[] parts = sort.split(":");
+            sortField = parts[0];
+            direction = parts[1].equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        }
+
+        Sort sortObj;
+        try {
+            sortObj = Sort.by(direction, sortField);
+        } catch (IllegalArgumentException e) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "Invalid sort field");
+        }
+
+        Pageable pageable = PageRequest.of(page, pageSize, sortObj);
+        Page<ReviewResponse> reviews = reviewService.getReviewPageResponseWithFilters(productId, search, minRating, maxRating, startDate, endDate, pageable);
+        if(reviews.getContent().isEmpty()) return ResponseEntity.status(404).body("Review not found");
+        
+        return ResponseEntity.ok(reviews);
     }
 }

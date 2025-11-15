@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -165,6 +167,22 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{orderId}/reviewable")
+    public ResponseEntity<?> getReviewable(HttpSession session, @PathVariable Long orderId) {
+        Long userId = userService.getUserIdBySession(session);
+        if(userId == null) throw new ApiException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "Please login first.");
+        
+        BuyerOrderResponse response = orderService.createClientOrderResponseByIdAndUserId(orderId, userId);
+        if (response == null) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "NOT FOUND", "Order Not Found");
+        }
+
+        OrderStatus status = orderService.getOrderStatusById(orderId);
+        Map<String, Object> result = new HashMap<>();
+        result.put("reviewable", status == OrderStatus.COMPLETED);
+
+        return ResponseEntity.ok(result);
+    }
 
     @PostMapping("/checkoutTest")
     public ResponseEntity<?> checkoutTest(

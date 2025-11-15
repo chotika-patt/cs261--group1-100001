@@ -42,4 +42,26 @@ public class ReviewImage {
     public void setSize(Long size) {
         this.size = size;
     }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public Long getImageId() {
+        return imageId;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+    public Review getReview() {
+        return review;
+    }
+    public Long getSize() {
+        return size;
+    }
 }

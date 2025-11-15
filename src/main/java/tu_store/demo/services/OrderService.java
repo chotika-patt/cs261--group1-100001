@@ -313,6 +313,14 @@ public class OrderService {
         return orderRepository.findFirstByOrderId(id);
     }
 
+    public OrderStatus getOrderStatusById(Long id){
+        Order order = orderRepository.findFirstByOrderId(id);
+        if(order == null) return null;
+
+        return order.getStatus();
+    }
+
+
     // -----------------------------------------------------
     // UPDATE STATUS
     // -----------------------------------------------------
