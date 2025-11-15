@@ -316,46 +316,62 @@ public class OrderService {
     // -----------------------------------------------------
     // UPDATE STATUS
     // -----------------------------------------------------
-    @Transactional
-    public Order updateStatus(Order order, OrderStatus status){
+    public Boolean updateStatus(Order order, ShipmentTrackingStatus status){
         if(order == null || status == null) return null;
-        if(order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.COMPLETED) return null;
+        if(order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.COMPLETED) return false;
+        
+        ShipmentTracking st = order.getShipmentTracking();
+        if(st == null) return false;
 
-        if(status == OrderStatus.PAID) {
+        if(status == ShipmentTrackingStatus.SHIPPED) {
+            if(st.getStatus() != ShipmentTrackingStatus.PREPARING) return false;
 
-            orderStatusLogService.createOrderLog(order, status);
-            order.setStatus(status);
+            st.setStatus(status);
 
-            ShipmentTracking st = shipmentTrackingService.getOrCreateShipmentTracking(order);
-            order.setShipmentTracking(st);
+        } else if(status == ShipmentTrackingStatus.DELIVERED) {
+            if(st.getStatus() != ShipmentTrackingStatus.SHIPPED) return false;
 
-        } else if(status == OrderStatus.COMPLETED) {
+            st.setStatus(status);
 
-            if(order.getShipmentTracking() == null ||
-               order.getShipmentTracking().getStatus() != ShipmentTrackingStatus.DELIVERED){
-                return null;
-            }
-
-            orderStatusLogService.createOrderLog(order, status);
-            order.setStatus(status);
+            orderStatusLogService.createOrderLog(order, OrderStatus.COMPLETED);
+            order.setStatus(OrderStatus.COMPLETED);
         }
 
         orderRepository.save(order);
-        return order;
+        return true;
     }
 
-    public Order updateStatus(Order order){
-        if(order == null) return null;
 
-        if(order.getStatus() == OrderStatus.PENDING){
-            return updateStatus(order, OrderStatus.PAID);
-        }
-        else if(order.getStatus() == OrderStatus.PAID){
-            return updateStatus(order, OrderStatus.COMPLETED);
-        }
+    public void updateStatusTest(Order order, OrderStatus status){
+        if(order == null || status == null) return;
 
-        return null;
+        orderStatusLogService.createOrderLog(order, status);
+        order.setStatus(status);
+
+
+        if (order.getStatus() == OrderStatus.PAID) {
+            ShipmentTracking stExisting = order.getShipmentTracking();
+            if (stExisting == null) {
+                ShipmentTracking st = shipmentTrackingService.getOrCreateShipmentTracking(order);
+                order.setShipmentTracking(st);
+                orderRepository.save(order);
+            }
+            return;
+        }
     }
+
+    // public Boolean updateStatus(Order order){
+    //     if(order == null) return null;
+
+    //     if(order.getStatus() == OrderStatus.PENDING){
+    //         return updateStatus(order, OrderStatus.PAID);
+    //     } 
+    //     else if(order.getStatus() == OrderStatus.PAID){
+    //         return updateStatus(order, OrderStatus.COMPLETED);
+    //     }
+
+    //     return null;
+    // }
 
     // -----------------------------------------------------
     // CANCEL ORDER
@@ -445,43 +461,71 @@ public class OrderService {
         Order order = orderRepository.findFirstByOrderId(orderId);
         if (order == null) throw new IllegalArgumentException("order not found");
 
+        // Debug log entry
+        System.out.println("[ORDER] updateStatusToPaid() called for orderId=" + orderId + " currentStatus=" + order.getStatus() + " paymentRef=" + paymentRef);
+
+        // Prevent invalid transitions
         if (order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.COMPLETED) {
             throw new IllegalStateException("cannot mark paid on cancelled/completed order");
         }
 
+        // If already PAID, ensure shipmentTracking exists and return
         if (order.getStatus() == OrderStatus.PAID) {
             ShipmentTracking stExisting = order.getShipmentTracking();
             if (stExisting == null) {
                 ShipmentTracking st = shipmentTrackingService.getOrCreateShipmentTracking(order);
                 order.setShipmentTracking(st);
-                orderRepository.save(order);
+                orderRepository.saveAndFlush(order);
             }
+            System.out.println("[ORDER] already PAID - nothing to do for orderId=" + orderId);
             return;
         }
 
-        order.setStatus(OrderStatus.PAID);
-        orderRepository.save(order);
+        // capture previous status for logging
+        OrderStatus prevStatus = order.getStatus();
 
+        // 1) Update order status to PAID and flush
+        order.setStatus(OrderStatus.PAID);
+        orderRepository.saveAndFlush(order);
+        System.out.println("[ORDER] order status updated to PAID (orderId=" + orderId + ")");
+
+        // 2) Ensure shipment tracking exists (will not throw now that order is PAID)
         try {
             ShipmentTracking st = shipmentTrackingService.getOrCreateShipmentTracking(order);
             order.setShipmentTracking(st);
-            orderRepository.save(order);
+            orderRepository.saveAndFlush(order);
         } catch (Exception e) {
-
+            // log the exception but do not abort — still proceed to stock update and logging
+            System.err.println("[ORDER] failed to create shipment tracking for orderId=" + orderId + " : " + e.getMessage());
+            e.printStackTrace();
         }
 
-        orderStatusLogService.createOrderLog(order, OrderStatus.PAID);
+        // 3) Create status log using explicit prev/new
+        try {
+            orderStatusLogService.createOrderLog(order, prevStatus, OrderStatus.PAID);
+        } catch (Exception e) {
+            System.err.println("[ORDER] failed to create order status log for orderId=" + orderId + ": " + e.getMessage());
+            e.printStackTrace();
+        }
 
-        for (OrderItem item : order.getItems()) {
-            Product product = item.getProduct();
-            if (product != null) {
+        // 4) Deduct stock for items (defensive checks)
+        try {
+            for (OrderItem item : order.getItems()) {
+                Product product = item.getProduct();
+                if (product == null) continue;
                 int remaining = product.getStock() - item.getQuantity();
                 if (remaining < 0) remaining = 0;
                 product.setStock(remaining);
                 productRepository.save(product);
             }
+            // final save of order (if any relationships changed)
+            orderRepository.saveAndFlush(order);
+        } catch (Exception e) {
+            System.err.println("[ORDER] error updating stock for orderId=" + orderId + ": " + e.getMessage());
+            e.printStackTrace();
+            throw e; // rethrow so caller (webhook) can log ORDER_UPDATE_FAILED visibly
         }
 
-        orderRepository.save(order);
+        System.out.println("[ORDER] updateStatusToPaid completed for orderId=" + orderId);
     }
 }

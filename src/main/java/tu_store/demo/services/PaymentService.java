@@ -16,7 +16,7 @@ import tu_store.demo.dto.InitiatePaymentResponse;
 import tu_store.demo.dto.PaymentStatusResponse;
 import tu_store.demo.models.Payment;
 import tu_store.demo.models.PaymentLog;
-import tu_store.demo.models.enums.OrderStatus;
+import tu_store.demo.models.enums.PaymentStatus;
 import tu_store.demo.repositories.PaymentLogRepository;
 import tu_store.demo.repositories.PaymentRepository;
 import tu_store.demo.services.payment.ProviderClient;
@@ -73,8 +73,10 @@ public class PaymentService {
         payment.setMethod(req.getMethod());
         payment.setAmount(req.getAmount());
         payment.setCurrency(req.getCurrency() == null ? "THB" : req.getCurrency());
-        payment.setStatus(OrderStatus.INIT);
+        payment.setStatus(PaymentStatus.INIT);
         payment.setIdempotencyKey(idKey);
+        payment.setExpiresAt(LocalDateTime.now().plusMinutes(15));
+
         if (req.getMetadata() != null) {
             try {
                 payment.setMetadata(objectMapper.writeValueAsString(req.getMetadata()));
@@ -82,6 +84,7 @@ public class PaymentService {
                 payment.setMetadata("{}");
             }
         }
+
         payment = paymentRepository.save(payment);
 
         log(payment.getPaymentId(), "PAYMENT_CREATED", payment.getMetadata());
@@ -93,7 +96,7 @@ public class PaymentService {
             pr = client.createPayment(payment);
         } catch (Exception e) {
             // provider call failed: mark failed and return
-            payment.setStatus(OrderStatus.FAILED);
+            payment.setStatus(PaymentStatus.FAILED);
             payment.setUpdatedAt(LocalDateTime.now());
             paymentRepository.save(payment);
             log(payment.getPaymentId(), "PROVIDER_CREATE_ERROR", e.getMessage());
@@ -102,9 +105,9 @@ public class PaymentService {
 
         // update based on provider response
         if (pr.getProviderRef() != null) payment.setPaymentRef(pr.getProviderRef());
-        if (pr.isPending()) payment.setStatus(OrderStatus.PENDING);
-        else if (pr.isSuccess()) payment.setStatus(OrderStatus.PAID);
-        else payment.setStatus(OrderStatus.FAILED);
+        if (pr.isPending()) payment.setStatus(PaymentStatus.PENDING);
+        else if (pr.isSuccess()) payment.setStatus(PaymentStatus.PAID);
+        else payment.setStatus(PaymentStatus.FAILED);
 
         payment.setUpdatedAt(LocalDateTime.now());
         paymentRepository.save(payment);
@@ -116,7 +119,7 @@ public class PaymentService {
         }
 
         // If provider says PAID instantly, update order
-        if (OrderStatus.PAID.equals(payment.getStatus())) {
+        if (PaymentStatus.PAID.equals(payment.getStatus())) {
             try {
                 orderService.updateStatusToPaid(payment.getOrderId(), payment.getPaymentRef());
                 log(payment.getPaymentId(), "ORDER_PAID", "orderId=" + payment.getOrderId());
@@ -138,9 +141,9 @@ public class PaymentService {
     public void cancelPayment(Long paymentId, Long userId) {
         Payment p = paymentRepository.findById(paymentId).orElseThrow(() -> new EntityNotFoundException("payment not found"));
         if (!p.getUserId().equals(userId)) throw new AccessDeniedException("not your payment");
-        if (OrderStatus.PAID.equals(p.getStatus()) || OrderStatus.CANCELLED.equals(p.getStatus()))
+        if (PaymentStatus.PAID.equals(p.getStatus()) || PaymentStatus.CANCELLED.equals(p.getStatus()))
             throw new IllegalStateException("cannot cancel");
-        p.setStatus(OrderStatus.CANCELLED);
+        p.setStatus(PaymentStatus.CANCELLED);
         p.setUpdatedAt(LocalDateTime.now());
         paymentRepository.save(p);
         log(paymentId, "PAYMENT_CANCELLED", null);
@@ -182,7 +185,7 @@ public class PaymentService {
         }
 
         // map and update status
-        OrderStatus newStatus = OrderStatus.valueOf(mapProviderStatusToInternal(event.getStatus()));
+        PaymentStatus newStatus = PaymentStatus.valueOf(mapProviderStatusToInternal(event.getStatus()));
         p.setStatus(newStatus);
         if (event.getProviderRef() != null) p.setPaymentRef(event.getProviderRef());
         p.setUpdatedAt(LocalDateTime.now());
@@ -190,7 +193,7 @@ public class PaymentService {
 
         log(p.getPaymentId(), "WEBHOOK_PROCESSED", body);
 
-        if (OrderStatus.PAID.equals(newStatus)) {
+        if (PaymentStatus.PAID.equals(newStatus)) {
             try {
                 orderService.updateStatusToPaid(p.getOrderId(), p.getPaymentRef());
                 log(p.getPaymentId(), "ORDER_PAID", "orderId=" + p.getOrderId());
@@ -305,5 +308,21 @@ public class PaymentService {
             sb.append(String.format("%02x", b));
         }
         return sb.toString();
+    }
+
+    @Transactional
+    public void markPaymentExpired(Long paymentId) {
+        Payment p = paymentRepository.findById(paymentId).orElse(null);
+        if (p == null) return;
+
+        // Only expire if still in progress
+        if (p.getStatus() == null) return;
+        if (!(p.getStatus() == PaymentStatus.PENDING || p.getStatus() == PaymentStatus.INIT)) return;
+
+        p.setStatus(PaymentStatus.EXPIRED);
+        p.setUpdatedAt(LocalDateTime.now());
+        paymentRepository.save(p);
+
+        log(p.getPaymentId(), "PAYMENT_EXPIRED", "expiredByScheduler");
     }
 }
