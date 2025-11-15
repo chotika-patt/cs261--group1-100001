@@ -30,11 +30,11 @@
             <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
             <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
               <p class="status">
-                  <i class="fa-solid"
+                <i class="fa-solid"
                      th:classappend="${verifiedStatus == 'อนุมัติการขายแล้ว'} ? 'fa-circle-check text-green' : 'fa-circle-xmark text-red'"></i>
-                  <span>สถานะ : </span>
-                  <span th:text="${verifiedStatus}"></span>
-              </p>
+                <span>สถานะ : </span>
+                <span th:text="${verifiedStatus}"></span>
+            </p>
           </div>
           <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
         </div>
@@ -63,25 +63,27 @@
     </div>
 </nav>
 
-<!-- ======= Popup Logout ======= -->
-<div class="logout-modal" id="logout-modal">
-<div class="modal-content">
-    <i class="fa-solid fa-circle-exclamation"></i>
-    <p>คุณต้องการออกจากระบบหรือไม่</p>
-    <div class="modal-buttons">
-    <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
-    <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+<!-- ======= Popup ยืนยันออกจากระบบ ======= -->
+  <div class="logout-modal" id="logout-modal">
+    <div class="modal-content">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <p>คุณต้องการออกจากระบบหรือไม่</p>
+      <div class="modal-buttons">
+        <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+        <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+      </div>
+      <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
     </div>
-    <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
-</div>
-</div>
-
-<div class="logout-success" id="logout-success">
-<div class="success-content">
-    <i class="fa-solid fa-circle-check"></i>
-    <p>ออกจากระบบสำเร็จแล้ว</p>
-</div>
   </div>
+
+  <!-- ======= Popup ออกจากระบบสำเร็จ ======= -->
+  <div class="logout-success" id="logout-success">
+    <div class="success-content">
+      <i class="fa-solid fa-circle-check"></i>
+      <p>ออกจากระบบสำเร็จแล้ว</p>
+    </div>
+  </div>
+
 
 <!-- ======= ฟอร์มเพิ่มสินค้า ======= -->
 <div class="product-container">

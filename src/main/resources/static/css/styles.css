@@ -682,7 +682,7 @@ main {
   display: none;
   flex-direction: column;
   align-items: center;
-  z-index: 99999;
+  z-index: 99999 !important;
   animation: fadeIn 0.25s ease-out;
 }
 
@@ -726,25 +726,29 @@ main {
 .dropdown-category { position: relative; }
 
 .dropdown-content {
-  position: absolute; top: calc(100% + 8px); left: 0;
-  width: 208px; height: 235px;
-  background-color: rgba(255,255,255,.9);
-  border-radius: 16px; overflow: hidden; text-align: center;
-  box-shadow: 0 8px 22px rgba(0,0,0,.18);
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%; 
+  transform: translateX(-50%) translateY(-10px) scale(0.95);
+  width: 208px;
+  height: 235px; 
+  background-color: rgba(255, 255, 255, 0.95); 
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2); 
   backdrop-filter: blur(10px);
-  z-index: 1001;
+  z-index: 9999 !important;
   opacity: 0;
-  transform: translateY(-6px) scale(.98);
   visibility: hidden;
   pointer-events: none;
-  transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
 }
 .dropdown-content.show {
   opacity: 1;
-  transform: translateY(0) scale(1);
   visibility: visible;
   pointer-events: auto;
-  transition: opacity .25s ease, transform .25s ease;
+  transform: translateX(-50%) translateY(0) scale(1);
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .dropdown-content a {

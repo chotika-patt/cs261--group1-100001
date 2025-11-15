@@ -29,11 +29,11 @@
             <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">seller_email@example.com</span></p>
             <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">08xxxxxxxx</span></p>
               <p class="status">
-                  <i class="fa-solid"
-                     th:classappend="${session.status == 'อนุมัติการขายแล้ว'} ? 'fa-circle-check text-green' : 'fa-circle-xmark text-red'"></i>
-                  <span>สถานะ : </span>
-                  <span th:text="${session.status}">ยังไม่อนุมัติการขาย</span>
-              </p>
+                <i class="fa-solid"
+                     th:classappend="${verifiedStatus == 'อนุมัติการขายแล้ว'} ? 'fa-circle-check text-green' : 'fa-circle-xmark text-red'"></i>
+                <span>สถานะ : </span>
+                <span th:text="${verifiedStatus}"></span>
+            </p>
           </div>
           <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
         </div>

@@ -160,5 +160,26 @@
     </script>
 <script th:src="@{/js/search.js}" defer></script>
 
+<script>
+  // Dropdown หมวดหมู่สินค้า//
+  document.addEventListener("DOMContentLoaded", function() {
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    const overlay = document.querySelector('.overlay');
+
+    dropdownToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdownContent.classList.toggle('show');
+      overlay.classList.toggle('show');
+    });
+
+    overlay.addEventListener('click', function() {
+      dropdownContent.classList.remove('show');
+      overlay.classList.remove('show');
+    });
+  });
+</script>                              
+
+
 </body>
 </html>

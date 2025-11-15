@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TU Store</title>
-
-    <!-- ✅ ใช้ dynamic path -->
     <link rel="icon" type="image/png" href="/img/Logo.png">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
@@ -45,20 +43,26 @@
                     </div>
                 </li>
 
-                <li><a th:href="@{/}">เช็คร้านค้า</a></li>
+                <li><a th:href="@{/login}">เช็คสถานะ</a></li>
                 <li><a th:href="@{/}">ติดต่อเรา</a></li>
                 <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
             </ul>
-            <div class="overlay"></div>
             <div class="search-bar-replacement">
-                <div class="search-input-container">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
-                </div>
-                <button class="search-close-btn" id="search-close">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
+  <div class="search-input-container">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+    <div id="search-suggestions" class="suggestions-list"></div>
+  </div>
+
+  <button class="search-close-btn" id="search-close">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <button id="filter-icon" class="search-filter-btn">
+     <i class="fa-solid fa-filter"> ตัวกรอง</i>
+  </button>
+  </div>
+
         </nav>
     </div>
 <main>
@@ -142,7 +146,10 @@
 
 <!-- ✅ เรียก JS แบบ dynamic -->
 <script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/search.js}"></script>
+
 <script>
+  // Dropdown หมวดหมู่สินค้า//
   document.addEventListener("DOMContentLoaded", function() {
     const dropdownToggle = document.querySelector('.dropdown-toggle');
     const dropdownContent = document.querySelector('.dropdown-content');

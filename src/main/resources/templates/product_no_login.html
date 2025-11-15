@@ -25,33 +25,44 @@
     </div>
 
     <nav class="nav-bottom">
-        <ul class="menu">
-            <li><a th:href="@{/index}">หน้าหลัก</a></li>
-            <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
-            <div class="overlay"></div> <!-- สำหรับ liquid glass -->
-            <div class="dropdown-content">
-                    <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
-                    <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
-                    <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
-                    <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
-                    <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
-            </div>
-        <li><a href="#">เช็คสถานะ</a></li>
-        <li><a href="#">ติดต่อเรา</a></li>
-        <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-        </ul>
+            <ul class="menu">
+                <li><a th:href="@{/}">หน้าหลัก</a></li>
 
-        <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
-        <div class="search-bar-replacement">
-        <div class="search-input-container">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
-        </div>
-        <button class="search-close-btn" id="search-close">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-        </div>
-    </nav>
+                <li class="dropdown-category">
+                    <a href="#" class="dropdown-toggle">
+                        หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-content">
+                        <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+                        <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+                        <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+                        <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+                        <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
+
+                    </div>
+                </li>
+
+                <li><a th:href="@{/login}">เช็คสถานะ</a></li>
+                <li><a th:href="@{/}">ติดต่อเรา</a></li>
+                <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+            </ul>
+            <div class="search-bar-replacement">
+  <div class="search-input-container">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+    <div id="search-suggestions" class="suggestions-list"></div>
+  </div>
+
+  <button class="search-close-btn" id="search-close">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <button id="filter-icon" class="search-filter-btn">
+     <i class="fa-solid fa-filter"> ตัวกรอง</i>
+  </button>
+  </div>
+
+        </nav>
 
     <div class="product-section">
         <div class="product-header">
@@ -126,6 +137,27 @@
             titleEl.textContent = 'รายการสินค้าทั้งหมด';
         }
     </script>
+    <script>
+  // Dropdown หมวดหมู่สินค้า//
+  document.addEventListener("DOMContentLoaded", function() {
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    const overlay = document.querySelector('.overlay');
+
+    dropdownToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdownContent.classList.toggle('show');
+      overlay.classList.toggle('show');
+    });
+
+    overlay.addEventListener('click', function() {
+      dropdownContent.classList.remove('show');
+      overlay.classList.remove('show');
+    });
+  });
+</script>                              
+<script th:src="@{/js/main.js}" defer></script>
+<script th:src="@{/js/search.js}" defer></script>
 
 </body>
 </html>

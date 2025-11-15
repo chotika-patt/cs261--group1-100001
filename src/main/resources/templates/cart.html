@@ -57,22 +57,26 @@
               <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
         </div>
       </li>
-      <li><a href="#">เช็คสถานะ</a></li>
+      <li><a th:href="@{/order-status-check}">เช็คสถานะ</a></li>
       <li><a href="#">ติดต่อเรา</a></li>
-      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-    </ul> 
-    <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
-    <div class="search-bar-replacement">
-      <div class="search-input-container">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
-      </div>
-      <button class="search-close-btn" id="search-close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-    <div id="search-results"></div>
-  </nav>
+       <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+            </ul>
+            <div class="search-bar-replacement">
+  <div class="search-input-container">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+    <div id="search-suggestions" class="suggestions-list"></div>
+  </div>
+
+  <button class="search-close-btn" id="search-close">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <button id="filter-icon" class="search-filter-btn">
+     <i class="fa-solid fa-filter"> ตัวกรอง</i>
+  </button>
+  </div>
+        </nav>
   
   <!-- Main Cart -->
   <main class="cart-container">
@@ -131,6 +135,27 @@
         <p>ออกจากระบบสำเร็จแล้ว</p>
     </div>
 </div>
+
+<script>
+  // Dropdown หมวดหมู่สินค้า//
+  document.addEventListener("DOMContentLoaded", function() {
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    const overlay = document.querySelector('.overlay');
+
+    dropdownToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdownContent.classList.toggle('show');
+      overlay.classList.toggle('show');
+    });
+
+    overlay.addEventListener('click', function() {
+      dropdownContent.classList.remove('show');
+      overlay.classList.remove('show');
+    });
+  });
+</script>                              
+
 <script th:src="@{/js/main.js}" defer></script>
 <script th:src="@{/js/search.js}" defer></script>
 </body>
