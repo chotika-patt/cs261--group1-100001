@@ -2,6 +2,7 @@ package tu_store.demo.models;
 
 import jakarta.persistence.*;
 import tu_store.demo.models.enums.OrderStatus;
+import tu_store.demo.models.enums.PaymentStatus;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +20,7 @@ public class Payment {
     private String currency = "THB";
 
     @Column(nullable=false)
-    private OrderStatus status; // INIT, PENDING, PAID, FAILED, CANCELLED, EXPIRED
+    private PaymentStatus status; // INIT, PENDING, PAID, FAILED, CANCELLED, EXPIRED
 
     private String paymentRef;
     private String idempotencyKey;
@@ -29,6 +30,7 @@ public class Payment {
 
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
+    private LocalDateTime expiresAt;
 
 
     // ---------------- Getters & Setters ----------------
@@ -41,8 +43,8 @@ public class Payment {
     public Double getAmount() { return amount; }
     public void setAmount(Double amount) { this.amount = amount; }
 
-    public OrderStatus getStatus() { return status; }
-    public void setStatus(OrderStatus status) { this.status = status; }
+    public PaymentStatus getStatus() { return status; }
+    public void setStatus(PaymentStatus status) { this.status = status; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
@@ -70,5 +72,8 @@ public class Payment {
 
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
+
+    public LocalDateTime getExpiresAt() { return expiresAt; }
+    public void setExpiresAt(LocalDateTime expiresAt) { this.expiresAt = expiresAt; }
 
 }
