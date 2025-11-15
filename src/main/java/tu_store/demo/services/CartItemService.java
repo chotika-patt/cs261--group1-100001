@@ -27,12 +27,19 @@ public class CartItemService {
     }
 
     public CartItem createItem(Cart cart, CartItemDto dto) {
-        Product product = productRepository.findFirstByProductId(dto.getProductId());
+        if (dto == null) return null;
+        Long productId = dto.getProductId();
+        if (productId == null) return null; // nothing to create
 
-        if(product == null) return null;
+        Product product = productRepository.findFirstByProductId(productId);
+        if (product == null) return null;
 
-        return new CartItem(cart, product, dto.getQuantity());
+        int qty = dto.getQuantity();
+        if (qty <= 0) return null;
+
+        return new CartItem(cart, product, qty);
     }
+
     public CartItemDto createCartItemResponse(CartItem item){
         CartItemDto dto = new CartItemDto();
         dto.setPrice(item.getProduct().getPrice());

@@ -40,3 +40,7 @@ form.addEventListener("submit", async (e) => {
     alert("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้");
   }
 });
+
+
+
+const edit_form = document.getElementById("")

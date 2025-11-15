@@ -20,7 +20,6 @@
           <span class="user-text" th:text="${session.username}">Seller Name</span>
           <div class="user-icon"><i class="fa-solid fa-user"></i></div>
         </button>
-
         <div class="dropdown" id="user-dropdown">
           <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
           <div class="avatar"><i class="fa-solid fa-user"></i></div>
@@ -28,7 +27,14 @@
           <div class="info">
             <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">seller_email@example.com</span></p>
             <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">08xxxxxxxx</span></p>
-          </div>
+            <p class="status">
+                <i class="fa-solid"
+                     th:classappend="${verifiedStatus == 'อนุมัติการขายแล้ว'} ? 'fa-circle-check text-green' : 'fa-circle-xmark text-red'"></i>
+                <span>สถานะ : </span>
+                <span th:text="${verifiedStatus}"></span>
+            </p>
+           
+
           <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
         </div>
       </div>
@@ -43,7 +49,7 @@
     <ul class="menu">
       <li><a th:href="@{/sellerTemp}">แดชบอร์ด</a></li>
       <li><a href="#">จัดการสินค้า</a></li>
-      <li><a href="#">คำสั่งซื้อ</a></li>
+      <li><a th:href="@{/sellerOrders}">คำสั่งซื้อ</a></li>
       <li><a href="#">ตั้งค่าร้านค้า</a></li>
       <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
     </ul>

@@ -1,118 +1,275 @@
 <!DOCTYPE html>
-<html lang="th" xmlns:th="http://www.thymeleaf.org">
+<html lang="th">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Product Detail</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตะกร้าสินค้า</title>
     <link rel="icon" type="image/png" href="/img/Logo.png">
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" th:href="@{/css/product-detail.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/product-detail.css}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
+
 <!-- ======= Navbar บนสุด ======= -->
-  <nav class="nav-top">
-      <div class="right-buttons">
-      <div class="user-menu">
-        <button class="user-btn" id="user-btn">
-          <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
-          <div class="user-icon"><i class="fa-solid fa-user"></i></div>
-        </button>
+<nav class="nav-top">
+    <div class="right-buttons">
+        <div class="user-menu">
+            <button class="user-btn" id="user-btn">
+                <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
+                <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+            </button>
 
-        <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
-          <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
-          <div class="avatar"><i class="fa-solid fa-user"></i></div>
-          <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
-          <div class="info">
-            <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
-            <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
-          </div>
-          <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+            <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
+                <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
+                <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
+                <div class="info">
+                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
+                    <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
+                </div>
+                <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+            </div>
         </div>
-      </div>
-      <a th:href="@{/cart}" class="cart-icon">
-        <span class="material-symbols-outlined">shopping_cart</span>
-      </a>
+        <a th:href="@{/cart}" class="cart-icon">
+            <span class="material-symbols-outlined">shopping_cart</span>
+        </a>
     </div>
-  </nav>
-  <div class="left-logo">
-          <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
-  </div>
+</nav>
+<div class="left-logo">
+    <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+</div>
 
-  <!-- ======= Navbar ล่าง ======= -->
-    <nav class="nav-bottom">
+<!-- ======= Navbar ล่าง ======= -->
+<nav class="nav-bottom">
     <ul class="menu">
         <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
 
         <li class="dropdown-category">
-        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
-        <div class="overlay"></div> <!-- สำหรับ liquid glass -->
-        <div class="dropdown-content">
-              <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
-              <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
-              <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
-              <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
-              <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
-        </div>
-      </li>
-      <li><a href="#">เช็คสถานะ</a></li>
-      <li><a href="#">ติดต่อเรา</a></li>
-      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-    </ul> 
+            <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+            <div class="overlay"></div> <!-- สำหรับ liquid glass -->
+            <div class="dropdown-content">
+                <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+                <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+                <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+                <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+                <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
+            </div>
+        </li>
+        <li><a href="#">เช็คสถานะ</a></li>
+        <li><a href="#">ติดต่อเรา</a></li>
+        <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+    </ul>
     <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
     <div class="search-bar-replacement">
-      <div class="search-input-container">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
-      </div>
-      <button class="search-close-btn" id="search-close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+        <div class="search-input-container">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+        </div>
+        <button class="search-close-btn" id="search-close">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
     </div>
     <div id="search-results"></div>
-  </nav>
-  <br>
+</nav>
+
+<!-- ======= ส่วนแสดงสินค้า ======= -->
+<div class="supplier-bar">
+    <span class="shop-icon"><i class="fa-solid fa-store"></i></span>
+    <span class="supplier-name">ชุมนุมเชียร์แห่งมหาวิทยาลัยธรรมศาสตร์</span>
+</div>
+
 <div class="product-container">
+
+    <!--  รูปสินค้า -->
     <div class="product-detail-photo">
-        <img th:if="${product.main_image != null}" th:src="@{/product_img/{file}(file=${product.main_image})}" alt="Product Image" style="width:200px;height:auto;">
+        <img th:src="@{/img/ballshirt_tu-cu.png}" alt="ballshirt">
     </div>
 
+    <!--  กล่องข้อมูลสินค้า -->
     <div class="product-detail-main">
-        <div class="product-header">
-            <h1 th:text="${product.name}">ชื่อสินค้า :</h1>
-            <button class="add-to-cart-btn">เพิ่มลงตะกร้า</button>
-        </div>
-        <p class="product-category">หมวดหมู่ : <span th:text="${product.category}">Category</span></p>
 
-        <div class="product-options">
-            <span class="option-label">สี :</span>
-            <button class="color-option">สีดำ</button>
-            <button class="color-option">สีขาว</button>
+        <div class="product-buttons">
+            <button class="add-cart-btn">เพิ่มลงตะกร้า</button>
         </div>
+        <h2 class="product-name"
+            th:text="'ชื่อสินค้า  : เสื้อเชียร์งานฟุตบอลสานสัมพันธ์ จุฬาฯ ธรรมศาสตร์ ปี 2567 - GOLDEN SEED POLO SHIRT'">ชื่อสินค้า</h2>
 
-        <div class="product-quantity">
-            <span class="option-label">จำนวน</span>
-            <div class="quantity-selector">
-                <button class="minus">-</button>
-                <input type="text" value="1" id="quantity" readonly>
-                <button class="plus">+</button>
+        <p class="product-category">
+            หมวดหมู่ : <span th:text="'เสื้อ'">เสื้อ</span>
+        </p>
+
+        <div class="product-size">
+            <span class="label">ขนาด :</span>
+            <div class="size-options">
+                <button class="  size-btn  ">XS</button>
+                <button class="  size-btn  ">S</button>
+                <button class="  size-btn active  ">M</button>
+                <button class="  size-btn  ">L</button>
+                <button class="  size-btn disabled  " disabled>XL</button>
+                <button class="  size-btn disabled  " disabled>2XL</button>
             </div>
         </div>
 
-        <div class="product-price-box">
-            <div class="price-label">ราคา</div>
-            <div class="price-value" th:text="'฿' + ${product.price}">฿1,290</div>
-        </div>
-    </div>
+        <p class="stock-status">
+            สถานะ : <span class="in-stock" id="stock-status-text">พร้อมจัดส่ง (<span id="stock-count"></span> ชิ้นในคลัง)</span>
+        </p>
 
-    <div class="product-detail-describe">
-        <h3>รายละเอียดสินค้า</h3>
-        <p th:text="${product.description}">รายละเอียดสินค้า</p>
+
+
+        <div class="product-quantity">
+            <span class="label">จำนวน :</span>
+            <div class="quantity-selector">
+                <button class="qty-btn minus">-</button>
+                <input type="text" id="quantity" value="1" readonly>
+                <button class="qty-btn plus">+</button>
+            </div>
+        </div>
+
+        <div class="price-box">
+            <div class="price">
+                <span class="price-label">ราคา</span>
+                <span class="price-value"
+                      th:text="'350' + 'บาท'">
+                      350.00 บาท
+                </span>
+            </div>
+        </div>
+
+
     </div>
 </div>
 
-<!-- ======= Popup Logout ======= -->
+
+<!--  รายละเอียดสินค้าแบบ Dropdown -->
+<div class="product-detail-describe">
+    <button class="detail-toggle" id="toggle-detail">
+        รายละเอียดสินค้า <i class="fa-solid fa-chevron-down"></i>
+    </button>
+
+    <div class="detail-content" id="detail-content">
+        <p>
+
+            เสื้อเชียร์งานฟุตบอลสานสัมพันธ์ จุฬาฯ ธรรมศาสตร์ ปี 2567 : WARRIX GOLDEN SEED POLO SHIRT<br><br>
+
+            ผลิตจากเส้นใย Polyester100% เอกสิทธิ์เฉพาะของ WARRIX ทักทอผ้าลวดลายอะตอม ที่ได้รับความนิยมสูงสุด<br><br>
+
+            #CUTUBALL #GOLDENSEED #THAMMASAT #CHEERTU<br><br>
+            ผู้ชนะการออกแบบเสื้อเชียร์ : นางสาวพัณวัสษา วงศ์เจริญ<br><br>
+            แนวคิดการออกแบบ: ได้รับแรงบันดาลใจมากจาก “เมล็ดพันธุ์คนธรรมศาสตร์” คือเจตนารมณ์ที่มหาวิทยาลัยธรรมศาสตร์ได้มุ่งเน้นมากว่า 90 ปี ในการผลิตบุคลากรที่มีความรู้ความสามารถและจิตวิญญาณในการรับใช้สังคม เป็นดั่งเมล็ดพันธุ์สีทองที่จะช่วยขับเคลื่อนประเทศไทยไปสู่สังคมโลกได้อย่างเต็มภาคภูมิ<br><br>
+
+            ประเภท : เสื้อผ้า Unisex<br><br>
+
+        </p>
+    </div>
+</div>
+
+<!-- รูปภาพสินค้าเพิ่มเติม -->
+<div class="product-more-images">
+    <button class="image-toggle" id="toggle-images">
+        รูปภาพสินค้าเพิ่มเติม <i class="fa-solid fa-chevron-down"></i>
+    </button>
+
+    <div class="image-gallery" id="image-gallery">
+        <div class="image-item">
+            <img src="/img/ballshirt_tu-cu.png" alt="front">
+        </div>
+        <div class="image-item">
+            <img src="/img/เพิ่มเติม2.png" alt="back">
+        </div>
+        <div class="image-item">
+            <img src="/img/เพิ่มเติม3.png" alt="model1">
+        </div>
+        <div class="image-item">
+            <img src="/img/เพิ่มเติม4.png" alt="model2">
+        </div>
+    </div>
+</div>
+<!-- รีวิวสินค้า -->
+<div class="product-review-section">
+    <button class="review-toggle" id="toggle-review">
+        ⭐️รีวิวสินค้าและคะแนน (240 ความคิดเห็น)
+        <i class="fa-solid fa-chevron-down"></i>
+    </button>
+</div>
+    <div class="review-box" id="review-box">
+        <div class="review-list">
+            <!-- รีวิว 1 -->
+            <div class="review-item">
+                <div class="review-header">
+                    <div class="review-avatar"></div>
+                    <div>
+                        <strong>แฟรงค์ เฟิร์ท</strong>
+                        <p class="review-detail">ขนาด (M), สี แดง x1</p>
+                    </div>
+                </div>
+                <div class="review-stars">⭐️⭐️⭐️⭐️⭐️</div>
+                <p class="review-text">
+                    เสื้อเชียร์จุฬาฯ ธรรมศาสตร์ปี 2567 เนื้อผ้าดีมาก สีสวยสด พิมพ์ลายคมชัด ใส่สบาย ไม่ร้อน เหมาะกับงานฟุตบอลมาก!
+                </p>
+                <div class="review-images">
+                    <img src="/img/เพิ่มเติม3.png" alt="">
+                    <img src="/img/เพิ่มเติม4.png" alt="">
+                </div>
+            </div>
+
+            <!-- รีวิว 2 -->
+            <div class="review-item">
+                <div class="review-header">
+                    <div class="review-avatar"></div>
+                    <div>
+                        <strong>เคน เอสลัสบัน</strong>
+                        <p class="review-detail">ขนาด (XL), สี แดง x1</p>
+                    </div>
+                </div>
+                <div class="review-stars">⭐️⭐️⭐️⭐️⭐️</div>
+                <p class="review-text">
+                    ของถึงไว ผ้าดีมาก ใส่แล้วเย็นสบาย ไม่ร้อนเลย เหมาะกับการใส่วันกิจกรรม ราคาก็คุ้มค่า
+                </p>
+                <div class="review-images">
+                    <img src="/img/เพิ่มเติม3.png" alt="">
+                    <img src="/img/เพิ่มเติม4.png" alt="">
+                </div>
+            </div>
+
+            <!-- รีวิว 3 -->
+            <div class="review-item">
+                <div class="review-header">
+                    <div class="review-avatar"></div>
+                    <div>
+                        <strong>มุก มณีวรรณ</strong>
+                        <p class="review-detail">ขนาด (S), สี แดง x1</p>
+                    </div>
+                </div>
+                <div class="review-stars">⭐️⭐️⭐️⭐️⭐️</div>
+                <p class="review-text">
+                    ชอบมากค่ะ คุณภาพดีเหมือนในรูป ส่งไว แพ็กดี ใส่แล้วพอดีตัว สั่งเพิ่มแน่นอน ❤️
+                </p>
+                <div class="review-images">
+                    <img src="/img/เพิ่มเติม3.png" alt="">
+                    <img src="/img/เพิ่มเติม4.png" alt="">
+                </div>
+            </div>
+        </div>
+
+        <!--  Pagination -->
+        <div class="review-pagination">
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">...</button>
+            <button class="page-btn">100</button>
+        </div>
+    </div>
+
+<div class="product-buttons">
+    <button class="buy-btn">
+        <i class="fa-solid fa-check"></i> สั่งซื้อทันที
+    </button>
+
+</div>
+
 <div class="logout-modal" id="logout-modal">
     <div class="modal-content">
         <i class="fa-solid fa-circle-exclamation"></i>
@@ -131,8 +288,11 @@
         <p>ออกจากระบบสำเร็จแล้ว</p>
     </div>
 </div>
+
 <script th:src="@{/js/main.js}" defer></script>
 <script th:src="@{/js/product-detail.js}" defer></script>
-<script th:src="@{/js/search.js}" defer></script>
+
+
 </body>
 </html>
+

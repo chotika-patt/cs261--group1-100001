@@ -1,0 +1,609 @@
+body {
+    background: #f5f5f5;
+    font-family: "IBM Plex Sans Thai", sans-serif;
+}
+
+.payment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 60px;
+}
+
+.payment-container h1 {
+    font-size: 22px;
+    margin-bottom: 25px;
+}
+
+.payment-box {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: 400px;
+    padding: 20px;
+}
+/*  ปุ่ม QR Payment */
+.method:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "IBM Plex Sans Thai", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111;
+    height: 90px;
+    border: 1.8px solid #ddd;
+    border-radius: 10px;
+    background: #fff;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-sizing: border-box; /*  ป้องกันล้น */
+}
+
+.method:first-child:hover {
+    background-color: #fff6d1;
+    border-color: #f4d35e;
+}
+
+.method {
+    display: flex;
+    align-items: center;        /*ทุกอันอยู่กึ่งกลางแนวตั้ง */
+    gap: 15px;
+    background: #fff;
+    border: 1.8px solid #ddd;
+    border-radius: 10px;
+    padding: 15px 20px;         /* เพิ่ม padding ด้านข้างให้บาลานซ์ */
+    cursor: pointer;
+    text-align: left;
+    height: 90px;               /* เท่ากับ QR Payment */
+    width: 100%;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-sizing: border-box;
+}
+
+.method:hover {
+    background-color: #fff6d1;
+    border-color: #f4d35e;
+}
+
+.method.active {
+    background: #fff6d1;
+    border-color: #f4d35e;
+}
+
+.method i {
+    font-size: 26px;
+    color: #333;
+    min-width: 30px;            /* ให้พื้นที่เท่ากัน */
+    text-align: center;
+}
+
+.method b {
+    display: block;
+    font-size: 14.5px;          /* ลดลงเล็กน้อยให้บาลานซ์กับกล่อง */
+    color: #111;
+    margin-bottom: 3px;         /* เพิ่มช่องว่างระหว่างหัวข้อกับคำอธิบาย */
+}
+
+.method p {
+    font-size: 12.5px;          /* เล็กลงนิดนึงเพื่อไม่ให้เกินกรอบ */
+    color: #555;
+    line-height: 1.4;
+    margin: 0;
+    max-width: 95%;             /* ป้องกันล้น */
+}
+body {
+    background: #f0f0f0;
+    font-family: "IBM Plex Sans Thai", sans-serif;
+    text-align: center;
+}
+
+.qr-popup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+.qr-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 280px;
+    padding: 25px 20px;
+}
+
+.qr-card img {
+    width: 180px;
+    height: 180px;
+    background: #ffde59;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.qr-card h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111;
+    margin: 8px 0;
+}
+
+.countdown {
+    font-size: 22px;
+    font-weight: bold;
+    color: #111;
+    margin: 4px 0 10px;
+}
+
+.desc {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.btn-confirm, .btn-newqr {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-confirm {
+    background: #e63946;
+    color: white;
+}
+
+.btn-confirm:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-newqr {
+    background: #ffde59;
+    color: #111;
+}
+
+.banner {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffe4e4;
+    border: 1px solid #ff8b8b;
+    color: #b30000;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.banner button {
+    background: transparent;
+    border: 1px solid #b30000;
+    color: #b30000;
+    padding: 3px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+}
+.qr-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.3);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.qr-card, .loading-card, .result-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    width: 300px;
+    padding: 25px 20px;
+    text-align: center;
+    animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.qr-card img {
+    width: 180px;
+    height: 180px;
+    background: #ffde59;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.qr-card h2 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.countdown {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 6px 0 10px;
+}
+
+.desc {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.btn-confirm, .btn-newqr {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-confirm {
+    background: #e63946;
+    color: #fff;
+}
+
+.btn-confirm:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-newqr {
+    background: #ffde59;
+    color: #111;
+}
+
+.spinner {
+    border: 6px solid #eee;
+    border-top: 6px solid #f4d35e;
+    border-right: 6px solid #e63946;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.icon {
+    font-size: 28px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 10px;
+}
+
+.success-icon {
+    background: #d4edda;
+    color: #2d7a32;
+}
+
+.fail-icon {
+    background: #f8d7da;
+    color: #b30000;
+}
+
+.error-text {
+    color: #b30000;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    overflow-x: hidden;
+}
+.result-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    padding: 30px 25px;
+    max-width: 360px;
+    margin: 40px auto;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.result-card.success {
+    border-top: 5px solid #28a745;
+}
+
+.result-card.fail {
+    border-top: 5px solid #dc3545;
+}
+
+.icon {
+    font-size: 26px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 15px;
+}
+
+.success-icon {
+    background: #d4edda;
+    color: #2d7a32;
+}
+
+.fail-icon {
+    background: #f8d7da;
+    color: #b30000;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 5px 0;
+}
+
+.amount {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.error-text {
+    color: #b30000;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+/*  รายละเอียดคำสั่งซื้อ */
+.detail-list {
+    text-align: left;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
+    border-top: 1px dashed #ddd;
+    padding-top: 15px;
+}
+
+.detail-list p {
+    display: flex;
+    justify-content: space-between;
+    margin: 4px 0;
+}
+
+.detail-list span {
+    color: #666;
+}
+
+.detail-list b {
+    color: #111;
+}
+.redirect-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px 0;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* ปุ่มตอน success */
+.redirect-btn:not(.retry) {
+    background-color: #2d7a32;
+    color: #fff;
+}
+
+.redirect-btn:not(.retry):hover {
+    background-color: #256528;
+}
+
+/* ปุ่มตอน fail */
+.redirect-btn.retry {
+    background-color: #b30000;
+    color: #fff;
+}
+
+.redirect-btn.retry:hover {
+    background-color: #990000;
+}
+
+/* ===== Popup: Unsupported Payment ===== */
+.unsupported-popup {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+.unsupported-card {
+    background: #fff;
+    border-radius: 20px;
+    width: 400px;
+    max-width: 90%;
+    padding: 50px 30px;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+
+.unsupported-card h3 {
+    font-size: 16px;
+    color: #8a8a8a;
+    font-weight: 500;
+    margin-bottom: 40px;
+    text-transform: lowercase;
+}
+
+.unsupported-card p {
+    color: #111;
+    font-weight: 600;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+.btn-close {
+    margin-top: 30px;
+    padding: 10px 24px;
+    border: none;
+    background: #cc0000;
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-close:hover {
+    background: #a00000;
+}
+/*  RESPONSIVE DESIGN SETTINGS */
+
+
+/* --- Desktop ≥ 1024px --- */
+@media (min-width: 1024px) {
+    .payment-container {
+        margin-top: 60px;
+    }
+
+    .payment-box {
+        width: 420px;
+        padding: 25px;
+    }
+
+    .method, .method:first-child {
+        height: 90px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 1023px) and (min-width: 768px) {
+    .payment-container {
+        margin-top: 40px;
+        padding: 0 40px;
+    }
+
+    .payment-box {
+        width: 100%;
+        max-width: 500px;
+        padding: 20px;
+    }
+
+    .method, .method:first-child {
+        height: 85px;
+        font-size: 15px;
+    }
+
+    .unsupported-card {
+        width: 360px;
+        padding: 40px 25px;
+    }
+
+    .qr-card, .loading-card, .result-card {
+        width: 280px;
+        padding: 20px 18px;
+    }
+}
+
+/* --- Mobile ≤ 480px --- */
+@media (max-width: 480px) {
+    .payment-container {
+        margin-top: 25px;
+        padding: 0 15px;
+    }
+
+    .payment-container h1 {
+        font-size: 18px;
+    }
+
+    .payment-box {
+        width: 100%;
+        padding: 15px;
+        box-shadow: none;
+    }
+
+    .method, .method:first-child {
+        flex-direction: row;
+        align-items: center;
+        height: auto;
+        padding: 12px;
+        font-size: 14px;
+        gap: 10px;
+    }
+
+    .method i {
+        font-size: 20px;
+    }
+
+    .method b {
+        font-size: 13px;
+    }
+
+    .method p {
+        font-size: 11.5px;
+    }
+
+    .unsupported-card {
+        width: 90%;
+        padding: 30px 20px;
+        border-radius: 15px;
+    }
+
+    .unsupported-card p {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .btn-close {
+        padding: 8px 18px;
+        font-size: 13px;
+        border-radius: 6px;
+    }
+
+    .qr-card, .loading-card, .result-card {
+        width: 85%;
+        padding: 20px 15px;
+        border-radius: 14px;
+    }
+
+    .qr-card img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .redirect-btn {
+        font-size: 13.5px;
+        padding: 8px 0;
+        border-radius: 8px;
+    }
+
+    .detail-list {
+        font-size: 12.5px;
+    }
+}

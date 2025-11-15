@@ -55,6 +55,8 @@ public class User {
         this.verified = verified;
     }
 
+
+
     // ----- Getters & Setters -----
     public Long getUser_id() { return userId; }
 

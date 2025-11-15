@@ -56,24 +56,27 @@
               <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
         </div>
       </li>
-      <li><a href="#">เช็คสถานะ</a></li>
+      <li><a th:href="@{/order-status-check}">เช็คสถานะ</a></li>
       <li><a href="#">ติดต่อเรา</a></li>
       <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-    </ul> 
+        <li><a href="#" id="filter-icon"><span class="fa-solid fa-filter"></span></a></li>
+    </ul>
     <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
     <div class="search-bar-replacement">
       <div class="search-input-container">
         <i class="fa-solid fa-magnifying-glass"></i>
         <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+          <div id="search-suggestions" class="suggestions-list"></div>
       </div>
       <button class="search-close-btn" id="search-close">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
-    <div id="search-results"></div>
+
   </nav>
   <!-- ======= ส่วนหลักของหน้า ======= -->
   <main>
+      <div id="search-results"></div>
     <div class="box-container">
       <div class="box">
         <h1>รวมร้านค้า <span>ในนาม ม.ธรรมศาสตร์</span></h1>
@@ -125,8 +128,8 @@
         </div>
         <br>
         <div class="product-grid">
-            <a th:each="product : ${products}" 
-                th:href="@{'/product_detail/' + ${product.productId}}" 
+            <a th:each="product : ${products}"
+                th:href="@{'/product_detail/' + ${product.productId}}"
                 class="product-card-link">
                 <div class="product-card">
                     <div class="product-image">
@@ -135,13 +138,13 @@
                     <div class="product-info">
                         <span class="product-name" th:text="${product.name}">Product Name</span>
                         <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
-                    </div> 
+                    </div>
                 </div>
             </a>
         </div>
     </div>
 </main>
-  
+
   <!-- ======= Footer ======= -->
   <footer>
     <div class="footer-content">
@@ -169,6 +172,240 @@
       <p>ออกจากระบบสำเร็จแล้ว</p>
     </div>
   </div>
+
+  <div id="filter-overlay" class="overlay-container">
+      <div class="modal-content">
+          <div class="filter-headbar">
+              <h3><i class="fa-solid fa-filter"></i> ตัวกรอง</h3>
+
+              <div class="filter-categories">
+                  <div class="category-row">
+                  <div class="category-label">
+                      <span>หมวดหมู่ :</span>
+                  </div>
+
+                  <div class="category-buttons">
+                      <button class="cat-btn">เสื้อ</button>
+                      <button class="cat-btn">กระเป๋า</button>
+                      <button class="cat-btn">เครื่องแบบนักศึกษา</button>
+                      <button class="cat-btn">ของใช้ทั่วไป</button>
+                      <button class="cat-btn">ของที่ระลึก</button>
+                  </div>
+              </div>
+              </div>
+          </div>
+
+          <div class="filter-body">
+              <!-- ช่วงราคา -->
+              <div class="filter-section">
+                  <h4>ช่วงราคา</h4>
+                  <div class="price-range">
+                      <input type="number" placeholder="ใส่ราคาต่ำสุด" class="price-input"> <a>-</a>
+                      <input type="number" placeholder="ใส่ราคาสูงสุด" class="price-input">
+                      <span class="price-unit">บาท</span>
+                  </div>
+              </div>
+
+              <!-- สถานะสินค้า -->
+              <div class="filter-section">
+                  <h4>สถานะสินค้า</h4>
+                  <div class="status-buttons">
+                      <button class="status-btn">พร้อมจัดส่ง</button>
+                      <button class="status-btn">PRE-ORDER</button>
+                  </div>
+              </div>
+
+              <!-- คะแนน -->
+              <div class="filter-section">
+                  <h4>คะแนน</h4>
+                  <div class="rating-buttons">
+                      <button class="rating-btn">5 ⭐</button>
+                      <button class="rating-btn">4 ⭐</button>
+                      <button class="rating-btn">3 ⭐</button>
+                      <button class="rating-btn">2 ⭐</button>
+                      <button class="rating-btn">1 ⭐</button>
+                  </div>
+              </div>
+
+              <!-- ปุ่มตกลง -->
+              <button class="filter-confirm-btn">ตกลง</button>
+          </div>
+      </div>
+  </div>
+<script>
+// ให้ปุ่มเป็น type="button" กัน submit เผลอ ๆ
+(function ensureButtonType(){
+  document.querySelectorAll('.cat-btn, .status-btn, .rating-btn').forEach(b=>{
+    if (b.tagName === 'BUTTON' && !b.getAttribute('type')) b.setAttribute('type','button');
+  });
+})();
+
+// จับคลิกใน #filter-overlay แล้วจัดการแบบเลือกทีละปุ่มเดียวในแต่ละกลุ่ม
+document.addEventListener('click', (e) => {
+  const overlay = document.getElementById('filter-overlay');
+  if (!overlay || !overlay.contains(e.target)) return;
+
+  // กลุ่มปุ่มใด ๆ ที่รองรับ single-select
+  const group = e.target.closest('.category-buttons, .status-buttons, .rating-buttons');
+  if (!group) return;
+
+  // ปุ่มที่กดจริง
+  const btn = e.target.closest('.cat-btn, .status-btn, .rating-btn');
+  if (!btn || !group.contains(btn)) return;
+
+  e.preventDefault();
+
+  // ล้าง active ในกลุ่มนั้นทั้งหมด แล้วตั้ง active ให้ปุ่มที่กด
+  group.querySelectorAll('.cat-btn, .status-btn, .rating-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+});
+</script>
+<script>
+(function setupCategorySingleSelectWithToggle() {
+  const container = document.querySelector('.category-buttons');
+  if (!container) return;
+
+  // กัน submit โดยไม่ตั้งใจ
+  container.querySelectorAll('.cat-btn').forEach(btn => {
+    if (btn.tagName === 'BUTTON' && !btn.getAttribute('type')) {
+      btn.setAttribute('type', 'button');
+    }
+  });
+
+  container.addEventListener('click', (e) => {
+    const btn = e.target.closest('.cat-btn');
+    if (!btn || !container.contains(btn)) return;
+    e.preventDefault();
+
+    const isActive = btn.classList.contains('active');
+
+    // ล้าง active ทั้งหมดก่อน
+    container.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+
+    // ถ้าเดิมไม่ได้ active ให้ตั้ง active; ถ้าเดิมเป็น active อยู่แล้ว = toggle ปล่อยว่าง
+    if (!isActive) {
+      btn.classList.add('active');
+    }
+  });
+})();
+</script>
+
+  
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    const overlay = document.querySelector('.overlay');
+
+    dropdownToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdownContent.classList.toggle('show');
+      overlay.classList.toggle('show');
+    });
+
+    overlay.addEventListener('click', function() {
+      dropdownContent.classList.remove('show');
+      overlay.classList.remove('show');
+    });
+  });
+</script> 
+<script>
+(() => {
+  /** ================== ตั้งค่า ================== **/
+  const PRODUCT_PATH = '/product'; // ถ้ายังใช้เดิม ให้เปลี่ยนเป็น '/product_no_login'
+
+  /** ================== ตัวช่วย ================== **/
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const getText = (el) => (el?.textContent || '').trim();
+
+  function getNumberOrNull(el) {
+    if (!el) return null;
+    const v = (el.value || '').trim();
+    if (v === '') return null;
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function buildQuery(params) {
+    const sp = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => {
+      if (v === null || v === undefined) return;
+      if (typeof v === 'string' && v.trim() === '') return;
+      sp.set(k, String(v));
+    });
+    return sp.toString();
+  }
+
+  /** ================== ดึงค่าจากฟิลเตอร์ ================== **/
+  function collectFilterValues() {
+    const overlay = document.getElementById('filter-overlay');
+
+    // หมวดหมู่ (เลือกได้หรือยกเลิกได้)
+    const selectedCatBtn = $('.category-buttons .cat-btn.active', overlay);
+    const category = getText(selectedCatBtn);
+
+    // ราคา
+    const [minInput, maxInput] = $$('.price-range .price-input', overlay);
+    let priceMin = getNumberOrNull(minInput);
+    let priceMax = getNumberOrNull(maxInput);
+    if (priceMin != null && priceMax != null && priceMin > priceMax) {
+      // สลับถ้าใส่กลับด้าน
+      const t = priceMin; priceMin = priceMax; priceMax = t;
+    }
+
+    // สถานะ (ตามโค้ดล่าสุดของคุณเป็น single-select ถ้าอยาก toggle ว่างได้ให้ปรับ JS ส่วนสถานะคล้าย cat-btn)
+    const statusBtn = $('.status-buttons .status-btn.active', overlay);
+    const status = getText(statusBtn);
+
+    // คะแนน (single-select เช่นกัน)
+    const ratingBtn = $('.rating-buttons .rating-btn.active', overlay);
+    // ดึงเฉพาะตัวเลขหน้าดาว เช่น "4 ⭐" => 4
+    const ratingText = getText(ratingBtn);
+    const rating = ratingText ? (ratingText.match(/\d+/)?.[0] || '') : '';
+
+    return { category, priceMin, priceMax, status, rating };
+  }
+
+  /** ================== ทำงานตอนกด "ตกลง" ================== **/
+  const confirmBtn = document.querySelector('.filter-confirm-btn');
+  if (confirmBtn) {
+    confirmBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      const { category, priceMin, priceMax, status, rating } = collectFilterValues();
+
+      // ให้ผล "เหมือน searchbar": ใช้ q เป็น keyword หลัก
+      // - ถ้าเลือกหมวดหมู่ ให้ q = ชื่อหมวดหมู่
+      // - ถ้าอยากรวม status/rating ใน q ด้วยก็ทำได้ แต่ตอนนี้เราแนบเป็นพารามิเตอร์แยกเพื่อกรองในหน้าปลายทาง
+      const q = category || '';
+
+      const query = buildQuery({
+        q,                         // keyword เหมือน searchbar
+        priceMin,                  // เพิ่มเงื่อนไขราคา (ถ้ากรอก)
+        priceMax,
+        status,                    // พร้อมจัดส่ง / PRE-ORDER
+        rating                     // 1..5
+      });
+
+      const url = query ? `${PRODUCT_PATH}?${query}` : PRODUCT_PATH;
+
+      // ปิด overlay ก่อน (ถ้ามี)
+      const overlay = document.getElementById('filter-overlay');
+      overlay?.classList.remove('show');
+
+      // ไปหน้า product
+      window.location.href = url;
+    });
+  }
+
+  /** ================== กันปุ่ม submit ฟอร์มโดยไม่ตั้งใจ ================== **/
+  document.querySelectorAll('.cat-btn, .status-btn, .rating-btn, .filter-confirm-btn').forEach(b => {
+    if (b.tagName === 'BUTTON' && !b.getAttribute('type')) b.setAttribute('type','button');
+  });
+})();
+</script>
+
 
   <!-- JS (dropdown/search/logout) -->
   <script th:src="@{/js/main.js}" defer></script>

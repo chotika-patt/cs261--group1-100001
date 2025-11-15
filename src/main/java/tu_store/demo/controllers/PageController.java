@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import tu_store.demo.repositories.ProductRepository;
 import tu_store.demo.repositories.UserRepository;
 import tu_store.demo.services.UserService;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @Controller
@@ -41,14 +43,17 @@ public class PageController {
     public PageController(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
+
     @GetMapping("/register")
     public String gotoRegister(){
-        return "register.html";
+        return "register";
     }
+
     @GetMapping("/login")
     public String showLoginPage() {
         return "login"; // just show the login.html template
     }
+
     @PostMapping("/login")
     public String handleLogin(
             @RequestParam String username,
@@ -120,10 +125,21 @@ public class PageController {
     public String sellerTempPage(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
         User seller = userService.findByUsername(username);
-
+       
+        if (username == null) {
+            return "redirect:/";
+        }
+        
+        String verifiedStatus;
+        if (Boolean.TRUE.equals(seller.getVerified())) {
+            verifiedStatus = "อนุมัติการขายแล้ว";
+        } else {
+            verifiedStatus = "ยังไม่อนุมัติการขาย";
+        }
         model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("email", session.getAttribute("email"));
         model.addAttribute("phone", session.getAttribute("phone"));
+        model.addAttribute("verifiedStatus", verifiedStatus);
         List<Product> products = productRepository.findBySeller(seller);
         model.addAttribute("products", products);
         return "sellerTemp"; // ✅ ชี้ไปที่ templates/sellerTemp.html
@@ -267,6 +283,10 @@ public class PageController {
         ));
         return "product_no_login"; // ✅ ชี้ไปที่ templates/product_no_login.html
     }
-
+    //---------ลิงก์ไปหน้า ลืมรหัส--------------
+    @GetMapping("/forget_password")
+    public String showForgetPasswordPage() {
+        return "forget_password";
+    }
 }
 

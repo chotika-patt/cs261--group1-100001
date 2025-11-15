@@ -23,24 +23,30 @@ public class Cart {
     @Column(name = "session_id")
     private String sessionId;  
  
-
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> items = new ArrayList<>();
     
+    private boolean isActive;
+
     public Cart() {}
-    
     
     public Cart(String id){
         this.sessionId = id;
+        this.isActive = true;
     } 
     
     public Cart(User user){
         this.user = user;
+        this.isActive = true;
     }
     public void setUser(User user){
         this.user = user;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public void addItem(CartItem item){
@@ -78,5 +84,9 @@ public class Cart {
 
     public long getUserId() {
         return user.getUser_id();
+    }
+
+    public boolean getActive(){
+        return this.isActive;
     }
 }
