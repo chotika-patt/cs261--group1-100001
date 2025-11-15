@@ -4,8 +4,8 @@ package tu_store.demo.controllers;
 
 import java.util.List;
 import java.util.Map;
-
-// import org.springframework.http.ResponseEntity;
+import org.apache.el.stream.Optional;
+//import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -243,6 +243,21 @@ public class PageController {
         model.addAttribute("phone", session.getAttribute("phone"));
         return "addProduct"; // <-- ต้องมีไฟล์ addProduct.html ใน templates
     }
+    @GetMapping("/product_edit/{id}")
+    public String editProductPage(@PathVariable Long id, HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("username", session.getAttribute("username"));
+        model.addAttribute("email", session.getAttribute("email"));
+        model.addAttribute("phone", session.getAttribute("phone"));
+        model.addAttribute("productId", id);
+
+        return "editProduct";
+    }
+
     @GetMapping("/category/{category}")
     public String getProductsByCategory(
             @PathVariable("category") Category category,

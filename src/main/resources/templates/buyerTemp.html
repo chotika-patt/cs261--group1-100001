@@ -59,19 +59,24 @@
       <li><a th:href="@{/order-status-check}">เช็คสถานะ</a></li>
       <li><a href="#">ติดต่อเรา</a></li>
       <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-        <li><a href="#" id="filter-icon"><span class="fa-solid fa-filter"></span></a></li>
+
     </ul>
     <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
     <div class="search-bar-replacement">
-      <div class="search-input-container">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
-          <div id="search-suggestions" class="suggestions-list"></div>
-      </div>
-      <button class="search-close-btn" id="search-close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
+  <div class="search-input-container">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+    <div id="search-suggestions" class="suggestions-list"></div>
+  </div>
+
+  <button class="search-close-btn" id="search-close">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <button id="filter-icon" class="search-filter-btn">
+     <i class="fa-solid fa-filter"> ตัวกรอง</i>
+  </button>
+  </div>
 
   </nav>
   <!-- ======= ส่วนหลักของหน้า ======= -->
@@ -119,6 +124,8 @@
             <h3>ของที่ระลึก</h3>
         </div>
     </div>
+    
+    <div class="next-session"></div>
 
     <!-- Products -->
     <div class="product-section">
@@ -133,7 +140,7 @@
                 class="product-card-link">
                 <div class="product-card">
                     <div class="product-image">
-                        <img th:if="${product.main_image != null}" th:src="@{/product_img/{file}(file=${product.main_image})}" alt="Product Image" style="width:200px;height:auto;">
+                        <img th:if="${product.main_image != null}" th:src="@{/product_img/{file}(file=${product.main_image})}" alt="Product Image">
                     </div>
                     <div class="product-info">
                         <span class="product-name" th:text="${product.name}">Product Name</span>
@@ -176,7 +183,7 @@
   <div id="filter-overlay" class="overlay-container">
       <div class="modal-content">
           <div class="filter-headbar">
-              <h3><i class="fa-solid fa-filter"></i> ตัวกรอง</h3>
+              <h3><i class="fa-solid fa-filter"></i><span>ตัวกรอง</span></h3>
 
               <div class="filter-categories">
                   <div class="category-row">
@@ -405,6 +412,38 @@ document.addEventListener('click', (e) => {
   });
 })();
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const searchIcon = document.getElementById('search-icon'); // ปุ่มแว่นขยาย
+    const filterIcon = document.getElementById('filter-icon'); // ปุ่ม Filter
+    const searchCloseBtn = document.getElementById('search-close'); // ปุ่มกากบาทปิด Search
+
+    // 1. เมื่อกดปุ่ม Search (แว่นขยาย)
+    if (searchIcon) {
+        searchIcon.addEventListener('click', function(e) {
+            // สั่งให้ Filter แสดงออกมา
+            if (filterIcon) {
+                filterIcon.style.display = 'inline-block'; 
+                // หรือใช้ 'block' ขึ้นอยู่กับการจัดหน้าของคุณ
+            }
+        });
+    }
+
+    // 2. เมื่อกดปุ่ม Close (กากบาท)
+    if (searchCloseBtn) {
+        searchCloseBtn.addEventListener('click', function() {
+            // สั่งให้ Filter ซ่อนกลับไปเหมือนเดิม
+            if (filterIcon) {
+                filterIcon.style.display = 'none';
+            }
+        });
+    }
+});
+</script>
+
+
+
 
 
   <!-- JS (dropdown/search/logout) -->

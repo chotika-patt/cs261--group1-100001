@@ -1,4 +1,6 @@
-/* ====== Base ====== */
+/* =========================================================
+   🌿 BASE (โทนสี ฟอนต์ พื้นหลัง)
+   ========================================================= */
 :root {
   --bg: #f4f4f4;
   --text: #111;
@@ -6,15 +8,13 @@
   --muted-2: #9CA3AF;
   --card: #fff;
   --border: rgba(0,0,0,0.08);
-  --accent: #d96a24;            
-  --accent-dark: #B45309;
-  --accent-pale: #FDE9D0;      
-  --primary: #FFC52E;           
-  --primary-text: #3A2D0A;
+  --accent: #d96a24;            /* สีส้มหลัก (ขอบ/เน้นบางที่) */
+  --accent-dark: #B45309;       /* ส้มเข้ม */
+  --accent-pale: #FDE9D0;       /* ส้มอ่อน (พื้น active) */
+  --primary: #FFC52E;           /* เหลืองปุ่มหลัก */
+  --primary-text: #3A2D0A;      /* ตัวหนังสือบนปุ่มเหลือง */
 }
-html, body {
-  height: 100%;
-}
+html, body { height: 100%; }
 body {
   margin: 0;
   font-family: 'IBM Plex Sans Thai', system-ui, sans-serif;
@@ -22,150 +22,110 @@ body {
   color: var(--text);
 }
 
-/* ====== Card ====== */
+/* =========================================================
+   🧾 ORDER DETAIL CARD + โครงหน้า/การ์ด
+   ========================================================= */
 .order-detail-card {
   background: var(--card);
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.08);
   border: 1px solid rgba(0,0,0,0.06);
   padding: 18px;
-  width: 100%;           
-  max-width: 1130px;     
-  height: 1130px;
-  margin: 20px auto;   
+  width: 100%;
+  max-width: 1130px;
+  height: 1130px;               /* ความสูงกล่องหลัก */
+  margin: 20px auto;
   box-sizing: border-box;
 }
 .page-title{
-    font-size: 28px;
-    font-weight: 700;
-    justify-content: center;
-    text-align: center;
-
+  font-size: 28px; font-weight: 700;
+  justify-content: center; text-align: center;
 }
-
 .order-date { color: #666; font-size: 14px; margin-bottom: 8px; }
-.shop-row {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
-}
+
+.shop-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .shop-icon {
   display: inline-flex; width: 36px; height: 36px; border-radius: 8px;
   background: #fff3e6; color: #d46b14; align-items: center; justify-content: center;
 }
 .shop-name { font-weight: 700; }
 
-/* ====== Summary grid ====== */
+/* =========================================================
+   🧩 SUMMARY GRID (ภาพสินค้า + ข้อมูลสรุป)
+   ========================================================= */
 .summary-grid {
-  display: grid; 
-  grid-template-columns: 268px 1fr; 
-  gap: 16px; 
-  align-items: start;
+  display: grid;
+  grid-template-columns: 268px 1fr; /* ซ้ายรูป / ขวาข้อมูล */
+  gap: 16px; align-items: start;
 }
 .summary-grid .thumb {
-  width: 268px; height: 279px; 
-  border-radius: 10px; overflow:
-   hidden; border: 1px solid rgba(0,0,0,0.06);
-}
-.summary-grid .thumb img {
-     width: 100%; height: 100%; 
-     object-fit: cover; display: block; }
-
-.summary-content { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 10px; }
-
-.payment-box {
-  margin-top: 30px;
-  margin-bottom: 30px;
-  height: auto;
-  box-sizing: border-box;
-  background: #f1f1f1; 
-  border-radius: 8px; 
-  padding: 12px;
+  width: 268px; height: 279px;
+  border-radius: 10px; overflow: hidden;
   border: 1px solid rgba(0,0,0,0.06);
-  display: flex;
-  flex-direction: column; 
-  gap: 8px;
+}
+.summary-grid .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.summary-content { display: flex; flex-direction: column; gap: 10px; }
+
+/* กล่องวิธี/สรุปการจ่ายเงิน */
+.payment-box {
+  margin-top: 30px; margin-bottom: 30px;
+  height: auto; box-sizing: border-box;
+  background: #f1f1f1; border-radius: 8px; padding: 12px;
+  border: 1px solid rgba(0,0,0,0.06);
+  display: flex; flex-direction: column; gap: 8px;
 }
 
+/* =========================================================
+   🔄 STATUS STEPS (4 ขั้นตอนสถานะ)
+   - คุม layout ของแถบขั้นตอน
+   - สีเขียวสำเร็จ/กำลังทำ อยู่ด้านล่าง (is-done / is-current)
+   ========================================================= */
 .status-steps {
-  margin-top: 18px; 
-  display: grid; 
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0; 
-  background: #f1f1f1; 
-  border-radius: 10px;
-  overflow: hidden; 
+  margin-top: 18px;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0; background: #f1f1f1; border-radius: 10px; overflow: hidden;
 }
-
 .step {
-  padding: 16px 10px; 
-  display: flex;
-  flex-direction: column; 
-  align-items: center;    
-  justify-content: center; 
-  gap: 6px; 
+  padding: 16px 10px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 6px;
 }
-
-.step .icon { 
-  color: var(--muted-2); 
-  font-size: 26px; 
-}
-.step .text { 
-  font-weight: 700; 
-  color: var(--muted-2); 
-  font-size: 14px; 
-}
-.step.active { 
-  background: var(--accent-pale); 
-}
-
+.step .icon { color: var(--muted-2); font-size: 26px; }
+.step .text { font-weight: 700; color: var(--muted-2); font-size: 14px; }
+.step.active { background: var(--accent-pale); }          /* active แบบส้มอ่อน */
 .step.active .icon { color: var(--text); }
-.step.active .text {color: var(--text); }
+.step.active .text { color: var(--text); }
 
+/* =========================================================
+   🎯 CTA/ปุ่มทั่วไป (นอกกล่องผู้ขาย)
+   ========================================================= */
 .cta { margin-top: 18px; display: flex; justify-content: center; }
 .btn { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
-.btn-primary { background: var(--primary); color: var(--primary-text); font-weight: 700; border-radius: 8px; padding: 10px 18px; box-shadow: 0 2px 0 rgba(0,0,0,0.08); }
+.btn-primary {
+  background: var(--primary); color: var(--primary-text);
+  font-weight: 700; border-radius: 8px; padding: 10px 18px;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.08);
+}
 .btn-primary:hover { filter: brightness(0.98); }
 
-/* ---------------Footer bar ------------------*/
+/* =========================================================
+   🦶 FOOTER BAR
+   ========================================================= */
 .footer-bar { height: 80px; background: #111; margin-top: 40px; }
-.summary-content { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 12px; 
-  margin-left: 30pxs;
+.summary-content {
+  display: flex; flex-direction: column; gap: 12px;
+  margin-left: 30pxs; /* ⚠️ อาจพิมพ์ผิด ควรเป็น 30px */
 }
 
-.detail-item {
-  display: grid;
-  grid-template-columns: 150px 1fr; 
-  gap: 16px; 
-  align-items: start; 
-}
+/* รายละเอียดซ้าย:ขวา */
+.detail-item { display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: start; }
+.detail-label { font-weight: 600; color: var(--muted); text-align: right; }
+.detail-label::after { content: " :"; }
+.detail-value { font-weight: 600; color: var(--text); word-break: break-word; }
+.detail-divider { border: none; border-top: 1px solid var(--border); margin: 8px 0; }
 
-.detail-label {
-  font-weight: 600;
-  color: var(--muted);
-  text-align: right;  
-}
-
-.detail-label::after {
-  content: " :";
-}
-
-.detail-value {
-  font-weight: 600;
-  color: var(--text);
-  word-break: break-word; 
-}
-
-.detail-divider {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 8px 0;
-}
-/* ===== Responsive ===== */
+/* =========================================================
+   📱 RESPONSIVE (จอเล็ก)
+   ========================================================= */
 @media (max-width: 900px) {
   .summary-grid { grid-template-columns: 120px 1fr; }
   .summary-grid .thumb { width: 120px; height: 120px; }
@@ -178,24 +138,21 @@ body {
   .payment-box { grid-template-columns: 1fr; }
 }
 
-/* กล่องปุ่มรับออเดอร์ */
+/* =========================================================
+   🧑‍💼 SELLER ACTIONS (กล่องปุ่มรับ/ปฏิเสธออเดอร์ + hint)
+   ========================================================= */
 .seller-actions{
-  margin-top: 24px;
-  padding: 20px 24px;
-  background: #fff;
-  border: 1px solid #E5E7EB;
-  border-radius: 12px;
+  margin-top: 24px; padding: 20px 24px;
+  background: #fff; border: 1px solid #E5E7EB; border-radius: 12px;
 }
 .seller-actions__row{
   display:flex; align-items:center; justify-content:space-between;
   gap:16px; flex-wrap:wrap;
 }
-.seller-actions__label{
-  font-weight: 700; color:#111827;
-}
+.seller-actions__label{ font-weight: 700; color:#111827; }
 .seller-actions__btns{ display:flex; gap:14px; }
 
-/* ปุ่มฐาน */
+/* ปุ่มพื้นฐานในกล่องผู้ขาย (รับ/ปฏิเสธ) */
 .btn{
   display:inline-flex; align-items:center; justify-content:center;
   min-width:120px; height:38px; padding:0 16px;
@@ -206,30 +163,31 @@ body {
 }
 .btn:active{ transform:translateY(1px); }
 
-/* ปฏิเสธ = แดงพื้นโปร่ง */
-.btn-ghost.btn-reject{
-  background:#fff; color:#B91C1C; border-color:#E5E7EB;
-}
+/* ปุ่มปฏิเสธ (โทนแดงโปร่ง) */
+.btn-ghost.btn-reject{ background:#fff; color:#B91C1C; border-color:#E5E7EB; }
 .btn-ghost.btn-reject:hover{ background:#FEE2E2; border-color:#FCA5A5; }
 
-/* ตกลง = เขียวทึบ */
-.btn-solid.btn-approve{
-  background:#16A34A; color:#fff; border-color:#16A34A;
-}
+/* ปุ่มตกลง (เขียวทึบ) */
+.btn-solid.btn-approve{ background:#16A34A; color:#fff; border-color:#16A34A; }
 .btn-solid.btn-approve:hover{ filter:brightness(.95); }
 
-/* สถานะเลือก (ตอนรอส่ง/ส่งสำเร็จให้ไฮไลต์ปุ่มนั้น) */
+/* ไฮไลต์ปุ่มที่ถูกเลือก */
 .btn.is-selected{ outline:3px solid rgba(34,197,94,.25); }
 
-/* Disabled/กำลังโหลด */
+/* สถานะ disabled/โหลด */
 .btn[disabled]{ opacity:.65; cursor:not-allowed; filter:grayscale(.1); }
 
-/* ข้อความผลลัพธ์ */
-.seller-actions__hint{
-  margin:10px 0 0; font-size:13px; color:#6B7280;
-}
+/* ข้อความแจ้งผลลัพธ์ใต้ปุ่ม */
+.seller-actions__hint{ margin:10px 0 0; font-size:13px; color:#6B7280; }
 .seller-actions__hint.success{ color:#16A34A; }
 .seller-actions__hint.error{ color:#B91C1C; }
+
+/* ซ่อนกลุ่มปุ่มด้วย JS หลังรับออเดอร์ */
+.seller-actions__btns.is-hidden{ display:none; }
+
+/* =========================================================
+   🧷 CONFIRM OVERLAY (โมดัลยืนยัน)
+   ========================================================= */
 .confirm-overlay{
   position:fixed; inset:0; display:grid; place-items:center;
   background:rgba(0,0,0,.45); backdrop-filter:blur(2px);
@@ -255,64 +213,57 @@ body {
 }
 .confirm-title{ margin:8px 0 4px; font-size:22px; font-weight:800; color:#111827; }
 .confirm-desc{ margin:0 0 22px; font-size:16px; color:#374151; }
-
 .confirm-actions{ display:flex; gap:18px; justify-content:center; }
 .confirm-actions .btn-outline,
 .confirm-actions .btn-solid{
   min-width:160px; height:44px; padding:0 16px; border-radius:10px;
   font-weight:800; letter-spacing:.2px; cursor:pointer;
 }
-.confirm-actions .btn-outline{
-  background:#fff; color:#9b1c1f; border:2px solid #b33636;
-}
+.confirm-actions .btn-outline{ background:#fff; color:#9b1c1f; border:2px solid #b33636; }
 .confirm-actions .btn-outline:hover{ background:#fff5f5; }
-.confirm-actions .btn-solid{
-  background:#b33636; color:#fff; border:2px solid #b33636;
-}
+.confirm-actions .btn-solid{ background:#b33636; color:#fff; border:2px solid #b33636; }
 .confirm-actions .btn-solid:hover{ filter:brightness(.95); }
 
-/* ====== Status steps (สีเขียวเมื่อรับออเดอร์) ====== */
+/* =========================================================
+   ✅ STATUS STEPS (โทนสีเมื่อสำเร็จ/กำลังทำ)
+   - ใช้ร่วมกับ JS ที่เติม .is-done / .is-current
+   ========================================================= */
 .status-steps .step.is-done{
-  background:#E8F5EB;                 /* เขียวอ่อน */
+  background:#E8F5EB;                 /* พื้นเขียวอ่อนของขั้นที่เสร็จแล้ว */
 }
 .status-steps .step.is-done .icon,
 .status-steps .step.is-done .text{
-  color:#16A34A;                       /* เขียว */
+  color:#16A34A;                       /* ไอคอน/ข้อความเขียว */
 }
 .status-steps .step.is-current{
-  background:#DCFCE7;                  /* เขียวอ่อน */
-  outline:2px solid rgba(22,163,74,.35);
+  background:#FCF5DD;                  /* พื้นสว่างของขั้นปัจจุบัน */
 }
 .status-steps .step.is-current .icon,
 .status-steps .step.is-current .text{
-  color:#166534;                       /* เขียวเข้ม */
+  color:#000000;
 }
 
-/* ====== Pill/ข้อความผลลัพธ์ ====== */
+/* =========================================================
+   🟩 RESULT PILL (แคปซูลข้อความสำเร็จ/สถานะ)
+   ========================================================= */
 .result-pill{
   display:inline-flex; align-items:center; gap:8px;
   padding:6px 10px; border-radius:999px; font-weight:700;
   background:#ECFDF5; color:#166534; border:1px solid #A7F3D0;
   margin-left:10px;
 }
-.result-pill--full{
-  display:block; text-align:center; margin-top:10px;
-}
+.result-pill--full{ display:block; text-align:center; margin-top:10px; }
 
-/* ====== กล่องยืนยันการจัดส่ง ====== */
+/* =========================================================
+   📦 SHIPPING PANEL (กล่อง “ยืนยันการจัดส่ง”)
+   ========================================================= */
 .shipping-panel{
   margin-top:16px; padding:16px; background:#F3F4F6;
   border:1px solid #E5E7EB; border-radius:12px;
 }
-.shipping-panel__title{
-  font-weight:800; margin:0 0 12px; color:#111827;
-}
-.shipping-grid{
-  display:grid; grid-template-columns: 1fr 1fr; gap:12px;
-}
-.shipping-field label{
-  display:block; font-size:13px; color:#6B7280; margin-bottom:6px;
-}
+.shipping-panel__title{ font-weight:800; margin:0 0 12px; color:#111827; }
+.shipping-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; } /* 2 คอลัมน์ */
+.shipping-field label{ display:block; font-size:13px; color:#6B7280; margin-bottom:6px; }
 .shipping-field select{
   width:100%; height:38px; border-radius:8px; border:1px solid #D1D5DB; padding:0 10px;
   background:#fff;
@@ -322,6 +273,3 @@ body {
   border:1px solid #16A34A; background:#16A34A; color:#fff; font-weight:800;
 }
 .shipping-panel .btn-confirm:hover{ filter:brightness(.95); }
-
-/* ซ่อนปุ่มหลังรับออเดอร์ (ใช้ใน JS) */
-.seller-actions__btns.is-hidden{ display:none; }

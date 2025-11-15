@@ -154,7 +154,7 @@
 
        <section class="seller-actions" data-order-id="001">
   <div class="seller-actions__row">
-    <div class="seller-actions__label">รับออเดอร์</div>
+    <div class="seller-actions__label">อัพเดทสถานะ</div>
 
     <div class="seller-actions__btns">
       <button class="btn btn-ghost btn-reject" data-choice="REJECT" type="button">
@@ -168,7 +168,33 @@
 
   <!-- แสดงผลลัพธ์/สถานะแบบสด -->
   <p class="seller-actions__hint" aria-live="polite"></p>
+  
 </section>
+<!-- กล่องยืนยันการจัดส่ง (ซ่อนตอนโหลดหน้า) -->
+<section class="shipping-panel" hidden>
+  <h4 class="shipping-panel__title">ยืนยันการจัดส่ง</h4>
+  <div class="shipping-grid">
+    <div class="shipping-field">
+      <label>ยืนยันการจัดส่ง</label>
+      <select id="confirm-shipping">
+        <option value="">-- เลือก --</option>
+        <option value="packed">แพ็คของเรียบร้อย</option>
+        <option value="handover">ส่งให้ขนส่งแล้ว</option>
+      </select>
+    </div>
+    <div class="shipping-field">
+      <label>ติดตามสถานะการจัดส่ง</label>
+      <select id="tracking-status">
+        <option value="">-- เลือก --</option>
+        <option value="in-transit">กำลังขนส่ง</option>
+        <option value="out-for-delivery">กำลังนำจ่าย</option>
+        <option value="delivered">จัดส่งสำเร็จ</option>
+      </select>
+    </div>
+  </div>
+  <button class="btn-confirm" type="button">ยืนยันการจัดส่ง</button>
+</section>
+
     </section>
     <!-- Confirm Overlay -->
 <div id="confirm-overlay" class="confirm-overlay" hidden aria-hidden="true">
@@ -186,8 +212,6 @@
     </div>
   </div>
 </div>
-
-
 <script>
 (() => {
   /* ===== Confirm Overlay helpers ===== */
@@ -206,14 +230,18 @@
     descEl.textContent  = message || '';
     onConfirm = typeof onOk === 'function' ? onOk : null;
     lastFocused = document.activeElement;
-    overlay.hidden = false; overlay.setAttribute('aria-hidden','false');
-    document.body.style.overflow = 'hidden'; btnOk?.focus();
+    overlay.hidden = false;
+    overlay.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    btnOk?.focus();
   }
   function closeConfirm() {
-    overlay.hidden = true; overlay.setAttribute('aria-hidden','true');
+    overlay.hidden = true;
+    overlay.setAttribute('aria-hidden','true');
     document.body.style.overflow = '';
     const fn = onConfirm; onConfirm = null;
-    lastFocused && lastFocused.focus?.(); return fn;
+    lastFocused && lastFocused.focus?.();
+    return fn;
   }
   btnOk?.addEventListener('click', () => { const fn = closeConfirm(); fn && fn(); });
   btnCancel?.addEventListener('click', () => closeConfirm());
@@ -221,104 +249,118 @@
   overlay?.addEventListener('click', (e)=>{ if(e.target === overlay) closeConfirm(); });
   document.addEventListener('keydown', (e)=>{ if(!overlay?.hidden && e.key==='Escape') closeConfirm(); });
 
-  /* ===== Seller actions logic ===== */
+  /* ===== Seller actions logic (Front-end only) ===== */
   const root       = document.querySelector('.seller-actions');
   if (!root) return;
 
-  const orderId    = root.getAttribute('data-order-id');
   const approveBtn = root.querySelector('[data-choice="ACCEPT"]');
   const rejectBtn  = root.querySelector('[data-choice="REJECT"]');
   const hint       = root.querySelector('.seller-actions__hint');
   const btnGroup   = root.querySelector('.seller-actions__btns');
-
-  const ENDPOINT = (id, decision) =>
-    `/api/seller/orders/${encodeURIComponent(id)}/decision?value=${encodeURIComponent(decision)}`;
+  let acceptClicks = 0;           
+  let wiredShipBtn = false;       
 
   function setLoading(loading){ [approveBtn, rejectBtn].forEach(b=> b && (b.disabled=!!loading)); }
-  function showHint(msg, kind){ if(!hint) return; hint.textContent=msg||''; hint.className='seller-actions__hint'+(kind?' '+kind:''); }
-  function selectButton(btn){ [approveBtn, rejectBtn].forEach(b=>b&&b.classList.remove('is-selected')); btn?.classList.add('is-selected'); }
+  function showHint(msg, kind){
+    if(!hint) return;
+    hint.textContent = msg || '';
+    hint.className = 'seller-actions__hint' + (kind ? ' ' + kind : '');
+  }
 
-  /* ---------- เมื่อรับออเดอร์แล้ว: อัปเดต UI ---------- */
-  function renderAcceptedUI(){
-    // 1) อัปเดตสถานะแถบขั้นตอน → step0 = done (เขียว), step1 = current (เขียว)
-    const statusStepsContainer = document.querySelector('.status-steps');
-    if (statusStepsContainer) {
-      const steps = statusStepsContainer.querySelectorAll('.step');
-      steps.forEach(s => { s.classList.remove('active','is-done','is-current'); });
-      if (steps[0]) steps[0].classList.add('is-done');
-      if (steps[1]) steps[1].classList.add('is-current');
-    }
-
-    // 2) ซ่อนปุ่ม ปฏิเสธ/ตกลง
-    btnGroup?.classList.add('is-hidden');
-
-    // 3) แสดง pill ข้อความสั้นข้างหัวข้อ
-    const label = root.querySelector('.seller-actions__label');
-    const pill  = document.createElement('span');
-    pill.className = 'result-pill';
-    pill.textContent = 'คุณได้ทำการรับออเดอร์นี้แล้ว';
-    if (label) label.insertAdjacentElement('afterend', pill); else root.appendChild(pill);
-
-    // 4) กล่องเทาล่าง + pill เต็มบรรทัด
+  function getOrCreateFullPill(){
     let panel = root.querySelector('.seller-actions__panel');
-    if (!panel) { panel = document.createElement('div'); panel.className='seller-actions__panel'; root.appendChild(panel); }
-    const fullPill = document.createElement('div');
-    fullPill.className = 'result-pill result-pill--full';
-    fullPill.textContent = 'คุณได้ทำการรับออเดอร์นี้แล้ว';
-    panel.appendChild(fullPill);
-
-    // 5) กล่อง “ยืนยันการจัดส่ง” แบบในภาพ
-    if (!root.querySelector('.shipping-panel')) {
-      const ship = document.createElement('div');
-      ship.className = 'shipping-panel';
-      ship.innerHTML = `
-        <h4 class="shipping-panel__title">ยืนยันการจัดส่ง</h4>
-        <div class="shipping-grid">
-          <div class="shipping-field">
-            <label>ยืนยันการจัดส่ง</label>
-            <select id="confirm-shipping">
-              <option value="">-- เลือก --</option>
-              <option value="packed">แพ็คของเรียบร้อย</option>
-              <option value="handover">ส่งให้ขนส่งแล้ว</option>
-            </select>
-          </div>
-          <div class="shipping-field">
-            <label>ติดตามสถานะการจัดส่ง</label>
-            <select id="tracking-status">
-              <option value="">-- เลือก --</option>
-              <option value="in-transit">กำลังขนส่ง</option>
-              <option value="out-for-delivery">กำลังนำจ่าย</option>
-              <option value="delivered">จัดส่งสำเร็จ</option>
-            </select>
-          </div>
-        </div>
-        <button class="btn-confirm" type="button">ยืนยันการจัดส่ง</button>
-      `;
-      panel.appendChild(ship);
-
-      // (ตัวอย่าง) คลิกปุ่มยืนยันการจัดส่ง → แค่โชว์ข้อความ
-      ship.querySelector('.btn-confirm')?.addEventListener('click', () => {
-        showHint('บันทึกการจัดส่งเรียบร้อย', 'success');
-      });
+    if (!panel) {
+      panel = document.createElement('div');
+      panel.className='seller-actions__panel';
+      root.appendChild(panel);
     }
-
-    showHint('', null);
-    selectButton(approveBtn);
+    let pill = panel.querySelector('.result-pill.result-pill--full');
+    if (!pill) {
+      pill = document.createElement('div');
+      pill.className = 'result-pill result-pill--full';
+      panel.appendChild(pill);
+    }
+    return pill;
   }
 
-  async function sendDecision(decision){
-    try{
-      setLoading(true); showHint('กำลังอัปเดตสถานะ...', null);
-      const res = await fetch(ENDPOINT(orderId, decision), { method:'POST' });
-      if (!res.ok) throw new Error('อัปเดตไม่สำเร็จ');
-
-      if (decision === 'ACCEPT') { renderAcceptedUI(); }
-      else { showHint('บันทึกแล้ว: ปฏิเสธออเดอร์', 'success'); selectButton(rejectBtn); }
-    }catch(err){ showHint(err.message || 'เกิดข้อผิดพลาด', 'error'); }
-    finally{ setLoading(false); }
+  function setStepsFirstPhase(){
+    const steps = document.querySelectorAll('.status-steps .step');
+    steps.forEach(s => s.classList.remove('is-done','is-current'));
+    if (steps[0]) steps[0].classList.add('is-done');
+    if (steps[1]) steps[1].classList.add('is-current');
+  }
+  function setStepsAllDone(){
+    const steps = document.querySelectorAll('.status-steps .step');
+    steps.forEach(s => { s.classList.add('is-done'); s.classList.remove('is-current'); });
   }
 
-  // ปฏิเสธ → มีหน้าต่างยืนยัน
+  function setupShippingPanel() {
+    const ship = document.querySelector('.shipping-panel');
+    if (!ship) return;
+
+    const confirmSel = ship.querySelector('#confirm-shipping');
+    const trackSel   = ship.querySelector('#tracking-status');
+    const btn        = ship.querySelector('.btn-confirm');
+
+    if (wiredShipBtn) return;
+    wiredShipBtn = true;
+
+    btn?.addEventListener('click', () => {
+      const v1 = confirmSel?.value?.trim();
+      const v2 = trackSel?.value?.trim();
+      if (!v1 || !v2) {
+        showHint('กรุณาเลือกข้อมูลให้ครบทั้งสองช่อง', 'error');
+        return;
+      }
+
+      setStepsAllDone();
+      const pill = getOrCreateFullPill();
+      pill.textContent = 'ทำการซื้อขายสินค้าเรียบร้อยแล้ว';
+      ship.hidden = true;
+      btnGroup?.classList.add('is-hidden');
+      showHint('บันทึกการจัดส่งเรียบร้อย', 'success');
+    });
+  }
+
+  function renderAcceptedUI(){
+    acceptClicks += 1;
+
+    if (acceptClicks === 1) {
+      // ครั้งแรก → ปิดปุ่มถาวร
+      btnGroup?.classList.add('is-hidden');
+      setStepsFirstPhase();
+
+      const pill = getOrCreateFullPill();
+      pill.textContent = 'คุณได้ทำการรับออเดอร์นี้แล้ว';
+
+      const ship = document.querySelector('.shipping-panel');
+      if (ship) ship.hidden = false;
+      setupShippingPanel();
+
+      showHint('รับออเดอร์', 'success');
+    } else {
+      // ครั้งที่สอง (ถ้ามีการเรียกซ้ำ)
+      setStepsAllDone();
+      const pill = getOrCreateFullPill();
+      pill.textContent = 'ทำการซื้อขายสินค้าเรียบร้อยแล้ว';
+      const ship = document.querySelector('.shipping-panel');
+      if (ship) ship.hidden = true;
+      btnGroup?.classList.add('is-hidden');
+      showHint('บันทึกแล้ว: สถานะสำเร็จ', 'success');
+    }
+  }
+
+  function sendDecision(decision){
+    setLoading(true);
+    if (decision === 'ACCEPT') {
+      renderAcceptedUI();
+    } else {
+      btnGroup?.classList.add('is-hidden');
+      showHint('คุณได้ปฏิเสธออเดอร์นี้แล้ว', 'error');
+    }
+    setLoading(false);
+  }
+
   rejectBtn?.addEventListener('click', () => {
     openConfirm({
       title: 'ยืนยันการปฏิเสธออเดอร์',
@@ -327,11 +369,9 @@
     });
   });
 
-  // ตกลง → รับออเดอร์และอัปเดต UI ทันที (ถ้าต้องการ overlay ให้คอมเมนต์สองบรรทัดล่าง แล้วใช้ openConfirm แบบเดียวกับปฏิเสธ)
   approveBtn?.addEventListener('click', () => sendDecision('ACCEPT'));
 })();
 </script>
-
 
 
   <script th:src="@{/js/main.js}" defer></script>

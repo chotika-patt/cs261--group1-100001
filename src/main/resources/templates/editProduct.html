@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>เพิ่มสินค้าใหม่ | TU Store</title>
+    <title>แก้ไขสินค้า | TU Store</title>
     <link rel="icon" type="image/png" href="/img/Logo.png">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" th:href="@{/css/add-product.css}">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
-
 <body>
-<!-- ======= Navbar บนสุด ======= -->
+    <!-- ======= Navbar บนสุด ======= -->
 <nav class="nav-top">
       <div class="right-buttons">
       <div class="user-menu">
@@ -92,33 +91,35 @@
 </div>
   </div>
 
-<!-- ======= ฟอร์มเพิ่มสินค้า ======= -->
+<!-- ======= Form Edit Product ======= -->
 <div class="product-container">
 
-    <!-- ฝั่งซ้าย: Upload -->
+    <!-- Image Section -->
     <div class="product-detail-photo" id="imageArea">
-        <label for="imageFile" id="uploadLabel">
-            <i class="fa-solid fa-plus"></i><br>
-            เพิ่มรูปภาพสินค้า
+        <img id="editPreviewImage" src="" alt="Preview" style="display:none;">
+        <input type="file" id="editImageFile" name="main_image" accept="image/*" style="display:none;">
+        <label for="editImageFile" id="editUploadLabel">
+            <i class="fa-solid fa-plus"></i><br>เพิ่มรูปภาพสินค้า
         </label>
-        <input type="file" id="imageFile" accept="image/*" style="display:none;">
-        <img id="previewImage" src="" alt="Preview">
-        <button id="removeImage">ลบรูป</button>
+        <button id="editRemoveImage" style="display:none;">ลบรูป</button>
     </div>
 
-    <!-- ฝั่งขวา: Form -->
+    <!-- Form Section -->
     <div class="product-detail-main">
         <div class="product-header">
-            <h1>เพิ่มสินค้าใหม่</h1>
+            <h1>แก้ไขสินค้า</h1>
             <button id="submitBtn" class="add-to-cart-btn">บันทึกข้อมูลสินค้า</button>
         </div>
 
-        <form id="addProductForm">
+        <form id="editForm" enctype="multipart/form-data">
+            <!-- สำหรับ PUT method -->
+            <input type="hidden" name="_method" value="put">
+
             <label>ชื่อสินค้า <span style="color:red">*</span></label>
-            <input id="name" type="text" placeholder="ใส่ชื่อสินค้า" required>
+            <input id="editName" name="name" type="text" placeholder="ใส่ชื่อสินค้า" required>
 
             <label>หมวดหมู่สินค้า <span style="color:red">*</span></label>
-            <select id="category" required>
+            <select id="editCategory" name="category" required>
                 <option value="">เลือกหมวดหมู่สินค้า</option>
                 <option value="SHIRT">เสื้อ</option>
                 <option value="BAG">กระเป๋า</option>
@@ -128,25 +129,18 @@
             </select>
 
             <label>จำนวนสินค้าในคลัง <span style="color:red">*</span></label>
-            <input id="stock" type="number" min="0" placeholder="ใส่จำนวนสินค้าในคลัง" required>
+            <input id="editStock" name="stock" type="number" min="0" required>
 
-            <div class="product-price-box">
-                <div class="price-label">ราคา *</div>
-                <div class="price-value">
-                    <input id="price" type="number" min="0" step="0.01" placeholder="ตั้งราคาสินค้า (หน่วย : บาท)" required>
-                </div>
-            </div>
+            <label>ราคา <span style="color:red">*</span></label>
+            <input id="editPrice" name="price" type="number" min="0" step="0.01" required>
+
+            <label>รายละเอียดสินค้า *</label>
+            <textarea id="editDescription" name="description" required></textarea>
         </form>
     </div>
-
-    <!-- ล่าง: รายละเอียด -->
-    <div class="product-detail-describe">
-        <h3>รายละเอียดสินค้า *</h3>
-        <textarea id="description" placeholder="ใส่รายละเอียดสินค้านี้..."></textarea>
-    </div>
 </div>
-<script th:src="@{/js/add-product.js}" defer></script>
 <script th:src="@{/js/main.js}" defer></script>
 <script th:src="@{/js/search.js}" defer></script>
+<script th:src="@{/js/edit-product.js}" defer></script>
 </body>
 </html>

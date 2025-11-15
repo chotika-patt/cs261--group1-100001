@@ -1,5 +1,11 @@
 package tu_store.demo.controllers;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -8,10 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
-import tu_store.demo.dto.AddToCartRequest;
 import tu_store.demo.dto.ProductResponse;
 import tu_store.demo.dto.ProductSearchRequest;
-import tu_store.demo.models.Cart;
 import tu_store.demo.models.Category;
 import tu_store.demo.models.Product;
 import tu_store.demo.models.User;
@@ -168,7 +172,6 @@ public ResponseEntity<?> addProduct(
         return ResponseEntity.ok("✅ Product ID " + id + " deleted successfully.");
     }
 
-    
     @PutMapping("seller/product/{id}")
     public ResponseEntity<?> updateProductBySeller(
             @PathVariable Long id,
