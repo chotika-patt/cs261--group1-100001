@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตะกร้าสินค้า</title>
+    <link rel="icon" type="image/png" href="/img/Logo.png">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/orderlist.css}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- ======= Navbar บนสุด ======= -->
+    <nav class="nav-top">
+        <div class="right-buttons">
+            <div class="user-menu">
+                <button class="user-btn" id="user-btn">
+                    <span class="user-text"
+                        th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
+                    <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+                </button>
+
+                <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
+                    <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
+                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                    <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
+                    <div class="info">
+                        <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
+                        <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
+                    </div>
+                    <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+                </div>
+            </div>
+            <a th:href="@{/cart}" class="cart-icon">
+                <span class="material-symbols-outlined">shopping_cart</span>
+            </a>
+        </div>
+    </nav>
+    <div class="left-logo">
+        <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+    </div>
+
+    <!-- ======= Navbar ล่าง ======= -->
+    <nav class="nav-bottom">
+        <ul class="menu">
+            <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
+
+            <li class="dropdown-category">
+                <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+                <div class="overlay"></div> <!-- สำหรับ liquid glass -->
+                <div class="dropdown-content">
+                    <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+                    <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+                    <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+                    <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+                    <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
+                </div>
+            </li>
+            <li><a th:href="@{/order-status-check}">เช็คสถานะ</a></li>
+            <li><a href="#">ติดต่อเรา</a></li>
+            <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+        </ul>
+        <div class="search-bar-replacement">
+            <div class="search-input-container">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+                <div id="search-suggestions" class="suggestions-list"></div>
+            </div>
+
+            <button class="search-close-btn" id="search-close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <button id="filter-icon" class="search-filter-btn">
+                <i class="fa-solid fa-filter"> ตัวกรอง</i>
+            </button>
+        </div>
+    </nav>
+
+    <!--======== section : orderlist header========-->
+    <div class="order-section">
+        <p>นี่คือรายการสินค้าที่คุณต้องการสั่งซื้อ</p>
+    </div>
+    <!-- ======= Popup Logout ======= -->
+    <div class="logout-modal" id="logout-modal">
+        <div class="modal-content">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <p>คุณต้องการออกจากระบบหรือไม่</p>
+            <div class="modal-buttons">
+                <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+                <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+            </div>
+            <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+        </div>
+    </div>
+
+    <div class="logout-success" id="logout-success">
+        <div class="success-content">
+            <i class="fa-solid fa-circle-check"></i>
+            <p>ออกจากระบบสำเร็จแล้ว</p>
+        </div>
+    </div>
+    <script th:src="@{/js/main.js}" defer></script>
+    <!--======== section : orderlist detail========-->
+    <div class="order-summary">
+        <class="contact-info">
+            <div class="row">
+                <img src="user icon.png" alt="TU Store Logo" style="width:42px; height:auto;">
+                <h4>เจเรมี่ เดลตา</h4>
+                <p class="info-detail">โทร : 060 111 1111</p>
+            </div>
+            <div class="info-detail">
+                <p class="gap">ที่อยู่ : 99 หมู่ 18 ถนนพหลโยธิน ตำบลคลองหนึ่ง อำเภอคลองหลวง จังหวัดปทุมธานี 12121</p>
+            </div>
+
+    </div>
+    </div>
+    <div class="order-summary">
+        <div class="order-details">
+            <div class="info-detail">
+                <p>วันที่ทำการสั่งซื้อ: 5 - 11 - 2025</p>
+            </div>
+            <div class="row">
+                <img src="market icon.png" alt="TU Store Logo" style="width:42px; height:auto;">
+                <h4>ชุมนุมเชียร์แห่งมหาวิทยาลัยธรรมศาสตร์</h4>
+            </div>
+            <div class="product">
+                <img src="shirt pic.png" alt="GOLDEN SEED POLO SHIRT" />
+
+                <div>
+                    <p class="main-detail">ชื่อสินค้า : เสื้อเชียร์งานฟุตบอลสานสัมพันธ์ จุฬาฯ ธรรมศาสตร์ ปี 2567 -
+                        GOLDEN SEED POLO SHIRT</p>
+                    <p class="main-detail">ขนาด : M</p>
+                    <p class="main-detail">สถานะ : <span style="color: #23A42A;">พร้อมจัดส่ง</span></p>
+                    <p class="main-detail">จำนวน : 1</p>
+                    <p class="main-detail">ราคา : 350.00 บาท</p>
+
+                </div>
+            </div>
+            <hr style="border: 0; border-top: 2px solid #000;">
+
+            <div class="total">
+                <div class="row-between">
+                    <span class="left-text">จำนวนรายการทั้งหมด</span>
+                    <span class="right-text">1</span>
+                </div>
+                <div class="row-between">
+                    <span class="left-text">รวมการสั่งซื้อ</span>
+                    <span class="right-text">350.00 บาท</span>
+                </div>
+                <div class="row-between">
+                    <span class="left-text">ค่าจัดส่ง</span>
+                    <span class="right-text">ฟรี</span>
+                </div>
+                <hr style="border: 0; border-top: 2px solid #000;">
+
+                <div class="lastrow-between">
+                    <span class="left-text">รวมยอดสั่งที่ต้องชำระ</span>
+                    <span class="right-text">350.00 บาท</span>
+                </div>
+
+            </div>
+        </div>
+
+        <button class="payment-button">ชำระเงิน</button>
+    </div>
+
+    <!-- ======= Popup Logout ======= -->
+    <div class="logout-modal" id="logout-modal">
+        <div class="modal-content">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <p>คุณต้องการออกจากระบบหรือไม่</p>
+            <div class="modal-buttons">
+                <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+                <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+            </div>
+            <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+        </div>
+    </div>
+
+    <div class="logout-success" id="logout-success">
+        <div class="success-content">
+            <i class="fa-solid fa-circle-check"></i>
+            <p>ออกจากระบบสำเร็จแล้ว</p>
+        </div>
+    </div>
+
+    <script>
+        // Dropdown หมวดหมู่สินค้า//
+        document.addEventListener("DOMContentLoaded", function () {
+            const dropdownToggle = document.querySelector('.dropdown-toggle');
+            const dropdownContent = document.querySelector('.dropdown-content');
+            const overlay = document.querySelector('.overlay');
+
+            dropdownToggle.addEventListener('click', function (e) {
+                e.preventDefault();
+                dropdownContent.classList.toggle('show');
+                overlay.classList.toggle('show');
+            });
+
+            overlay.addEventListener('click', function () {
+                dropdownContent.classList.remove('show');
+                overlay.classList.remove('show');
+            });
+        });
+    </script>
+
+    <script th:src="@{/js/main.js}" defer></script>
+    <script th:src="@{/js/search.js}" defer></script>
+</body>
+
+</html>
