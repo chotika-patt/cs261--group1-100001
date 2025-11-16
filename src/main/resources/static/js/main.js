@@ -1,9 +1,11 @@
-// 1. รอให้ HTML โหลดเสร็จก่อน (สำคัญมาก)
-// เราจะใช้ DOMContentLoaded แค่ "ครั้งเดียว" หุ้มทุกอย่างไว้ครับ
-document.addEventListener('DOMContentLoaded', () => {
+// ======================== MAIN SCRIPT ========================
+// รวมทุกอย่างให้สะอาด ไม่มีซ้ำ ไม่มี conflict
 
-  // =================== USER DROPDOWN ===================
-  // (อันนี้ของคุณดีอยู่แล้ว)
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ============================================================
+  // 1) USER DROPDOWN
+  // ============================================================
   (() => {
     const userBtn = document.getElementById("user-btn");
     const userDropdown = document.getElementById("user-dropdown");
@@ -27,8 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })();
 
-  // =================== LOGOUT MODAL ===================
-  // (อันนี้ของคุณดีอยู่แล้ว)
+
+  // ============================================================
+  // 2) LOGOUT MODAL
+  // ============================================================
   (() => {
     const logoutBtn = document.getElementById("logout-btn");
     const logoutModal = document.getElementById("logout-modal");
@@ -38,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutSuccess = document.getElementById("logout-success");
 
     if (logoutBtn && logoutModal && cancelLogout && confirmLogout && closeModal) {
+
       logoutBtn.addEventListener("click", (e) => {
         e.preventDefault();
         logoutModal.classList.add("active");
@@ -54,47 +59,45 @@ document.addEventListener('DOMContentLoaded', () => {
       confirmLogout.addEventListener("click", () => {
         logoutModal.classList.remove("active");
 
-        // ส่ง POST request ไป /logout
         fetch('/api/logout', { method: 'POST' })
-          .then(response => {
-            if (response.ok) {
+          .then((res) => {
+            if (res.ok) {
               logoutSuccess.classList.add("active");
               setTimeout(() => {
                 logoutSuccess.classList.remove("active");
-                window.location.href = "/"; // redirect หลัง logout สำเร็จ
-              }, 2500);
-            } else {
-              alert("เกิดข้อผิดพลาดในการออกจากระบบ");
+                window.location.href = "/";
+              }, 2000);
             }
-          })
-          .catch(err => {
-            console.error(err);
-            alert("เกิดข้อผิดพลาดในการออกจากระบบ");
           });
       });
     }
   })();
 
-  // =================== SEARCH BAR ===================
-  // (อันนี้ของคุณดีอยู่แล้ว)
+
+  // ============================================================
+  // 3) SEARCH BAR (เปิด–ปิด)
+  // ============================================================
   (() => {
-    const searchIcon = document.getElementById('search-icon');
-    const searchClose = document.getElementById('search-close');
-    const navBottom = document.querySelector('.nav-bottom');
+    const searchIcon = document.getElementById("search-icon");
+    const searchClose = document.getElementById("search-close");
+    const navBottom = document.querySelector(".nav-bottom");
 
     if (searchIcon && searchClose && navBottom) {
-      searchIcon.addEventListener('click', (event) => {
-        event.preventDefault();
-        navBottom.classList.add('search-active');
+      searchIcon.addEventListener("click", (e) => {
+        e.preventDefault();
+        navBottom.classList.add("search-active");
       });
 
-      searchClose.addEventListener('click', () => {
-        navBottom.classList.remove('search-active');
+      searchClose.addEventListener("click", () => {
+        navBottom.classList.remove("search-active");
       });
     }
   })();
 
-  // =================== DROPDOWN หมวดหมู่สินค้า ===================
+
+  // ============================================================
+  // 4) DROPDOWN หมวดหมู่ (เหลือง)
+  // ============================================================
   (() => {
     const categoryDropdown = document.querySelector('.dropdown-category');
     if (!categoryDropdown) return;
@@ -103,227 +106,116 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = categoryDropdown.querySelector('.overlay');
 
     if (toggle && overlay) {
-        toggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            categoryDropdown.classList.toggle('active');
-        });
-        overlay.addEventListener('click', function() {
-            categoryDropdown.classList.remove('active');
-        });
-    }
-  })();
-
-  // =================== DROPDOWN แถบแดง (Category Bar) ===================
-  // (อันนี้ของคุณดีอยู่แล้ว แต่ผมย้ายมาไว้ใน DOMContentLoaded)
-  (() => {
-    const dropdownToggle = document.querySelector('.category-toggle');
-    const dropdownContent = document.querySelector('.category-dropdown');
-
-    if (dropdownToggle && dropdownContent) {
-      dropdownToggle.addEventListener('click', function(e) {
+      toggle.addEventListener('click', (e) => {
         e.preventDefault();
-        dropdownContent.classList.toggle('show');
+        categoryDropdown.classList.toggle('active');
+      });
+
+      overlay.addEventListener('click', () => {
+        categoryDropdown.classList.remove('active');
       });
     }
   })();
 
 
-  // =================== FILTER OVERLAY ===================
-  // (ผมเลือกรุ่นล่างสุดของคุณมา 1 อัน และลบอันที่อยู่ใน <script> ทิ้ง)
+  // ============================================================
+  // 5) FILTER OVERLAY (เปิด–ปิด)
+  // ============================================================
   (() => {
-    const filterIcons = document.querySelectorAll('#filter-icon');
-    const filterOverlay = document.getElementById('filter-overlay');
+    const filterIcon = document.getElementById("filter-icon");
+    const overlay = document.getElementById("filter-overlay");
 
-    if (filterIcons.length > 0 && filterOverlay) {
-        const openFilter = () => {
-          filterOverlay.classList.add('show');
-        };
-        const closeFilter = () => {
-          filterOverlay.classList.remove('show');
-        };
+    if (filterIcon && overlay) {
 
-        filterIcons.forEach(icon => {
-          icon.addEventListener('click', (ev) => {
-            ev.preventDefault();
-            openFilter();
-          });
-        });
+      filterIcon.addEventListener("click", (e) => {
+        e.preventDefault();
+        overlay.classList.add("show");
+      });
 
-        filterOverlay.addEventListener('click', (ev) => {
-          if (ev.target === filterOverlay) {
-            closeFilter();
-          }
-        });
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) {
+          overlay.classList.remove("show");
+        }
+      });
     }
   })();
 
-  const searchInput = document.querySelector('.search-input-container input');
 
-const redirectToSearch = () => {
-  const keyword = searchInput?.value?.trim();
-  if (keyword) {
-    const searchUrl = `/product_no_login?q=${encodeURIComponent(keyword)}`;
-    window.location.href = searchUrl;
-  }
-};
+  // ============================================================
+  // 6) SINGLE SELECT BUTTON (category / status / rating)
+  // ============================================================
+  document.addEventListener("click", (e) => {
+    const container = e.target.closest(".category-buttons, .status-buttons, .rating-buttons");
+    if (!container) return;
 
-searchInput?.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") redirectToSearch();
-});
+    const btn = e.target.closest("button");
+    if (!btn) return;
 
-});
- /* ======= JS ตัวช่วยปุ่มฟิลเตอร์ ======= */
-(function ensureButtonType(){
-  document.querySelectorAll('.cat-btn, .status-btn, .rating-btn').forEach(b=>{
-    if (b.tagName === 'BUTTON' && !b.getAttribute('type')) b.setAttribute('type','button');
-  });
-})();
-
-document.addEventListener('click', (e) => {
-  const overlay = document.getElementById('filter-overlay');
-  if (!overlay || !overlay.contains(e.target)) return;
-  const group = e.target.closest('.category-buttons, .status-buttons, .rating-buttons');
-  if (!group) return;
-
-  const btn = e.target.closest('.cat-btn, .status-btn, .rating-btn');
-  if (!btn || !group.contains(btn)) return;
-  e.preventDefault();
-  group.querySelectorAll('.cat-btn, .status-btn, .rating-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-});
-
-
-  /* ======= JS ตัวช่วยปุ่มฟิลเตอร์ ======= */
-(function setupCategorySingleSelectWithToggle() {
-  const container = document.querySelector('.category-buttons');
-  if (!container) return;
-  container.querySelectorAll('.cat-btn').forEach(btn => {
-    if (btn.tagName === 'BUTTON' && !btn.getAttribute('type')) {
-      btn.setAttribute('type', 'button');
-    }
+    const wasActive = btn.classList.contains("active");
+    container.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+    if (!wasActive) btn.classList.add("active");
   });
 
-  container.addEventListener('click', (e) => {
-    const btn = e.target.closest('.cat-btn');
-    if (!btn || !container.contains(btn)) return;
+
+  // ============================================================
+  // 7) FILTER → redirect ไป /product?... 
+  // ============================================================
+  (() => {
+  const confirmBtn = document.getElementById("filter-confirm-button");
+  if (!confirmBtn) return;
+
+  confirmBtn.addEventListener("click", (e) => {
     e.preventDefault();
 
-    const isActive = btn.classList.contains('active');
-    container.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-    if (!isActive) {
-      btn.classList.add('active');
+    const getActiveData = (selector) => {
+      const el = document.querySelector(selector + " .active");
+      return el ? el.dataset.category || el.dataset.status || el.dataset.rating : null;
+    };
+
+    const category = getActiveData(".category-buttons");
+    const status = getActiveData(".status-buttons");
+    const rating = getActiveData(".rating-buttons");
+
+    const minPriceVal = document.getElementById("min-price")?.value.trim();
+    const maxPriceVal = document.getElementById("max-price")?.value.trim();
+
+    const minPrice = minPriceVal !== "" ? Number(minPriceVal) : null;
+    const maxPrice = maxPriceVal !== "" ? Number(maxPriceVal) : null;
+
+    // ⭐ TC6: ถ้า min > max → แจ้งเตือน + ไม่ค้นหา
+    if (minPrice !== null && maxPrice !== null && minPrice > maxPrice) {
+      alert("ราคาต่ำสุดต้องไม่มากกว่าราคาสูงสุด");
+      return;
     }
+
+    const params = new URLSearchParams();
+
+    if (category) params.set("category", category);
+    if (status) params.set("status", status);
+    if (rating) params.set("rating", rating);
+    if (minPrice !== null) params.set("minPrice", minPrice);
+    if (maxPrice !== null) params.set("maxPrice", maxPrice);
+
+    document.getElementById("filter-overlay").classList.remove("show");
+
+    window.location.href = `/product?${params.toString()}`;
   });
 })();
 
+  // ====================== CLEAR FILTER ======================
+document.addEventListener("DOMContentLoaded", () => {
+    const clearBtn = document.getElementById("filter-clear-button");
+    if (!clearBtn) return;
 
-(() => {
-  const PRODUCT_PATH = '/product'; 
+    clearBtn.addEventListener("click", () => {
+        // ปิด overlay
+        const overlay = document.getElementById("filter-overlay");
+        overlay?.classList.remove("show");
 
-  /* ======= JS ตัวช่วยปุ่มฟิลเตอร์ ======= */
-  const $ = (sel, root = document) => root.querySelector(sel);
-  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-  const getText = (el) => (el?.textContent || '').trim();
-
-  function getNumberOrNull(el) {
-    if (!el) return null;
-    const v = (el.value || '').trim();
-    if (v === '') return null;
-    const n = Number(v);
-    return Number.isFinite(n) ? n : null;
-  }
-
-  function buildQuery(params) {
-    const sp = new URLSearchParams();
-    Object.entries(params).forEach(([k, v]) => {
-      if (v === null || v === undefined) return;
-      if (typeof v === 'string' && v.trim() === '') return;
-      sp.set(k, String(v));
+        // redirect กลับหน้าเริ่มต้น
+        window.location.href = "/buyerTemp";
     });
-    return sp.toString();
-  }
-
-  /** ================== ดึงค่าจากฟิลเตอร์ ================== **/
-  function collectFilterValues() {
-    const overlay = document.getElementById('filter-overlay');
-    // หมวดหมู่ (เลือกได้หรือยกเลิกได้)
-    const selectedCatBtn = $('.category-buttons .cat-btn.active', overlay);
-    const category = getText(selectedCatBtn);
-    // ราคา
-    const [minInput, maxInput] = $$('.price-range .price-input', overlay);
-    let priceMin = getNumberOrNull(minInput);
-    let priceMax = getNumberOrNull(maxInput);
-    if (priceMin != null && priceMax != null && priceMin > priceMax) {
-      // สลับถ้าใส่กลับด้าน
-      const t = priceMin; priceMin = priceMax; priceMax = t;
-    }
-
-    // สถานะ 
-    const statusBtn = $('.status-buttons .status-btn.active', overlay);
-    const status = getText(statusBtn);
-    // คะแนน 
-    const ratingBtn = $('.rating-buttons .rating-btn.active', overlay);
-    const ratingText = getText(ratingBtn);
-    const rating = ratingText ? (ratingText.match(/\d+/)?.[0] || '') : '';
-
-    return { category, priceMin, priceMax, status, rating };
-  }
-
-  /** ================== ทำงานตอนกด "ตกลง" ================== **/
-  const confirmBtn = document.querySelector('.filter-confirm-btn');
-  if (confirmBtn) {
-    confirmBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-
-      const { category, priceMin, priceMax, status, rating } = collectFilterValues();
-
-      // ให้ผล "เหมือน searchbar": ใช้ q เป็น keyword หลัก
-      // - ถ้าเลือกหมวดหมู่ ให้ q = ชื่อหมวดหมู่
-      // - ถ้าอยากรวม status/rating ใน q ด้วยก็ทำได้ แต่ตอนนี้เราแนบเป็นพารามิเตอร์แยกเพื่อกรองในหน้าปลายทาง
-      const q = category || '';
-
-      const query = buildQuery({
-        q,                         
-        priceMin,               
-        priceMax,
-        status,                    
-        rating                    
-      });
-
-      const url = query ? `${PRODUCT_PATH}?${query}` : PRODUCT_PATH;
-      const overlay = document.getElementById('filter-overlay');
-      overlay?.classList.remove('show');
-      window.location.href = url;
-    });
-  }
-  /** ================== กันปุ่ม submit ฟอร์มโดยไม่ตั้งใจ ================== **/
-  document.querySelectorAll('.cat-btn, .status-btn, .rating-btn, .filter-confirm-btn').forEach(b => {
-    if (b.tagName === 'BUTTON' && !b.getAttribute('type')) b.setAttribute('type','button');
-  });
-})();
-
-
-document.addEventListener("DOMContentLoaded", function() {
-    const searchIcon = document.getElementById('search-icon');
-    const filterIcon = document.getElementById('filter-icon'); 
-    const searchCloseBtn = document.getElementById('search-close'); 
-    if (searchIcon) {
-        searchIcon.addEventListener('click', function(e) {
-            if (filterIcon) {
-                filterIcon.style.display = 'inline-block'; 
-            }
-        });
-    }
-    if (searchCloseBtn) {
-        searchCloseBtn.addEventListener('click', function() {
-            if (filterIcon) {
-                filterIcon.style.display = 'none';
-            }
-        });
-    }
 });
 
 
-
-
-
+});
