@@ -198,6 +198,74 @@
     </article>
   </div>
 
+  <!-- ======================= FILTER OVERLAY ======================= -->
+
+  <div id="filter-overlay" class="overlay-container">
+      <div class="modal-content">
+
+          <div class="filter-headbar">
+              <h3>
+                <i class="fa-solid fa-filter"></i>
+                <span>ตัวกรอง</span>
+              </h3>
+
+              <div class="filter-categories">
+                  <div class="category-row">
+                    <div class="category-label">
+                        <span>หมวดหมู่ :</span>
+                    </div>
+
+                    <div class="category-buttons">
+                        <button class="cat-btn" data-category="SHIRT">เสื้อ</button>
+                        <button class="cat-btn" data-category="BAG">กระเป๋า</button>
+                        <button class="cat-btn" data-category="STUDENT_UNIFORM">เครื่องแบบนักศึกษา</button>
+                        <button class="cat-btn" data-category="GENERAL_PURPOSE">ของใช้ทั่วไป</button>
+                        <button class="cat-btn" data-category="MEMORABILIA">ของที่ระลึก</button>
+                    </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="filter-body">
+
+              <!-- ช่วงราคา -->
+              <div class="filter-section">
+                  <h4>ช่วงราคา</h4>
+                  <div class="price-range">
+                      <input type="number" placeholder="ใส่ราคาต่ำสุด" id="min-price" class="price-input">
+                      <a>-</a>
+                      <input type="number" placeholder="ใส่ราคาสูงสุด" id="max-price" class="price-input">
+                      <span class="price-unit">บาท</span>
+                  </div>
+              </div>
+
+              <!-- สถานะสินค้า -->
+              <div class="filter-section">
+                  <h4>สถานะสินค้า</h4>
+                  <div class="status-buttons">
+                      <button class="status-btn" data-status="AVAILABLE">พร้อมจัดส่ง</button>
+                      <button class="status-btn" data-status="PRE_ORDER">PRE-ORDER</button>
+                  </div>
+              </div>
+
+              <!-- คะแนน -->
+              <div class="filter-section">
+                  <h4>คะแนน</h4>
+                  <div class="rating-buttons">
+                      <button class="rating-btn" data-rating="5">5 ⭐</button>
+                      <button class="rating-btn" data-rating="4">4 ⭐</button>
+                      <button class="rating-btn" data-rating="3">3 ⭐</button>
+                      <button class="rating-btn" data-rating="2">2 ⭐</button>
+                      <button class="rating-btn" data-rating="1">1 ⭐</button>
+                  </div>
+              </div>
+
+              <!-- ปุ่มตกลง -->
+              <button class="filter-confirm-btn" id="filter-confirm-button">ตกลง</button>
+
+          </div>
+      </div>
+  </div>
   <!-- ===== SCRIPTS ===== -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
