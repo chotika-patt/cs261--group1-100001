@@ -114,6 +114,11 @@ public class PageController {
 
     @GetMapping("/buyerTemp")
     public String buyerTempPage(HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+        User buyer = userService.findByUsername(username);
+        if (username == null) return "redirect:/login";
+        else if(buyer == null || buyer.getRole() != UserRole.CLIENT) return "redirect:/";
+
         model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("email", session.getAttribute("email"));
         model.addAttribute("phone", session.getAttribute("phone"));
@@ -126,10 +131,8 @@ public class PageController {
     public String sellerTempPage(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
         User seller = userService.findByUsername(username);
-       
-        if (username == null) {
-            return "redirect:/";
-        }
+        if (username == null) return "redirect:/login";
+        else if(seller == null || seller.getRole() != UserRole.SELLER) return "redirect:/";
         
         String verifiedStatus;
         if (Boolean.TRUE.equals(seller.getVerified())) {
@@ -237,6 +240,11 @@ public class PageController {
     }
     @GetMapping("/addProduct")
     public String addProductPage(HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+        User seller = userService.findByUsername(username);
+        if (username == null) return "redirect:/login";
+        else if(seller == null || seller.getRole() != UserRole.SELLER) return "redirect:/";
+
         model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("email", session.getAttribute("email"));
         model.addAttribute("phone", session.getAttribute("phone"));
@@ -245,9 +253,10 @@ public class PageController {
     @GetMapping("/product_edit/{id}")
     public String editProductPage(@PathVariable Long id, HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
-        if (username == null) {
-            return "redirect:/login";
-        }
+        User seller = userService.findByUsername(username);
+        if (username == null) return "redirect:/login";
+        else if(seller == null || seller.getRole() != UserRole.SELLER) return "redirect:/";
+
 
         model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("email", session.getAttribute("email"));
@@ -303,7 +312,15 @@ public class PageController {
         return "forget_password";
     }
     @GetMapping("/order-status-check")
-    public String orderStatusPage(Model model) { // เปลี่ยนชื่อฟังก์ชันให้ตรงกับหน้าที่
+    public String orderStatusPage(HttpSession session, Model model) { // เปลี่ยนชื่อฟังก์ชันให้ตรงกับหน้าที่
+        String username = (String) session.getAttribute("username");
+        User buyer = userService.findByUsername(username);
+        if (username == null) {
+            return "redirect:/login";
+        }else if(buyer == null || buyer.getRole() != UserRole.CLIENT){
+            return "redirect:/";
+        }
+
         model.addAttribute("username", "Guest");
         model.addAttribute("email", "-");
         model.addAttribute("phone", "-");
@@ -311,7 +328,15 @@ public class PageController {
     }
 
      @GetMapping("/order-detail-waiting")
-    public String orderDetailWaitingPage(Model model) { // เปลี่ยนชื่อฟังก์ชันให้ตรงกับหน้าที่
+    public String orderDetailWaitingPage(HttpSession session, Model model) { // เปลี่ยนชื่อฟังก์ชันให้ตรงกับหน้าที่
+        String username = (String) session.getAttribute("username");
+        User buyer = userService.findByUsername(username);
+        if (username == null) {
+            return "redirect:/login";
+        }else if(buyer == null || buyer.getRole() != UserRole.CLIENT){
+            return "redirect:/";
+        }
+
         model.addAttribute("username", "Guest");
         model.addAttribute("email", "-");
         model.addAttribute("phone", "-");
@@ -321,14 +346,13 @@ public class PageController {
     @GetMapping("/sellerOrder")
     public String sellerOrderPage(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
-        if (username == null) {
-            return "redirect:/"; 
-        }
-
         User seller = userService.findByUsername(username);
-        if (seller == null) {
-            return "redirect:/"; 
+        if (username == null) {
+            return "redirect:/login";
+        }else if(seller == null || seller.getRole() != UserRole.SELLER){
+            return "redirect:/";
         }
+        
         String verifiedStatus;
         if (Boolean.TRUE.equals(seller.getVerified())) {
             verifiedStatus = "อนุมัติการขายแล้ว";
@@ -346,8 +370,11 @@ public class PageController {
     @GetMapping("/payment")
     public String showPaymentPage(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
+        User buyer = userService.findByUsername(username);
         if (username == null) {
-            return "redirect:/"; // ถ้ายังไม่ล็อกอิน ให้ดีดกลับไปหน้าแรก
+            return "redirect:/login";
+        }else if(buyer == null || buyer.getRole() != UserRole.CLIENT){
+            return "redirect:/";
         }
         model.addAttribute("username", username);
         model.addAttribute("email", session.getAttribute("email"));

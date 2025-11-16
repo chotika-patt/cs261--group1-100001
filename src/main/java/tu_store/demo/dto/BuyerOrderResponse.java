@@ -7,13 +7,18 @@ import java.util.List;
 
 import tu_store.demo.models.enums.OrderStatus;
 import tu_store.demo.models.enums.PaymentStatus;
+import tu_store.demo.models.enums.ShipmentTrackingStatus;
 
 public class BuyerOrderResponse {
     private Long orderId;
+    private String productName;
     private OrderStatus status;
     private PaymentStatus paymentStatus;
+    private ShipmentTrackingStatus sTrackingStatus;
+    private String shopName;
     private Integer quantity;
     private String trackingCode;
+    private String imagePath;
     private Double totalPrice;
 
     private List<BuyerOrderItemResponse> items = new ArrayList<>();
@@ -26,8 +31,27 @@ public class BuyerOrderResponse {
         this.createdAt = createdAt;
     }
 
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+    public String getImagePath() {
+        return imagePath;
+    }
+
     public void setItems(List<BuyerOrderItemResponse> items) {
         this.items = items;
+    }
+    
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setsTrackingStatus(ShipmentTrackingStatus sTrackingStatus) {
+        this.sTrackingStatus = sTrackingStatus;
     }
 
     public void setOrderId(Long orderId) {
@@ -66,6 +90,10 @@ public class BuyerOrderResponse {
         return orderId;
     }
     
+    public String getProductName() {
+        return productName;
+    }
+
     public PaymentStatus getPaymentStatus() {
         return paymentStatus;
     }
@@ -84,5 +112,13 @@ public class BuyerOrderResponse {
 
     public String getTrackingCode() {
         return trackingCode;
+    }
+
+    public ShipmentTrackingStatus getsTrackingStatus() {
+        return sTrackingStatus;
+    }
+
+    public String getShopName() {
+        return shopName;
     }
 }
