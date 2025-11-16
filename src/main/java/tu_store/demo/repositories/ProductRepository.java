@@ -24,26 +24,26 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      *  (Sorting จะทำใน Service เพื่อความยืดหยุ่น)
      */
     @Query("""
-        SELECT p FROM Product p
-        WHERE (:name IS NULL OR p.name LIKE CONCAT('%', :name, '%'))
-          AND (:category IS NULL OR p.category = :category)
-          AND (:minPrice IS NULL OR p.price >= :minPrice)
-          AND (:maxPrice IS NULL OR p.price <= :maxPrice)
-          AND (:rating IS NULL OR p.ratingAvg >= :rating)
-          AND (
-                :inStock IS NULL OR 
-                (:inStock = TRUE AND p.stock > 0) OR
-                (:inStock = FALSE AND p.stock = 0)
-              )
-    """)
-    List<Product> searchProducts(
-            @Param("name") String name,
-            @Param("category") Category category,
-            @Param("minPrice") Long minPrice,
-            @Param("maxPrice") Long maxPrice,
-            @Param("rating") Double rating,
-            @Param("inStock") Boolean inStock
-    );
+    SELECT p FROM Product p
+    WHERE (:name IS NULL OR :name = '' OR LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%')))
+      AND (:category IS NULL OR p.category = :category)
+      AND (:minPrice IS NULL OR p.price >= :minPrice)
+      AND (:maxPrice IS NULL OR p.price <= :maxPrice)
+      AND (:rating IS NULL OR p.ratingAvg >= :rating)
+      AND (
+            :inStock IS NULL OR 
+            (:inStock = TRUE AND p.stock > 0) OR
+            (:inStock = FALSE AND p.stock = 0)
+          )
+""")
+List<Product> searchProducts(
+        @Param("name") String name,
+        @Param("category") Category category,
+        @Param("minPrice") Long minPrice,
+        @Param("maxPrice") Long maxPrice,
+        @Param("rating") Double rating,
+        @Param("inStock") Boolean inStock
+);
 
     // Query สำหรับข้อมูลเฉพาะทาง
 

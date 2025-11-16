@@ -5,113 +5,158 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/img/Logo.png">
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <title>Product Page</title>
+
+    <style>
+        .product-grid a { text-decoration:none; }
+        .filter-tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .filter-tag {
+            background: #e8e8e8;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .search-loading-container {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 40px;
+        }
+        .search-not-found-container {
+            display: none;
+            text-align: center;
+            margin-top: 40px;
+        }
+    </style>
 </head>
+
 <body>
-<!-- ======= Navbar บนสุด ======= -->
-  <nav class="nav-top">
-      <div class="right-buttons">
-      <div class="user-menu">
-        <button class="user-btn" id="user-btn">
-          <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
-          <div class="user-icon"><i class="fa-solid fa-user"></i></div>
-        </button>
 
-        <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
-          <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
-          <div class="avatar"><i class="fa-solid fa-user"></i></div>
-          <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
-          <div class="info">
-            <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
-            <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
-          </div>
-          <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+<!-- ===== NAV TOP ===== -->
+<nav class="nav-top">
+    <div class="right-buttons">
+        <div class="user-menu">
+            <button class="user-btn" id="user-btn">
+                <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
+                <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+            </button>
+
+            <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
+                <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
+                <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
+                <div class="info">
+                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">email</span></p>
+                    <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">phone</span></p>
+                </div>
+                <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+            </div>
         </div>
-      </div>
-      <a th:href="@{/cart}" class="cart-icon">
-        <span class="material-symbols-outlined">shopping_cart</span>
-      </a>
+        <a th:href="@{/cart}" class="cart-icon">
+            <span class="material-symbols-outlined">shopping_cart</span>
+        </a>
     </div>
-  </nav>
-  <div class="left-logo">
-          <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
-  </div>
+</nav>
 
-  <!-- ======= Navbar ล่าง ======= -->
-  <nav class="nav-bottom">
+<div class="left-logo">
+    <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+</div>
+
+<!-- ===== NAV BOTTOM ===== -->
+<nav class="nav-bottom">
     <ul class="menu">
         <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
 
         <li class="dropdown-category">
-        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
-        <div class="overlay"></div> <!-- สำหรับ liquid glass -->
-        <div class="dropdown-content">
-              <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
-              <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
-              <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
-              <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
-              <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
-        </div>
-      </li>
-      <li><a href="#">เช็คสถานะ</a></li>
-      <li><a href="#">ติดต่อเรา</a></li>
-      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-    </ul> 
-    <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
-    <div class="search-bar-replacement">
-      <div class="search-input-container">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
-        <div id="search-suggestions" class="suggestions-list"></div>
-      </div>
-      <button class="search-close-btn" id="search-close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-    <div id="search-results"></div>
-  </nav>
+            <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
+            <div class="overlay"></div>
+            <div class="dropdown-content">
+                <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+                <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+                <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+                <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+                <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
+            </div>
+        </li>
 
+        <li><a href="#">เช็คสถานะ</a></li>
+        <li><a href="#">ติดต่อเรา</a></li>
+
+        <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+    </ul>
+
+    <!-- Search bar -->
+    <div class="search-bar-replacement">
+        <div class="search-input-container">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+            <div id="search-suggestions" class="suggestions-list"></div>
+        </div>
+        <button class="search-close-btn" id="search-close">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <div id="search-results"></div>
+</nav>
+
+<!-- ===== PRODUCT SECTION ===== -->
 <div class="product-section">
-        <div class="product-header">
-        <div class="product-header">
-            <h1 id="page-title">รายการสินค้าทั้งหมด</h1>
-        </div>
-            <p><a th:href="@{/product_no_login}">ดูทั้งหมด</a></p>
-        </div>
-        <div id="filter-tags-container" class="filter-tags-container"></div>
+    <div class="product-header">
+        <h1 id="page-title">รายการสินค้าทั้งหมด</h1>
+        <p><a th:href="@{/product_no_login}">ดูทั้งหมด</a></p>
+    </div>
+
+    <!-- FILTER TAGS -->
+    <div id="filter-tags-container" class="filter-tags-container"></div>
+
+    <!-- Loading -->
     <div id="search-loading" class="search-loading-container">
         <div class="loader"></div>
-        <p>กำลังดำเนินการ</p>
+        <p>กำลังดำเนินการ...</p>
     </div>
 
-    <div id="search-not-found" class="search-not-found-container" style="display: none;">
+    <!-- Not Found -->
+    <div id="search-not-found" class="search-not-found-container">
         <i class="fa-solid fa-circle-xmark"></i>
-        <p>ค้นหา: <strong id="search-query-text">(คำค้นหา)</strong></p>
+        <p>ค้นหา: <strong id="search-query-text"></strong></p>
         <h2>ไม่พบสินค้า</h2>
     </div>
-        <div class="product-grid">
-            <a th:each="product : ${products}" 
-                th:href="@{'/product_detail/' + ${product.productId}}" 
-                class="product-card-link">
-                <div class="product-card">
-                    <div class="product-image">
-                        <img th:if="${product.main_image != null}" th:src="@{/product_img/{file}(file=${product.main_image})}" alt="Product Image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-name" th:text="${product.name}">Product Name</span>
-                        <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
-                    </div> 
+
+    <!-- Product Grid -->
+    <div id="product-grid" class="product-grid">
+        <a th:each="product : ${products}"
+           th:href="@{'/product_detail/' + ${product.productId}}"
+           class="product-card-link">
+
+            <div class="product-card">
+                <div class="product-image">
+                    <img th:if="${product.main_image != null}"
+                         th:src="@{/product_img/{file}(file=${product.main_image})}"
+                         alt="Product">
                 </div>
-            </a>
-        </div>
+                <div class="product-info">
+                    <span class="product-name" th:text="${product.name}">Product Name</span>
+                    <span class="product-price" th:text="'฿ ' + ${product.price}">฿0</span>
+                </div>
+            </div>
+        </a>
     </div>
-<!-- ======= Popup Logout ======= -->
+</div>
+
+<!-- LOGOUT MODAL -->
 <div class="logout-modal" id="logout-modal">
     <div class="modal-content">
         <i class="fa-solid fa-circle-exclamation"></i>
-        <p>คุณต้องการออกจากระบบหรือไม่</p>
+        <p>คุณต้องการออกจากระบบหรือไม่?</p>
         <div class="modal-buttons">
             <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
             <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
@@ -126,39 +171,28 @@
         <p>ออกจากระบบสำเร็จแล้ว</p>
     </div>
 </div>
+
+<!-- JS -->
 <script th:src="@{/js/main.js}" defer></script>
-<script>
-        // element h1 ที่เราจะเปลี่ยนข้อความ
-        const titleEl = document.getElementById('page-title');
-
-        // เอา path ปัจจุบัน เช่น /category/SHIRT
-        const path = window.location.pathname;
-
-        // ถ้าเป็นหน้า category/*
-        if (path.startsWith('/category/')) {
-            const code = path.split('/').pop();   // ได้ code เช่น SHIRT
-
-            // map code → ชื่อภาษาไทย
-            const categoryMap = {
-            'SHIRT': 'เสื้อ',
-            'BAG': 'กระเป๋า',
-            'STUDENT_UNIFORM': 'เครื่องแบบนักศึกษา',
-            'GENERAL_PURPOSE': 'ของใช้ทั่วไป',
-            'MEMORABILIA': 'ของที่ระลึก'
-            };
-
-            if (categoryMap[code]) {
-            titleEl.textContent = categoryMap[code];   // เช่น "เสื้อ"
-            } else {
-            titleEl.textContent = 'รายการสินค้าทั้งหมด';
-            }
-
-        } else {
-            // กรณีอื่น ๆ เช่น /index หรือ /product_no_login
-            titleEl.textContent = 'รายการสินค้าทั้งหมด';
-        }
-    </script>
 <script th:src="@{/js/search.js}" defer></script>
+
+<!-- Title Setter -->
+<script>
+const titleEl = document.getElementById('page-title');
+const path = window.location.pathname;
+
+if (path.startsWith('/category/')) {
+    const code = path.split('/').pop();
+    const categoryMap = {
+        'SHIRT': 'เสื้อ',
+        'BAG': 'กระเป๋า',
+        'STUDENT_UNIFORM': 'เครื่องแบบนักศึกษา',
+        'GENERAL_PURPOSE': 'ของใช้ทั่วไป',
+        'MEMORABILIA': 'ของที่ระลึก'
+    };
+    titleEl.textContent = categoryMap[code] || 'รายการสินค้าทั้งหมด';
+}
+</script>
 
 </body>
 </html>
