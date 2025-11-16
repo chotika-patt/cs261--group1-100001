@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta id="meta-stock" th:content="${stock}">
     <title>รายละเอียดสินค้า | TU Store</title>
 
     <link rel="icon" type="image/png" href="/img/Logo.png">
@@ -69,41 +70,41 @@
 
 <div class="product-container">
 
-    <!--  รูปสินค้า -->
+    <!-- รูปสินค้า -->
     <div class="product-detail-photo">
-        <img th:src="@{/img/ballshirt_tu-cu.png}" alt="ballshirt">
+        <img th:src="@{/product_img/{file}(file=${product.main_image})}" alt="">
     </div>
 
-    <!--  กล่องข้อมูลสินค้า -->
+    <!-- กล่องข้อมูลสินค้า -->
     <div class="product-detail-main">
-
         <div class="product-buttons">
-            <button class="add-cart-btn">เพิ่มลงตะกร้า</button>
+            <button th:href="@{/login}" class="add-cart-btn">เพิ่มลงตะกร้า</button>
         </div>
-        <h2 class="product-name"
-            th:text="'ชื่อสินค้า  : เสื้อเชียร์งานฟุตบอลสานสัมพันธ์ จุฬาฯ ธรรมศาสตร์ ปี 2567 - GOLDEN SEED POLO SHIRT'">ชื่อสินค้า</h2>
+
+        ชื่อสินค้า: <h2 class="product-name" th:text="${product.name}"></h2>
 
         <p class="product-category">
-            หมวดหมู่ : <span th:text="'เสื้อ'">เสื้อ</span>
+            หมวดหมู่ : <span th:text="${product.category}"></span>
         </p>
 
         <div class="product-size">
             <span class="label">ขนาด :</span>
             <div class="size-options">
-                <button class="  size-btn  ">XS</button>
-                <button class="  size-btn  ">S</button>
-                <button class="  size-btn active  ">M</button>
-                <button class="  size-btn  ">L</button>
-                <button class="  size-btn disabled  " disabled>XL</button>
-                <button class="  size-btn disabled  " disabled>2XL</button>
+                <button class="size-btn">XS</button>
+                <button class="size-btn">S</button>
+                <button class="size-btn active">M</button>
+                <button class="size-btn">L</button>
+                <button class="size-btn disabled" disabled>XL</button>
+                <button class="size-btn disabled" disabled>2XL</button>
             </div>
         </div>
 
         <p class="stock-status">
-            สถานะ : <span class="in-stock" id="stock-status-text">พร้อมจัดส่ง (<span id="stock-count"></span> ชิ้นในคลัง)</span>
+            สถานะ : 
+            <span id="stock-status-text" class="in-stock">
+                พร้อมจัดส่ง (<span id="stock-count"></span> ชิ้นในคลัง)
+            </span>
         </p>
-
-
 
         <div class="product-quantity">
             <span class="label">จำนวน :</span>
@@ -117,16 +118,12 @@
         <div class="price-box">
             <div class="price">
                 <span class="price-label">ราคา</span>
-                <span class="price-value"
-                      th:text="'350' + 'บาท'">
-                      350.00 บาท
-                </span>
+                <span class="price-value" th:text="${product.price} + ' บาท'">-</span>
             </div>
         </div>
-
-
     </div>
 </div>
+
 
 
 <!--  รายละเอียดสินค้าแบบ Dropdown -->
@@ -136,19 +133,7 @@
     </button>
 
     <div class="detail-content" id="detail-content">
-        <p>
-
-            เสื้อเชียร์งานฟุตบอลสานสัมพันธ์ จุฬาฯ ธรรมศาสตร์ ปี 2567 : WARRIX GOLDEN SEED POLO SHIRT<br><br>
-
-            ผลิตจากเส้นใย Polyester100% เอกสิทธิ์เฉพาะของ WARRIX ทักทอผ้าลวดลายอะตอม ที่ได้รับความนิยมสูงสุด<br><br>
-
-            #CUTUBALL #GOLDENSEED #THAMMASAT #CHEERTU<br><br>
-            ผู้ชนะการออกแบบเสื้อเชียร์ : นางสาวพัณวัสษา วงศ์เจริญ<br><br>
-            แนวคิดการออกแบบ: ได้รับแรงบันดาลใจมากจาก “เมล็ดพันธุ์คนธรรมศาสตร์” คือเจตนารมณ์ที่มหาวิทยาลัยธรรมศาสตร์ได้มุ่งเน้นมากว่า 90 ปี ในการผลิตบุคลากรที่มีความรู้ความสามารถและจิตวิญญาณในการรับใช้สังคม เป็นดั่งเมล็ดพันธุ์สีทองที่จะช่วยขับเคลื่อนประเทศไทยไปสู่สังคมโลกได้อย่างเต็มภาคภูมิ<br><br>
-
-            ประเภท : เสื้อผ้า Unisex<br><br>
-
-        </p>
+        <p th:text= "${product.description}"></p>
     </div>
 </div>
 
@@ -251,7 +236,7 @@
 </div>
 
 <div class="product-buttons">
-    <button class="buy-btn">
+    <button th:href="@{/login}" class="buy-btn">
         <i class="fa-solid fa-check"></i> สั่งซื้อทันที
     </button>
 
@@ -283,9 +268,8 @@
         <p>ออกจากระบบสำเร็จแล้ว</p>
     </div>
 </div>
-
-<script th:src="@{/js/main.js}" defer></script>
 <script th:src="@{/js/product-detail.js}" defer></script>
+<script th:src="@{/js/main.js}" defer></script>
 </body>
 </html>
 

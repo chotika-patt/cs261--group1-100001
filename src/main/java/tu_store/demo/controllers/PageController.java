@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import tu_store.demo.models.Category;
 import tu_store.demo.models.Product;
+import tu_store.demo.models.ProductStatus;
 import tu_store.demo.models.User;
 import tu_store.demo.models.UserRole;
 
@@ -203,26 +204,22 @@ public class PageController {
     public String productDetailPage (Model model, @PathVariable Long productId,HttpSession session) {
         String username = (String) session.getAttribute("username");
         Product product = productRepository.findById(productId).orElse(null);
-
         // Validate productId
         if (productId == null || productId <= 0) {
             model.addAttribute("errorMessage", "รหัสสินค้าผิดพลาด");
             return "error_page"; // create a generic error template
         }
-
-        Product prod = productRepository.findById(productId).orElse(null);
-
-        if (prod == null) {
+        if (product == null) {
             model.addAttribute("errorMessage", "สินค้านี้ไม่มีอยู่");
             return "error_page"; // or redirect to a 404 page
         }
-
         if (username == null) {
             model.addAllAttributes(Map.of(
                 "username", "Guest",
                 "email", "-",
                 "phone", "-"
             ));
+            model.addAttribute("stock", product.getStock());
             model.addAttribute("product", product);
             return "product_detail_no_login";
         }
@@ -234,6 +231,7 @@ public class PageController {
             "phone", phone
         ));
         model.addAttribute("product", product);
+        model.addAttribute("stock", product.getStock());
         return "product_detail";
     }
     @GetMapping("/addProduct")

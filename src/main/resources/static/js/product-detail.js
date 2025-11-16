@@ -1,6 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-    //  ตั้งค่า stock mock
-    let stock = 0; // <-- mock ก่อน (รอเชื่อม backend)
+    const metaStockEl = document.getElementById("meta-stock");
+    console.log("Meta stock element:", metaStockEl);
+    
+    const stock = Number(metaStockEl?.content) || 0;
+    console.log("Stock number:", stock);
+
     const stockCountEl = document.getElementById("stock-count");
     const stockStatusText = document.getElementById("stock-status-text");
     const addCartBtn = document.querySelector(".add-cart-btn");
@@ -8,16 +12,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     stockCountEl.textContent = stock;
 
-    //  สินค้าหมด
-    if (stock <= 0) {
+    if (stock > 0) {
+        stockStatusText.textContent = `พร้อมจัดส่ง (${stock} ชิ้นในคลัง)`;
+        stockStatusText.classList.remove("out-of-stock");
+        stockStatusText.classList.add("in-stock");
+        addCartBtn.disabled = false;
+        addCartBtn.classList.remove("out-of-stock");
+
+        if (buyBtn) {
+            buyBtn.disabled = false;
+            buyBtn.classList.remove("out-of-stock");
+            buyBtn.innerHTML = `<i class="fa-solid fa-bag-shopping"></i> สั่งซื้อทันที`;
+        }
+    } else {
         stockStatusText.textContent = "สินค้าหมด";
         stockStatusText.classList.remove("in-stock");
         stockStatusText.classList.add("out-of-stock");
         addCartBtn.disabled = true;
         addCartBtn.classList.add("out-of-stock");
-        buyBtn.disabled = true;
-        buyBtn.classList.add("out-of-stock");
-        buyBtn.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ขออภัย สินค้าหมด`;
+
+        if (buyBtn) {
+            buyBtn.disabled = true;
+            buyBtn.classList.add("out-of-stock");
+            buyBtn.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ขออภัย สินค้าหมด`;
+        }
     }
 
     //  ปุ่มเลือกไซซ์
