@@ -26,7 +26,8 @@ public class UserTestData {
                 null,
                 null,
                 UserRole.CLIENT,
-                null
+                null,
+                null    // ⭐ organizationType
         );
     }
 
@@ -42,7 +43,8 @@ public class UserTestData {
                 "5912345678",
                 null,
                 UserRole.SELLER,
-                false
+                false,
+                "ชมรม"  // ⭐ seller มักเป็นองค์กร → ใส่ค่าให้สมจริง
         );
     }
 
@@ -58,6 +60,7 @@ public class UserTestData {
         user.setEmail("test@email.com");
         user.setPhone("0812345678");
         user.setRole(UserRole.CLIENT);
+        user.setOrganizationType(null);    // ⭐ ป้องกัน null pointer
         return user;
     }
 
@@ -71,6 +74,7 @@ public class UserTestData {
         user.setEmail("test@email.com");
         user.setPhone("0812345678");
         user.setRole(UserRole.CLIENT);
+        user.setOrganizationType(null);
         return user;
     }
 
@@ -81,43 +85,46 @@ public class UserTestData {
         return new User(
                 "testuser",
                 "test@email.com",
-                "123",  // สั้นกว่า 6 ตัว
+                "123",  // สั้นกว่า 6
                 "0812345678",
                 null,
                 null,
                 UserRole.CLIENT,
-                null
+                null,
+                null    // ⭐ organizationType
         );
     }
 
     /**
-     * สร้าง user ที่มี email ไม่ถูกต้อง (ไม่มี @)
+     * สร้าง user ที่มี email ไม่ถูกต้อง
      */
     public static User createUserWithInvalidEmail() {
         return new User(
                 "testuser",
-                "invalidemail",  // ไม่มี @
+                "invalidemail",  
                 "password123",
                 "0812345678",
                 null,
                 null,
                 UserRole.CLIENT,
+                null,
                 null
         );
     }
 
     /**
-     * สร้าง user ที่มี phone number ไม่ถูกต้อง (ไม่ 10 ตัว)
+     * สร้าง user ที่มี phone number ไม่ถูกต้อง
      */
     public static User createUserWithInvalidPhone() {
         return new User(
                 "testuser",
                 "test@email.com",
                 "password123",
-                "123",  // ไม่ 10 ตัว
+                "123",  
                 null,
                 null,
                 UserRole.CLIENT,
+                null,
                 null
         );
     }
@@ -131,15 +138,16 @@ public class UserTestData {
                 "seller@email.com",
                 "password123",
                 "0812345678",
-                null,  // ไม่มี student ID
+                null,
                 null,
                 UserRole.SELLER,
-                false
+                false,
+                "กลุ่มอิสระ"   // ⭐ แม้ไม่มี studentID แต่ควรมี organizationType
         );
     }
 
     /**
-     * สร้าง seller ที่มี student ID ไม่ถูกต้อง (ไม่ 10 ตัว)
+     * สร้าง seller ที่ student ID ไม่ถูกต้อง
      */
     public static User createSellerWithInvalidStudentID() {
         return new User(
@@ -147,17 +155,18 @@ public class UserTestData {
                 "seller@email.com",
                 "password123",
                 "0812345678",
-                "123",  // ไม่ 10 ตัว
+                "123",
                 null,
                 UserRole.SELLER,
-                false
+                false,
+                "ชุมนุม"
         );
     }
 
     // ====== Custom Users ======
 
     /**
-     * สร้าง user ที่มี username และ hashed password ตามที่ต้องการ
+     * สร้าง user พร้อม hashed password
      */
     public static User createUserWithHashedPassword(String username, String plainPassword) {
         User user = new User();
@@ -166,11 +175,12 @@ public class UserTestData {
         user.setEmail(username + "@email.com");
         user.setPhone("0812345678");
         user.setRole(UserRole.CLIENT);
+        user.setOrganizationType(null);   // ⭐ เพิ่มให้ครบ
         return user;
     }
 
     /**
-     * สร้าง user ที่มี username และ role ที่กำหนด
+     * สร้าง user กำหนด role เอง
      */
     public static User createUserWithRole(String username, UserRole role) {
         User user = new User();
@@ -179,6 +189,7 @@ public class UserTestData {
         user.setEmail(username + "@email.com");
         user.setPhone("0812345678");
         user.setRole(role);
+        user.setOrganizationType(null);
         return user;
     }
 
@@ -186,14 +197,13 @@ public class UserTestData {
      * สร้าง user ข้อมูลว่าง
      */
     public static User createEmptyUser() {
-        return new User();
+        User user = new User();
+        user.setOrganizationType(null);
+        return user;
     }
 
     // ====== Helper Methods ======
 
-    /**
-     * ตรวจสอบว่า user ใช้ได้สำหรับ registration ไหม
-     */
     public static boolean isValidForRegistration(User user) {
         if (user.getUsername() == null || user.getUsername().isBlank()) return false;
         if (user.getPassword() == null || user.getPassword().length() < 6) return false;
