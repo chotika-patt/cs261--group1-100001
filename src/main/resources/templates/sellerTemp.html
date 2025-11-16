@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="th" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>หน้าหลักผู้ขาย - TU Store</title>
 
-    <link rel="icon" type="image/png" href="/img/Logo.png">
+  <link rel="icon" type="image/png" href="/img/Logo.png">
   <link rel="stylesheet" th:href="@{/css/styles.css}" />
   <link rel="stylesheet" th:href="@{/css/seller_home.css}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
@@ -14,7 +15,7 @@
 <body>
   <!-- ======= Navbar ด้านบน ======= -->
   <nav class="nav-top">
-      <div class="right-buttons">
+    <div class="right-buttons">
       <div class="user-menu">
         <button class="user-btn" id="user-btn">
           <span class="user-text" th:text="${session.username}">Seller Name</span>
@@ -28,11 +29,11 @@
           <div class="info">
             <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">seller_email@example.com</span></p>
             <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">08xxxxxxxx</span></p>
-              <p class="status">
-                <i class="fa-solid"
-                     th:classappend="${verifiedStatus == 'อนุมัติการขายแล้ว'} ? 'fa-circle-check text-green' : 'fa-circle-xmark text-red'"></i>
-                <span>สถานะ : </span>
-                <span th:text="${verifiedStatus}"></span>
+            <p class="status">
+              <i class="fa-solid"
+                th:classappend="${verifiedStatus == 'อนุมัติการขายแล้ว'} ? 'fa-circle-check text-green' : 'fa-circle-xmark text-red'"></i>
+              <span>สถานะ : </span>
+              <span th:text="${verifiedStatus}"></span>
             </p>
           </div>
           <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
@@ -41,8 +42,8 @@
     </div>
   </nav>
   <div class="left-logo">
-     <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
-   </div>
+    <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+  </div>
 
   <!-- ======= Navbar ด้านล่าง ======= -->
   <nav class="nav-bottom">
@@ -66,51 +67,53 @@
   <main class="seller-dashboard">
     <div class="dashboard-header">
       <h1 th:text="'ยินดีต้อนรับ, ' + ${username} + '!'">ยินดีต้อนรับ, Seller Name!</h1>
-        <a th:href="@{/addProduct}" class="add-product-link">
-            <button class="add-product-btn">
-                <i class="fa-solid fa-plus"></i> เพิ่มสินค้าใหม่
-            </button>
-        </a>
+      <a th:href="@{/addProduct}" class="add-product-link">
+        <button class="add-product-btn">
+          <i class="fa-solid fa-plus"></i> เพิ่มสินค้าใหม่
+        </button>
+      </a>
     </div>
 
     <div class="product-management-section">
-    <h2>รายการสินค้าของคุณ</h2>
-    <div class="product-management-grid">
+      <h2>รายการสินค้าของคุณ</h2>
+      <div class="product-management-grid">
         <div class="product-card-seller" th:each="product : ${products}">
-            <div class="product-image-placeholder">
-               <img th:if="${product.main_image != null}" 
-                    th:src="@{/product_img/{file}(file=${product.main_image})}" 
-                    alt="Product Image" style="width:200px;height:auto;">
+          <div class="product-image-placeholder">
+            <img th:if="${product.main_image != null}" th:src="@{/product_img/{file}(file=${product.main_image})}"
+              alt="Product Image" style="width:200px;height:auto;">
 
-            </div>
-            <div class="product-info-seller">
-                <span class="product-name" th:text="${product.name}">ชื่อสินค้า</span>
-                <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
-            </div>
-            <div class="product-actions">
-                <button class="edit-btn" th:onclick="'location.href=\'/product_edit/' + ${product.productId} + '\';'">แก้ไข</button>
-                <button class="delete-btn" th:onclick="'location.href=\'/product_delete/' + ${product.productId} + '\';'">ลบ</button>
-            </div>
+          </div>
+          <div class="product-info-seller">
+            <span class="product-name" th:text="${product.name}">ชื่อสินค้า</span>
+            <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
+          </div>
+          <div class="product-actions">
+            <button class="edit-btn"
+              th:onclick="'location.href=\'/product_edit/' + ${product.productId} + '\';'">แก้ไข</button>
+            <button class="delete-btn" th:attr="data-product-id=${product.productId}">
+              ลบ
+            </button>
+          </div>
         </div>
+      </div>
     </div>
-</div>
   </main>
-  
+
   <!-- ======= Popup ยืนยันการลบสินค้า ======= -->
-  <div class="logout-modal" id="logout-modal">
+  <div class="logout-modal" id="delete-product-modal">
     <div class="modal-content">
       <i class="fa-solid fa-circle-exclamation"></i>
       <p>คุณต้องการลบสินค้าใช่หรือไม่</p>
       <div class="modal-buttons">
-        <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
-        <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+        <button id="cancel-delete-product" class="cancel-btn">ยกเลิก</button>
+        <button id="confirm-delete-product" class="confirm-btn">ยืนยัน</button>
       </div>
-      <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+      <i class="fa-solid fa-xmark modal-close" id="close-delete-modal"></i>
     </div>
   </div>
 
   <!-- ======= Popup ลบสินค้าสำเร็จ ======= -->
-  <div class="logout-success" id="logout-success">
+  <div class="logout-success" id="delete-product-success">
     <div class="success-content">
       <i class="fa-solid fa-circle-check"></i>
       <p>ลบสินค้าสำเร็จ</p>
@@ -143,4 +146,5 @@
   <script th:src="@{/js/auth.js}" defer></script>
   <script th:src="@{/js/sellerTemp.js}" defer></script>
 </body>
+
 </html>
