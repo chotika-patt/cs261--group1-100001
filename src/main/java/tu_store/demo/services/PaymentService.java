@@ -75,7 +75,7 @@ public class PaymentService {
         payment.setCurrency(req.getCurrency() == null ? "THB" : req.getCurrency());
         payment.setStatus(PaymentStatus.INIT);
         payment.setIdempotencyKey(idKey);
-        payment.setExpiresAt(LocalDateTime.now().plusMinutes(15));
+        payment.setExpiresAt(LocalDateTime.now().plusMinutes(1));
 
         if (req.getMetadata() != null) {
             try {
