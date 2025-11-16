@@ -192,5 +192,31 @@ document.addEventListener("DOMContentLoaded", () => {
             btn.classList.add('active');
         });
     });
+    // Dropdowns
+    const toggleBtn = document.getElementById("toggle-detail");
+    const detailBox = document.getElementById("detail-content");
+    const icon = toggleBtn.querySelector("i");
+    toggleBtn.addEventListener("click", () => {
+        detailBox.classList.toggle("active");
+        icon.classList.toggle("fa-chevron-down");
+        icon.classList.toggle("fa-chevron-up");
+    });
 
+    const toggleImgBtn = document.getElementById("toggle-images");
+    const imageGallery = document.getElementById("image-gallery");
+    const iconImg = toggleImgBtn.querySelector("i");
+    toggleImgBtn.addEventListener("click", () => {
+        imageGallery.classList.toggle("active");
+        iconImg.classList.toggle("fa-chevron-down");
+        iconImg.classList.toggle("fa-chevron-up");
+    });
+
+    const toggleReview = document.getElementById("toggle-review");
+    const reviewBox = document.getElementById("review-box");
+    const reviewIcon = toggleReview.querySelector("i");
+    toggleReview.addEventListener("click", () => {
+        reviewBox.classList.toggle("active");
+        reviewIcon.classList.toggle("fa-chevron-down");
+        reviewIcon.classList.toggle("fa-chevron-up");
+    });
 });
