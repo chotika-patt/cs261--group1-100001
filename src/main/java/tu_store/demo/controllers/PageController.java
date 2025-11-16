@@ -232,6 +232,7 @@ public class PageController {
         ));
         model.addAttribute("product", product);
         model.addAttribute("stock", product.getStock());
+        model.addAttribute("productId", product.getProductId());
         return "product_detail";
     }
     @GetMapping("/addProduct")
