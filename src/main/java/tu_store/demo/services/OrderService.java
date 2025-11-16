@@ -104,13 +104,18 @@ public class OrderService {
         response.setOrderId(order.getOrderId());
         response.setTotalPrice(order.getTotalPrice());
         response.setStatus(order.getStatus());
+        response.setShopName(order.getSeller().getOrganizationType());
+        response.setProductName(order.getItems().get(0).getProduct().getName());
+        response.setImagePath(order.getItems().get(0).getProduct().getMain_image());
 
         ShipmentTracking st = order.getShipmentTracking();
         if(st != null){
             response.setTrackingCode(st.getTrackingNumber());
+            response.setsTrackingStatus(st.getStatus());
         }
         else{
             response.setTrackingCode("");
+            response.setsTrackingStatus(null);
         }
         
         Integer q = 0;
