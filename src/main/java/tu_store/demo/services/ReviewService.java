@@ -78,6 +78,7 @@ public class ReviewService {
         return newReview;
     }
 
+
     public void saveReviewImage(Review review, MultipartFile image, String uploadDir){
         try {
             String originalName = image.getOriginalFilename();
@@ -85,7 +86,7 @@ public class ReviewService {
             int dot = originalName != null ? originalName.lastIndexOf('.') : -1;
             if(dot > 0) ext = originalName.substring(dot + 1);
 
-            String fileName = "review_" + review.getReviewId() + (ext.isEmpty() ? "" : "." + ext);
+            String fileName = "review_" + review.getReviewId() + "_" + java.util.UUID.randomUUID().toString() + (ext.isEmpty() ? "" : "." + ext);
 
             Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
             Files.createDirectories(uploadPath);
@@ -96,6 +97,8 @@ public class ReviewService {
             ReviewImage reviewImage = new ReviewImage();
             reviewImage.setReview(review);
             reviewImage.setFilePath(fileName);
+            reviewImage.setMimeType(image.getContentType());
+            reviewImage.setSize(image.getSize());
             review.getImages().add(reviewImage);
 
             reviewRepository.save(review);
@@ -113,16 +116,29 @@ public class ReviewService {
         if (newRating != null) review.setRating(newRating);
 
         // Update images
-        if (images != null && !images.isEmpty()) {
-            review.getImages().clear(); // remove old images
+        if (images != null) {
+            // delete files for existing images first
+            if (review.getImages() != null && !review.getImages().isEmpty()) {
+                for (ReviewImage img : new ArrayList<>(review.getImages())) {
+                    // delete file from disk
+                    deleteReviewImageFile(img.getFilePath(), uploadDirRev);
+                }
+                review.getImages().clear();
+            }
+            // save new images
             for (MultipartFile image : images) {
-                saveReviewImage(review, image, uploadDirRev);
+                if (image != null && !image.isEmpty()) {
+                    saveReviewImage(review, image, uploadDirRev);
+                }
             }
         }
 
+
         Review saved = reviewRepository.save(review);
 
-        productService.updateProductRatingById(review.getProduct().getProductId());
+        if (review.getProduct() != null && review.getProduct().getProductId() != null) {
+            productService.updateProductRatingById(review.getProduct().getProductId());
+        }
         return saved;
     }
 
@@ -148,8 +164,9 @@ public class ReviewService {
         if(review == null) return false;
 
         if (review.getImages() != null && !review.getImages().isEmpty()) {
-            for (ReviewImage img : review.getImages()) {
+            for (ReviewImage img : new ArrayList<>(review.getImages())) {
                 deleteReviewImageFile(img.getFilePath(), uploadDirRev);
+                review.getImages().remove(img);
             }
         }
 
@@ -182,7 +199,7 @@ public class ReviewService {
         response.setComment(review.getComment());
         response.setCreatedAt(review.getCreatedAt());
         response.setOrderId(review.getOrder().getOrderId());
-        response.setProductId(review.getOrder().getOrderId());
+        response.setProductId(review.getProduct().getProductId());
         response.setRating(review.getRating());
         response.setReviewId(review.getReviewId());
 

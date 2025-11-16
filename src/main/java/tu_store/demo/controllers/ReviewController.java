@@ -145,8 +145,10 @@ public class ReviewController {
         }
 
         if (images != null && !images.isEmpty()) {
+            int i = 1;
             for(MultipartFile image : images){
                 reviewService.saveReviewImage(review, image, uploadDirRev);
+                i++;
             }
             
         }
@@ -188,11 +190,11 @@ public class ReviewController {
 
         if (images != null && !images.isEmpty()) {
             validateReviewImages(images);
-        }  
+        }
 
-        reviewService.updateReview(reviewId, comment, rating, images, uploadDirRev);
+        Review updated = reviewService.updateReview(reviewId, comment, rating, images, uploadDirRev);
 
-        return ResponseEntity.ok(reviewService.createReviewResponse(review));
+        return ResponseEntity.ok(reviewService.createReviewResponse(updated));
     }
 
     @DeleteMapping("/{reviewId}")

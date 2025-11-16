@@ -1,63 +1,84 @@
 document.addEventListener("DOMContentLoaded", () => {
-    //  ตั้งค่า stock mock
-    let stock = 0; // <-- mock ก่อน (รอเชื่อม backend)
+
+    const metaStockEl = document.getElementById("meta-stock");
+    const metaProductEl = document.getElementById("meta-product-id");
+
+    const stock = Number(metaStockEl?.content) || 0;
+    const productId = Number(metaProductEl?.content) || 0;
+
+    console.log("Product ID:", productId);
+    console.log("Stock:", stock);
+
     const stockCountEl = document.getElementById("stock-count");
     const stockStatusText = document.getElementById("stock-status-text");
     const addCartBtn = document.querySelector(".add-cart-btn");
     const buyBtn = document.querySelector(".buy-btn");
+    const qtyInput = document.getElementById("quantity");
+    const plusBtn = document.querySelector(".plus");
+    const minusBtn = document.querySelector(".minus");
+
+    if (!addCartBtn) {
+        console.error("Add to cart button not found!");
+        return;
+    }
 
     stockCountEl.textContent = stock;
 
-    //  สินค้าหมด
-    if (stock <= 0) {
-        stockStatusText.textContent = "สินค้าหมด";
-        stockStatusText.classList.remove("in-stock");
-        stockStatusText.classList.add("out-of-stock");
-        addCartBtn.disabled = true;
-        addCartBtn.classList.add("out-of-stock");
-        buyBtn.disabled = true;
-        buyBtn.classList.add("out-of-stock");
-        buyBtn.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ขออภัย สินค้าหมด`;
+    // Update stock UI
+    function updateStockUI() {
+        if (stock > 0) {
+            stockStatusText.textContent = `พร้อมจัดส่ง (${stock} ชิ้นในคลัง)`;
+            stockStatusText.classList.add("in-stock");
+            stockStatusText.classList.remove("out-of-stock");
+            enableButtons();
+        } else {
+            stockStatusText.textContent = "สินค้าหมด";
+            stockStatusText.classList.add("out-of-stock");
+            stockStatusText.classList.remove("in-stock");
+            disableButtons();
+        }
     }
 
-    //  ปุ่มเลือกไซซ์
-    document.querySelectorAll('.size-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        });
-    });
+    function disableButtons() {
+        addCartBtn.disabled = true;
+        if (buyBtn) buyBtn.disabled = true;
+        addCartBtn.classList.add("out-of-stock");
+        if (buyBtn) buyBtn.classList.add("out-of-stock");
+    }
 
-    // เพิ่ม/ลดจำนวนสินค้า
-    const qtyInput = document.getElementById('quantity');
-    const plusBtn = document.querySelector('.plus');
-    const minusBtn = document.querySelector('.minus');
+    function enableButtons() {
+        addCartBtn.disabled = false;
+        if (buyBtn) buyBtn.disabled = false;
+        addCartBtn.classList.remove("out-of-stock");
+        if (buyBtn) buyBtn.classList.remove("out-of-stock");
+    }
 
-    // สร้าง inline error message
-    const warningMsg = document.createElement('p');
-    warningMsg.style.color = 'red';
-    warningMsg.style.fontSize = '14px';
-    warningMsg.style.marginTop = '4px';
-    warningMsg.style.display = 'none';
-    qtyInput.parentElement.appendChild(warningMsg);
+    updateStockUI();
 
-    // ฟังก์ชันตรวจสอบ input
-    function validateInput() {
-        const value = parseInt(qtyInput.value) || 0;
+    // Error message
+    const warningMsg = document.createElement("p");
+    warningMsg.style.color = "red";
+    warningMsg.style.fontSize = "14px";
+    warningMsg.style.marginTop = "4px";
+    warningMsg.style.display = "none";
+    qtyInput?.parentElement.appendChild(warningMsg);
+
+    function validateQty() {
+        const qty = Number(qtyInput?.value) || 0;
         let valid = true;
 
-        if (isNaN(value) || value <= 0) {
-            showError("⚠️ จำนวนสินค้าต้องมากกว่า 0");
+        if (qty <= 0) {
+            showError("⚠️ จำนวนต้องมากกว่า 0");
             valid = false;
-        } else if (value > stock) {
-            showError(`⚠️ เกินจำนวนสินค้าในคลัง (${stock} ชิ้น)`);
+        } else if (qty > stock) {
+            showError(`⚠️ จำนวนคงเหลือไม่พอ (${stock} ชิ้น)`);
             valid = false;
         } else {
             hideError();
         }
 
         addCartBtn.disabled = !valid;
-        buyBtn.disabled = !valid;
+        if (buyBtn) buyBtn.disabled = !valid;
         return valid;
     }
 
@@ -65,97 +86,111 @@ document.addEventListener("DOMContentLoaded", () => {
         warningMsg.textContent = msg;
         warningMsg.style.display = "block";
     }
+
     function hideError() {
         warningMsg.style.display = "none";
     }
 
-    //  เพิ่มการตรวจซ้ำหลัง API
-    async function simulateAddToCart() {
-        if (!validateInput()) return; // ไม่ต้องเรียก API ถ้า invalid ก่อนหน้า
+    // Add to cart API
+    async function callAddToCart() {
+        if (!validateQty()) return;
 
         try {
-            // mock API เรียก
-            const response = await fakeApiCall();
-            if (!response.ok) throw { status: response.status };
-            alert("เพิ่มสินค้าสำเร็จ ✅");
-        } catch (err) {
-            handleApiError(err.status);
+            console.log("Calling /api/cart/add", { productId, quantity: qtyInput.value });
+            const response = await fetch("/api/cart/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    productId: productId,
+                    quantity: Number(qtyInput.value)
+                })
+            });
+
+            if (!response.ok) {
+                let errStatus = 500;
+                try {
+                    const errData = await response.json();
+                    errStatus = errData.status || 500;
+                } catch {}
+                handleApiError(errStatus);
+                return;
+            }
+
+            alert("เพิ่มสินค้าเข้าตะกร้าสำเร็จ! 🛒");
+
+        } catch (error) {
+            console.error(error);
+            showError("❌ ไม่สามารถติดต่อเซิร์ฟเวอร์ได้");
         }
     }
 
-    // จำลอง API response เพื่อทดสอบ
-    async function fakeApiCall() {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                const randomStatus = [200, 400, 401, 404, 409, 500][Math.floor(Math.random() * 6)];
-                if (randomStatus === 200) resolve({ ok: true });
-                else reject({ status: randomStatus });
-            }, 500);
-        });
+    // Buy now
+    async function callBuyNow() {
+        if (!validateQty()) return;
+
+        try {
+            console.log("Calling /api/cart/add", { productId, quantity: qtyInput.value });
+            const response = await fetch("/api/orders/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    productId: productId,
+                    quantity: Number(qtyInput.value)
+                })
+            });
+
+            if (!response.ok) {
+                let errStatus = 500;
+                try {
+                    const errData = await response.json();
+                    errStatus = errData.status || 500;
+                } catch {}
+                handleApiError(errStatus);
+                return;
+            }
+
+            alert("เพิ่มสินค้าเข้าตะกร้าสำเร็จ! 🛒");
+
+        } catch (error) {
+            console.error(error);
+            showError("❌ ไม่สามารถติดต่อเซิร์ฟเวอร์ได้");
+        }
     }
 
-    // ===== แม็ปข้อความ error ที่อ่านง่าย =====
     function handleApiError(status) {
-        let message = "เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ";
-        switch (status) {
-            case 400:
-                message = "คำขอไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง";
-                break;
-            case 401:
-                message = "กรุณาเข้าสู่ระบบก่อนทำรายการ";
-                break;
-            case 404:
-                message = "ไม่พบข้อมูลสินค้าในระบบ";
-                break;
-            case 409:
-                message = "จำนวนที่สั่งเกินสต๊อกที่มีอยู่";
-                break;
-            case 500:
-                message = "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์ กรุณาลองใหม่ภายหลัง";
-                break;
-        }
-        showError(`❌ ${message}`);
+        const msg = {
+            400: "คำขอไม่ถูกต้อง",
+            401: "กรุณาเข้าสู่ระบบก่อน",
+            404: "ไม่พบสินค้า",
+            409: "จำนวนไม่พอในสต็อก",
+            500: "เซิร์ฟเวอร์ผิดพลาด"
+        }[status] || "เกิดข้อผิดพลาด";
+
+        showError(`❌ ${msg}`);
     }
 
-    //  event ปุ่ม
-    plusBtn.addEventListener('click', () => {
-        let current = parseInt(qtyInput.value) || 0;
-        qtyInput.value = current + 1;
-        validateInput();
+    plusBtn?.addEventListener("click", () => {
+        qtyInput.value = (Number(qtyInput.value) || 0) + 1;
+        validateQty();
     });
-    minusBtn.addEventListener('click', () => {
-        let current = parseInt(qtyInput.value) || 1;
+
+    minusBtn?.addEventListener("click", () => {
+        const current = Number(qtyInput.value) || 1;
         if (current > 1) qtyInput.value = current - 1;
-        validateInput();
-    });
-    qtyInput.addEventListener('input', validateInput);
-    addCartBtn.addEventListener('click', simulateAddToCart);
-
-    // Dropdowns
-    const toggleBtn = document.getElementById("toggle-detail");
-    const detailBox = document.getElementById("detail-content");
-    const icon = toggleBtn.querySelector("i");
-    toggleBtn.addEventListener("click", () => {
-        detailBox.classList.toggle("active");
-        icon.classList.toggle("fa-chevron-down");
-        icon.classList.toggle("fa-chevron-up");
+        validateQty();
     });
 
-    const toggleImgBtn = document.getElementById("toggle-images");
-    const imageGallery = document.getElementById("image-gallery");
-    const iconImg = toggleImgBtn.querySelector("i");
-    toggleImgBtn.addEventListener("click", () => {
-        imageGallery.classList.toggle("active");
-        iconImg.classList.toggle("fa-chevron-down");
-        iconImg.classList.toggle("fa-chevron-up");
+    qtyInput?.addEventListener("input", validateQty);
+
+    addCartBtn.addEventListener("click", callAddToCart);
+    if (buyBtn) buyBtn.addEventListener("click", callBuyNow);
+
+    // Size buttons
+    document.querySelectorAll('.size-btn')?.forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
     });
 
-    const toggleReview = document.getElementById("toggle-review");
-    const reviewBox = document.getElementById("review-box");
-    const reviewIcon = toggleReview.querySelector("i");
-    toggleReview.addEventListener("click", () => {
-        reviewBox.classList.toggle("active");
-        reviewIcon.classList.toggle("fa-chevron-down");
-        reviewIcon.classList.toggle("fa-chevron-up");
-    });
 });

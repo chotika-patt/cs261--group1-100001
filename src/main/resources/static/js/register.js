@@ -34,6 +34,7 @@ document.getElementById("sellerForm").addEventListener("submit", async (event) =
     confirm_password: document.getElementById("seller-confirm-password").value,
     phone: document.getElementById("seller-phone").value,
     studentID: document.getElementById("student-ID").value,
+    organizationType: document.getElementById("organizationType").value,
     role: "SELLER"
   };
 

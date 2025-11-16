@@ -44,14 +44,11 @@ public class OrderController {
     public ResponseEntity<OrderDraftResponse> createDraft(HttpSession session, @RequestBody(required = false) Object body){
         Long userId = userService.getUserIdBySession(session);
         if(userId == null) throw new ApiException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "Please login first.");
-
-
         var cart = cartService.getOrCreateCartByUserId(userId);
         if(cart == null || cart.getItems() == null || cart.getItems().isEmpty())
             throw new ApiException(HttpStatus.BAD_REQUEST, "EMPTY_CART", "ตะกร้าว่าง");
 
-
-// service will validate product existence/status/stock
+        // service will validate product existence/status/stock
         var order = orderService.createOrder(cart);
 
 

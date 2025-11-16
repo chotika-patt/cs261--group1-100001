@@ -6,6 +6,8 @@ target/
 
 /src/main/java/tu_store/demo/testLocal/
 
+.env
+
 ### STS ###
 .apt_generated
 .classpath
