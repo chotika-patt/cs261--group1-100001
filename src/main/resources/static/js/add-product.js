@@ -26,7 +26,7 @@ removeBtn.addEventListener('click', function() {
 
 
      document.getElementById("submitBtn").addEventListener("click", async (event) => {
-       event.preventDefault();
+        event.preventDefault();
 
 
         const formData = new FormData();
