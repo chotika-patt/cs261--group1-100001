@@ -145,8 +145,10 @@ public class ReviewController {
         }
 
         if (images != null && !images.isEmpty()) {
+            int i = 1;
             for(MultipartFile image : images){
-                reviewService.saveReviewImage(review, image, uploadDirRev);
+                reviewService.saveReviewImage(review, image, uploadDirRev, i);
+                i++;
             }
             
         }
