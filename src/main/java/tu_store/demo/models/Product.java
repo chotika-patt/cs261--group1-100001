@@ -77,6 +77,10 @@ public class Product {
     @Column(name = "rating_count")
     private Integer ratingCount = 0;
 
+    @Column(name = "organization_type", columnDefinition = "NVARCHAR(50)", nullable = true)
+    private String organizationType;
+
+
     // ================= Constructors =================
 
     public Product() {}
@@ -166,6 +170,10 @@ public class Product {
         this.soldCount = soldCount;
     }
 
+    public void setOrganizationType(String organizationType) { 
+        this.organizationType = organizationType; 
+    }
+
     // ================= Getters =================
 
     public Long getProductId() {
@@ -226,5 +234,9 @@ public class Product {
 
     public Integer getRatingCount() {
         return this.ratingCount;
+    }
+
+    public String getOrganizationType() { 
+        return organizationType; 
     }
 }
