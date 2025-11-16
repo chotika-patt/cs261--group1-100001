@@ -12,10 +12,14 @@ public class ProductResponse {
     private ProductStatus status;
     private String sellerName;
 
+    // ⭐ ฟิลด์ใหม่ — บอกว่าสินค้านี้ขายในนามอะไร (ชุมนุม/ชมรม/กลุ่มอิสระ)
+    private String organizationType;
+
     public ProductResponse(){}
 
     public ProductResponse(Long product_id, String name, long price, int stock,
-                           Category category, ProductStatus status, String sellerName) {
+                           Category category, ProductStatus status,
+                           String sellerName, String organizationType) {
         this.product_id = product_id;
         this.name = name;
         this.price = price;
@@ -23,9 +27,10 @@ public class ProductResponse {
         this.category = category;
         this.status = status;
         this.sellerName = sellerName;
+        this.organizationType = organizationType;
     }
 
-    // Getters
+    // ====== GETTERS ======
     public Long getProduct_id() { return product_id; }
     public String getName() { return name; }
     public long getPrice() { return price; }
@@ -33,4 +38,7 @@ public class ProductResponse {
     public Category getCategory() { return category; }
     public ProductStatus getStatus() { return status; }
     public String getSellerName() { return sellerName; }
+
+    // ⭐ getter ใหม่
+    public String getOrganizationType() { return organizationType; }
 }

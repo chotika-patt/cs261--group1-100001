@@ -79,13 +79,17 @@ public class ReviewService {
     }
 
     public void saveReviewImage(Review review, MultipartFile image, String uploadDir){
+        saveReviewImage(review, image, uploadDir, 1);
+    }
+
+    public void saveReviewImage(Review review, MultipartFile image, String uploadDir, int idCount){
         try {
             String originalName = image.getOriginalFilename();
             String ext = "";
             int dot = originalName != null ? originalName.lastIndexOf('.') : -1;
             if(dot > 0) ext = originalName.substring(dot + 1);
 
-            String fileName = "review_" + review.getReviewId() + (ext.isEmpty() ? "" : "." + ext);
+            String fileName = "review_" + review.getReviewId() + "_" + idCount + (ext.isEmpty() ? "" : "." + ext);
 
             Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
             Files.createDirectories(uploadPath);
@@ -115,8 +119,9 @@ public class ReviewService {
         // Update images
         if (images != null && !images.isEmpty()) {
             review.getImages().clear(); // remove old images
+            int i = 1;
             for (MultipartFile image : images) {
-                saveReviewImage(review, image, uploadDirRev);
+                saveReviewImage(review, image, uploadDirRev, i);
             }
         }
 

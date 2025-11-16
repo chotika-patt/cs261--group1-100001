@@ -36,6 +36,9 @@ public class ProductService {
 
         product.setSeller(seller);
 
+        // ⭐⭐ ADD NEW IMPORTANT LINE
+        product.setOrganizationType(seller.getOrganizationType());
+
         if (product.getStock() <= 0) {
             product.setStock(0);
         }
@@ -53,7 +56,6 @@ public class ProductService {
             Boolean inStock,
             String sort
     ) {
-        // 1) ดึงข้อมูลด้วย filter (ใช้ index)
         List<Product> products = productRepository.searchProducts(
                 name,
                 category,
@@ -63,7 +65,6 @@ public class ProductService {
                 inStock
         );
 
-        // 2) Sort ใน service เพื่อรองรับหลายแบบ
         if (sort != null) {
             switch (sort) {
                 case "price_asc" -> products.sort(Comparator.comparing(Product::getPrice));
@@ -98,6 +99,7 @@ public class ProductService {
         return responseList;
     }
 
+    // ⭐ Updated: ส่ง organizationType ออกไปด้วย
     public ProductResponse createProductResponse(Product product){
         return new ProductResponse(
                 product.getProductId(),
@@ -106,7 +108,8 @@ public class ProductService {
                 product.getStock(),
                 product.getCategory(),
                 product.getStatus(),
-                product.getSeller().getUsername()
+                product.getSeller().getUsername(),
+                product.getOrganizationType()  // ⭐ USE VALUE FROM PRODUCT
         );
     }
 
