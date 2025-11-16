@@ -11,15 +11,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import jakarta.servlet.http.HttpSession;
 
-// import java.util.HashMap;
-// import java.util.Map;
-
 @Service
 public class UserService {
-    // DB แบบ ยังไม่ใส่ sql เอาจริงต้องเชื่อมและใส่ใน repositories
-    // private final Map<String, User> users = new HashMap<>();
+
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    
 
     @Autowired
     private UserRepository userRepository;
@@ -27,29 +22,36 @@ public class UserService {
     @Autowired
     private TuApiService tuApiService;
 
+    // ----------------------------------------------------
+    // LOGIN
+    // ----------------------------------------------------
     public boolean login(User user) {
         User dbUser = userRepository.findFirstByUsername(user.getUsername());
-
-        if(dbUser == null) return false;
+        if (dbUser == null) return false;
 
         return passwordEncoder.matches(user.getPassword(), dbUser.getPassword());
     }
 
+
+    // ----------------------------------------------------
+    // REGISTER (แบบเดิม, return String)
+    // ----------------------------------------------------
     public String register(User httpUser) {
+
         String username = httpUser.getUsername().trim();
         String email = httpUser.getEmail().trim();
         String password = httpUser.getPassword();
         String phone = httpUser.getPhone();
         String studentID = httpUser.getStudentID();
+        String organizationType = httpUser.getOrganizationType();   // ⭐ ดึงค่ามาใช้
         UserRole role = httpUser.getRole();
 
-        User user = userRepository.findFirstByUsernameIgnoreCase(username);
-
-        if (user != null){
+        User existingUser = userRepository.findFirstByUsernameIgnoreCase(username);
+        if (existingUser != null) {
             return "Username has already been used.";
         }
 
-        if (password.length() < 6){
+        if (password.length() < 6) {
             return "Password must be at least 6 characters.";
         }
 
@@ -57,64 +59,92 @@ public class UserService {
             return "Invalid email address.";
         }
 
-        if (phone.length() != 10){
+        if (phone.length() != 10) {
             return "Invalid phone number.";
         }
-        
+
         String hashedPassword = passwordEncoder.encode(password);
 
-        if(role == UserRole.CLIENT){
-            User newUser = new User(username, email, hashedPassword, phone, null, null, role, null);
+        if (role == UserRole.CLIENT) {
+
+            User newUser = new User(
+                username, email, hashedPassword, phone,
+                null, null,
+                role, null,
+                organizationType   // ⭐ เพิ่มฟิลด์ใหม่
+            );
+
             userRepository.save(newUser);
         }
-        else if(role == UserRole.SELLER){
-            if (studentID.length() != 10){
+
+        else if (role == UserRole.SELLER) {
+
+            if (studentID.length() != 10) {
                 return "Invalid student ID.";
             }
-            User newUser = new User(username, email, hashedPassword, phone, studentID, httpUser.getVerify_document(), role, false);
+
+            User newUser = new User(
+                username, email, hashedPassword, phone,
+                studentID, httpUser.getVerify_document(),
+                role, false,
+                organizationType   // ⭐ เพิ่มฟิลด์ใหม่
+            );
+
             userRepository.save(newUser);
         }
-        else{
+
+        else {
             return "Invalid role.";
         }
 
         return role + " registered successfully.";
     }
+
+
+
+    // ----------------------------------------------------
+    // FIND USER BY USERNAME
+    // ----------------------------------------------------
     public User findByUsername(String username) {
         return userRepository.findFirstByUsername(username);
     }
 
-    public User getUserBySession(HttpSession session){
+
+    // ----------------------------------------------------
+    // GET USER FROM SESSION
+    // ----------------------------------------------------
+    public User getUserBySession(HttpSession session) {
         String username = (String) session.getAttribute("username");
-        if(username == null) return null;
+        if (username == null) return null;
 
-        User user = findByUsername(username);
-        if(user == null) return null;
-
-        return user;
+        return findByUsername(username);
     }
 
-    public Long getUserIdBySession(HttpSession session){
+    public Long getUserIdBySession(HttpSession session) {
         User user = getUserBySession(session);
-        
-        if(user == null) return null;
-
-        return user.getUser_id();
+        return (user == null) ? null : user.getUser_id();
     }
 
+
+
+    // ----------------------------------------------------
+    // REGISTER (เวอร์ชันคืนค่า User พร้อม user_id)
+    // ----------------------------------------------------
     public User registerReturnUser(User httpUser) {
+
         String username = httpUser.getUsername().trim();
         String email = httpUser.getEmail().trim();
         String password = httpUser.getPassword();
         String phone = httpUser.getPhone();
         String studentID = httpUser.getStudentID();
+        String organizationType = httpUser.getOrganizationType();   // ⭐ ฟิลด์ใหม่
         UserRole role = httpUser.getRole();
 
         User existingUser = userRepository.findFirstByUsernameIgnoreCase(username);
         if (existingUser != null) {
             throw new RuntimeException("Username has already been used.");
         }
-        
+
         if (password.length() < 6) {
             throw new RuntimeException("Password must be at least 6 characters.");
         }
@@ -130,48 +160,60 @@ public class UserService {
         String hashedPassword = new BCryptPasswordEncoder().encode(password);
 
         User newUser;
+
         if (role == UserRole.CLIENT) {
-            newUser = new User(username, email, hashedPassword, phone, null, null, role, null);
-        } else if (role == UserRole.SELLER) {
+
+            newUser = new User(
+                username, email, hashedPassword, phone,
+                null, null,
+                role, null,
+                organizationType    // ⭐ เพิ่มฟิลด์ใหม่
+            );
+        }
+
+        else if (role == UserRole.SELLER) {
+
             if (studentID == null || studentID.length() != 10) {
                 throw new RuntimeException("Invalid student ID.");
             }
+
             boolean isValidStudent = tuApiService.checkStudentExists(studentID);
             if (!isValidStudent) {
                 throw new RuntimeException("Student ID not valid according to TU records.");
             }
 
-            newUser = new User(username, email, hashedPassword, phone, studentID, null, role, false);
-        } else {
+            newUser = new User(
+                username, email, hashedPassword, phone,
+                studentID, null,
+                role, false,
+                organizationType     // ⭐ เพิ่มฟิลด์ใหม่
+            );
+        }
+
+        else {
             throw new RuntimeException("Invalid role.");
         }
-        return userRepository.save(newUser); // คืนค่า User ที่บันทึกแล้ว (มี user_id)
+
+        return userRepository.save(newUser);
     }
 
-    public boolean isSellerById(Long id){
+
+
+    // ----------------------------------------------------
+    // ROLE CHECK HELPERS
+    // ----------------------------------------------------
+    public boolean isSellerById(Long id) {
         User user = userRepository.findFirstByUserId(id);
-
-        if(user == null) return false;
-        if(user.getRole() == UserRole.SELLER) return true;
-
-        return false;
-    }
-    
-    public boolean isBuyerById(Long id){
-        User user = userRepository.findFirstByUserId(id);
-
-        if(user == null) return false;
-        if(user.getRole() == UserRole.CLIENT) return true;
-
-        return false;
+        return (user != null && user.getRole() == UserRole.SELLER);
     }
 
-    public boolean isVerifiedSellerById(Long id){
+    public boolean isBuyerById(Long id) {
         User user = userRepository.findFirstByUserId(id);
+        return (user != null && user.getRole() == UserRole.CLIENT);
+    }
 
-        if(user == null) return false;
-        if(user.getRole() == UserRole.SELLER && user.getVerified() == true) return true;
-
-        return false;
+    public boolean isVerifiedSellerById(Long id) {
+        User user = userRepository.findFirstByUserId(id);
+        return (user != null && user.getRole() == UserRole.SELLER && user.getVerified() == true);
     }
 }

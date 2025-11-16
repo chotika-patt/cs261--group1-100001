@@ -28,7 +28,7 @@ public class User {
     private String studentID;  // เฉพาะ seller
 
     @Column(length = 255, nullable = true)
-    private String verify_document;  // path หรือ URL ของไฟล์ยืนยัน (.jpg / .pdf)
+    private String verify_document;  // path หรือ URL ไฟล์ยืนยัน (.jpg / .pdf)
 
     @Column(nullable = true)
     private Boolean verified;
@@ -40,11 +40,20 @@ public class User {
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    // ⭐️ ฟิลด์ใหม่: ขายสินค้าในนาม (ชุมนุม / ชมรม / กลุ่มอิสระ)
+    @Column(name = "organization_type", columnDefinition = "NVARCHAR(50)", nullable = true)
+    private String organizationType;
+
+
+
+
     // ----- Constructors -----
     public User() {}
 
     public User(String username, String email, String password, String phone,
-                String studentID, String verify_document, UserRole role,  Boolean verified) {
+                String studentID, String verify_document, UserRole role,
+                Boolean verified, String organizationType) {
+
         this.username = username;
         this.email = email;
         this.password = password;
@@ -53,8 +62,8 @@ public class User {
         this.verify_document = verify_document;
         this.role = role;
         this.verified = verified;
+        this.organizationType = organizationType;
     }
-
 
 
     // ----- Getters & Setters -----
@@ -86,4 +95,8 @@ public class User {
 
     public Boolean getVerified() { return verified; }
     public void setVerified(Boolean verified) { this.verified = verified; }
+
+    // ⭐️ Getter / Setter ของฟิลด์ใหม่
+    public String getOrganizationType() { return organizationType; }
+    public void setOrganizationType(String organizationType) { this.organizationType = organizationType; }
 }

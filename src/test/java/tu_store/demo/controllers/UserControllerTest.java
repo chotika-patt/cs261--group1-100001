@@ -24,6 +24,7 @@ public class UserControllerTest {
         userController = new UserController(userService);
     }
 
+
     // ====== TEST 1: ตรวจสอบ input ว่างไหม ======
     @Test
     public void testLogin_WithEmptyUsername_ShouldReturnBadRequest() {
@@ -31,8 +32,7 @@ public class UserControllerTest {
         user.setUsername("");
         user.setPassword("password123");
 
-        // ตรวจสอบว่า username ว่าง
-        assertTrue(user.getUsername().isBlank(), "Username should be blank");
+        assertTrue(user.getUsername().isBlank());
     }
 
     @Test
@@ -41,8 +41,7 @@ public class UserControllerTest {
         user.setUsername("testuser");
         user.setPassword("");
 
-        // ตรวจสอบว่า password ว่าง
-        assertTrue(user.getPassword().isBlank(), "Password should be blank");
+        assertTrue(user.getPassword().isBlank());
     }
 
     @Test
@@ -51,32 +50,34 @@ public class UserControllerTest {
         user.setUsername("");
         user.setPassword("");
 
-        assertTrue(user.getUsername().isBlank() && user.getPassword().isBlank(),
-                "Both should be blank");
+        assertTrue(user.getUsername().isBlank() && user.getPassword().isBlank());
     }
+
 
     // ====== TEST 2: ตรวจสอบ verifyCredentials ด้วย mock service ======
     @Test
     public void testLogin_WithValidCredentials_ShouldReturnSuccess() {
-        // Arrange
+
         User inputUser = new User();
         inputUser.setUsername("testuser");
         inputUser.setPassword("password123");
 
-        User dbUser = new User("testuser", "test@email.com", "hashedPassword",
-                "0812345678", null, null, UserRole.CLIENT, null);
+        // ⭐ ใช้ constructor ใหม่ (add organizationType)
+        User dbUser = new User(
+                "testuser", "test@email.com", "hashedPassword",
+                "0812345678", null, null,
+                UserRole.CLIENT, null,
+                null  // ⭐ ค่า organizationType
+        );
 
-        // Mock service ให้ return true (login สำเร็จ)
         when(userService.login(inputUser)).thenReturn(true);
         when(userService.findByUsername("testuser")).thenReturn(dbUser);
 
-        // Act
         boolean loginResult = userService.login(inputUser);
         User foundUser = userService.findByUsername("testuser");
 
-        // Assert
-        assertTrue(loginResult, "Login should return true");
-        assertNotNull(foundUser, "User should be found");
+        assertTrue(loginResult);
+        assertNotNull(foundUser);
         assertEquals("testuser", foundUser.getUsername());
         assertEquals(UserRole.CLIENT, foundUser.getRole());
 
@@ -86,25 +87,22 @@ public class UserControllerTest {
 
     @Test
     public void testLogin_WithInvalidCredentials_ShouldReturnUnauthorized() {
-        // Arrange
+
         User inputUser = new User();
         inputUser.setUsername("testuser");
         inputUser.setPassword("wrongpassword");
 
-        // Mock service ให้ return false (login ไม่สำเร็จ)
         when(userService.login(inputUser)).thenReturn(false);
 
-        // Act
         boolean result = userService.login(inputUser);
+        assertFalse(result);
 
-        // Assert
-        assertFalse(result, "Login should return false with invalid credentials");
         verify(userService).login(inputUser);
     }
 
     @Test
     public void testLogin_WithNonexistentUser_ShouldReturnUnauthorized() {
-        // Arrange
+
         User inputUser = new User();
         inputUser.setUsername("nonexistentuser");
         inputUser.setPassword("password123");
@@ -112,76 +110,87 @@ public class UserControllerTest {
         when(userService.login(inputUser)).thenReturn(false);
         when(userService.findByUsername("nonexistentuser")).thenReturn(null);
 
-        // Act
         boolean loginResult = userService.login(inputUser);
         User foundUser = userService.findByUsername("nonexistentuser");
 
-        // Assert
-        assertFalse(loginResult, "Login should fail for nonexistent user");
-        assertNull(foundUser, "User should not be found");
+        assertFalse(loginResult);
+        assertNull(foundUser);
     }
+
 
     // ====== TEST 3: Register Buyer ======
     @Test
     public void testRegisterBuyer_WithValidData_ShouldSucceed() {
-        // Arrange
-        User user = new User("newbuyer", "buyer@email.com", "password123",
-                "0812345678", null, null, UserRole.CLIENT, null);
 
-        when(userService.register(any(User.class))).thenReturn("CLIENT registered successfully.");
+        User user = new User(
+                "newbuyer", "buyer@email.com", "password123",
+                "0812345678", null, null,
+                UserRole.CLIENT, null,
+                null   // ⭐ organizationType
+        );
 
-        // Act
+        when(userService.register(any(User.class)))
+                .thenReturn("CLIENT registered successfully.");
+
         String result = userService.register(user);
 
-        // Assert
-        assertTrue(result.contains("successfully"), "Should return success message");
-        assertEquals(UserRole.CLIENT, user.getRole(), "Role should be CLIENT");
+        assertTrue(result.contains("successfully"));
+        assertEquals(UserRole.CLIENT, user.getRole());
         verify(userService).register(any(User.class));
     }
 
     @Test
     public void testRegisterBuyer_WithDuplicateUsername_ShouldFail() {
-        // Arrange
-        User user = new User("existinguser", "buyer@email.com", "password123",
-                "0812345678", null, null, UserRole.CLIENT, null);
 
-        when(userService.register(any(User.class))).thenReturn("Username has already been used.");
+        User user = new User(
+                "existinguser", "buyer@email.com", "password123",
+                "0812345678", null, null,
+                UserRole.CLIENT, null,
+                null
+        );
 
-        // Act
+        when(userService.register(any(User.class)))
+                .thenReturn("Username has already been used.");
+
         String result = userService.register(user);
-
-        // Assert
         assertEquals("Username has already been used.", result);
     }
+
 
     // ====== TEST 4: Register Seller ======
     @Test
     public void testRegisterSeller_WithValidData_ShouldSucceed() {
-        // Arrange
-        User user = new User("newseller", "seller@email.com", "password123",
-                "0812345678", "5912345678", null, UserRole.SELLER, false);
+
+        User user = new User(
+                "newseller", "seller@email.com", "password123",
+                "0812345678", "5912345678",
+                null, UserRole.SELLER, false,
+                "ชมรม"   // ⭐ Seller ต้องมี organizationType
+        );
 
         when(userService.registerReturnUser(any(User.class))).thenReturn(user);
 
-        // Act
         User result = userService.registerReturnUser(user);
 
-        // Assert
-        assertNotNull(result, "User should not be null");
-        assertEquals(UserRole.SELLER, result.getRole(), "Role should be SELLER");
+        assertNotNull(result);
+        assertEquals(UserRole.SELLER, result.getRole());
         assertEquals("5912345678", result.getStudentID());
+        assertEquals("ชมรม", result.getOrganizationType());
     }
 
     @Test
     public void testRegisterSeller_WithoutStudentID_ShouldFail() {
-        // Arrange
-        User user = new User("newseller", "seller@email.com", "password123",
-                "0812345678", null, null, UserRole.SELLER, false);
+
+        User user = new User(
+                "newseller", "seller@email.com", "password123",
+                "0812345678", null,
+                null, UserRole.SELLER, false,
+                "ชุมนุม"
+        );
 
         when(userService.registerReturnUser(any(User.class)))
                 .thenThrow(new RuntimeException("Invalid student ID."));
 
-        // Act & Assert
         assertThrows(RuntimeException.class, () -> {
             userService.registerReturnUser(user);
         });
@@ -189,14 +198,17 @@ public class UserControllerTest {
 
     @Test
     public void testRegisterSeller_WithInvalidStudentID_ShouldFail() {
-        // Arrange
-        User user = new User("newseller", "seller@email.com", "password123",
-                "0812345678", "123", null, UserRole.SELLER, false);
+
+        User user = new User(
+                "newseller", "seller@email.com", "password123",
+                "0812345678", "123",
+                null, UserRole.SELLER, false,
+                "กลุ่มอิสระ"
+        );
 
         when(userService.registerReturnUser(any(User.class)))
                 .thenThrow(new RuntimeException("Invalid student ID."));
 
-        // Act & Assert
         assertThrows(RuntimeException.class, () -> {
             userService.registerReturnUser(user);
         });
