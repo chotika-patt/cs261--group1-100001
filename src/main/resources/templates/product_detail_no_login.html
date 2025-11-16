@@ -78,7 +78,7 @@
     <!-- กล่องข้อมูลสินค้า -->
     <div class="product-detail-main">
         <div class="product-buttons">
-            <button th:href="@{/login}" class="add-cart-btn">เพิ่มลงตะกร้า</button>
+            <a style="text-decoration: none;" th:href="@{/login}" class="add-cart-btn">เพิ่มลงตะกร้า</a>
         </div>
 
         ชื่อสินค้า: <h2 class="product-name" th:text="${product.name}"></h2>
@@ -236,10 +236,9 @@
 </div>
 
 <div class="product-buttons">
-    <button th:href="@{/login}" class="buy-btn">
+    <a style="text-decoration: none;" th:href="@{/login}" class="buy-btn">
         <i class="fa-solid fa-check"></i> สั่งซื้อทันที
-    </button>
-
+    </a>
 </div>
 
 <!--  Popup แจ้งเตือน -->
