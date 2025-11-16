@@ -341,14 +341,14 @@ public class OrderService {
             if(oldStatus != ShipmentTrackingStatus.PREPARING) return false;
             
             shipmentTrackingService.updateStatus(order, status);
-            notificationService.sendOrderStatusUpdateByEmail(order, oldStatus, status);
+            //notificationService.sendOrderStatusUpdateByEmail(order, oldStatus, status);
 
         } else if(status == ShipmentTrackingStatus.DELIVERED) {
             if(oldStatus != ShipmentTrackingStatus.SHIPPED) return false;
 
             shipmentTrackingService.updateStatus(order, status);
 
-            notificationService.sendOrderStatusUpdateByEmail(order, oldStatus, status);
+            //notificationService.sendOrderStatusUpdateByEmail(order, oldStatus, status);
             orderStatusLogService.createOrderLog(order, OrderStatus.COMPLETED);
             order.setStatus(OrderStatus.COMPLETED);
         }
@@ -376,18 +376,6 @@ public class OrderService {
         }
     }
 
-    // public Boolean updateStatus(Order order){
-    //     if(order == null) return null;
-
-    //     if(order.getStatus() == OrderStatus.PENDING){
-    //         return updateStatus(order, OrderStatus.PAID);
-    //     } 
-    //     else if(order.getStatus() == OrderStatus.PAID){
-    //         return updateStatus(order, OrderStatus.COMPLETED);
-    //     }
-
-    //     return null;
-    // }
 
     // -----------------------------------------------------
     // CANCEL ORDER
@@ -405,10 +393,10 @@ public class OrderService {
 
         ShipmentTracking st = order.getShipmentTracking();
         if(st != null) {
-            ShipmentTrackingStatus oldStStatus = st.getStatus();
+            //ShipmentTrackingStatus oldStStatus = st.getStatus();
 
             shipmentTrackingService.updateStatus(order, ShipmentTrackingStatus.CANCELLED);
-            notificationService.sendOrderStatusUpdateByEmail(order, oldStStatus, ShipmentTrackingStatus.CANCELLED);
+            //notificationService.sendOrderStatusUpdateByEmail(order, oldStStatus, ShipmentTrackingStatus.CANCELLED);
         }
 
         orderRepository.save(order);
@@ -496,7 +484,7 @@ public class OrderService {
                 order.setShipmentTracking(st);
                 orderRepository.saveAndFlush(order);
 
-                notificationService.sendOrderStatusUpdateByEmail(order, null, st.getStatus());
+                //notificationService.sendOrderStatusUpdateByEmail(order, null, st.getStatus());
             }
             System.out.println("[ORDER] already PAID - nothing to do for orderId=" + orderId);
             return;
@@ -516,7 +504,7 @@ public class OrderService {
             order.setShipmentTracking(st);
             orderRepository.saveAndFlush(order);
 
-            notificationService.sendOrderStatusUpdateByEmail(order, null, st.getStatus());
+            //notificationService.sendOrderStatusUpdateByEmail(order, null, st.getStatus());
         } catch (Exception e) {
             // log the exception but do not abort — still proceed to stock update and logging
             System.err.println("[ORDER] failed to create shipment tracking for orderId=" + orderId + " : " + e.getMessage());
