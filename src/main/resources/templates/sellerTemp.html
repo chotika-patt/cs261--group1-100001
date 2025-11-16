@@ -88,8 +88,9 @@
             <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
           </div>
           <div class="product-actions">
-            <button class="edit-btn"
-              th:onclick="'location.href=\'/product_edit/' + ${product.productId} + '\';'">แก้ไข</button>
+            <button class="edit-btn" th:attr="data-product-id=${product.productId}">
+              แก้ไข
+            </button>
             <button class="delete-btn" th:attr="data-product-id=${product.productId}">
               ลบ
             </button>

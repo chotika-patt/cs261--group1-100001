@@ -132,3 +132,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
+// Handle edit product buttons
+document.querySelectorAll('.edit-btn').forEach(button => {
+  button.addEventListener('click', function() {
+    const productId = this.getAttribute('data-product-id');
+    window.location.href = `/editProduct?id=${productId}`;
+  });
+});

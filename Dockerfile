@@ -1,5 +1,5 @@
 # ใช้ base image ของ JDK
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk
 
 # ตั้ง working directory ใน container
 WORKDIR /app
