@@ -192,4 +192,5 @@ function renderSearchResults(products) {
     `;
     grid.insertAdjacentHTML("beforeend", html);
   });
+
 }

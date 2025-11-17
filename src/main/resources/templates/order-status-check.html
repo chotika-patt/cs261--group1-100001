@@ -260,6 +260,7 @@
                       <input type="number" placeholder="ใส่ราคาสูงสุด" id="max-price" class="price-input">
                       <span class="price-unit">บาท</span>
                   </div>
+                  <p id="price-error" class="field-error"></p><!---ข้อความ error -->
               </div>
 
               <!-- สถานะสินค้า -->
@@ -405,6 +406,110 @@
       })();
     });
   </script>
+  <!--input validation ฝากย้ายไปไว้ใน search.js ด้วยจ้า-->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const overlay    = document.getElementById('filter-overlay');
+  if (!overlay) return;
+  const minInput   = overlay.querySelector('#min-price');
+  const maxInput   = overlay.querySelector('#max-price');
+  const priceError = overlay.querySelector('#price-error');
+  const applyBtn   = overlay.querySelector('.filter-confirm-btn');
+
+  function validateFilterInputs(showShake = false) {
+    if (!minInput || !maxInput || !applyBtn) return true;
+
+    let minRaw = minInput.value.trim();
+    let maxRaw = maxInput.value.trim();
+
+    let min = null;
+    let max = null;
+    let msg = '';
+    let isValid = true;
+
+    const englishPatternGlobal = /[A-Za-z]/g;
+    const englishPattern       = /[A-Za-z]/;
+
+    if (minRaw !== '' && englishPattern.test(minRaw)) {
+      minRaw = minRaw.replace(englishPatternGlobal, '');
+      minInput.value = minRaw;
+      isValid = false;
+      msg = 'กรุณากรอกราคาต่ำสุดเป็นตัวเลขเท่านั้น';
+    }
+
+    if (isValid && maxRaw !== '' && englishPattern.test(maxRaw)) {
+      maxRaw = maxRaw.replace(englishPatternGlobal, '');
+      maxInput.value = maxRaw;
+      isValid = false;
+      msg = 'กรุณากรอกราคาสูงสุดเป็นตัวเลขเท่านั้น';
+    }
+
+    if (isValid && minRaw !== '') {
+      min = Number(minRaw);
+      if (Number.isNaN(min)) {
+        isValid = false;
+        msg = 'กรุณากรอกราคาต่ำสุดเป็นตัวเลขเท่านั้น';
+      }
+    }
+
+    if (isValid && maxRaw !== '') {
+      max = Number(maxRaw);
+      if (Number.isNaN(max)) {
+        isValid = false;
+        msg = 'กรุณากรอกราคาสูงสุดเป็นตัวเลขเท่านั้น';
+      }
+    }
+
+    if (isValid && ((min !== null && min < 0) || (max !== null && max < 0))) {
+      isValid = false;
+      msg = 'กรอกราคาติดลบ กรุณากรอกใหม่';
+    }
+
+    if (isValid && min !== null && max !== null && min > max) {
+      isValid = false;
+      msg = 'ราคาต่ำสุดต้องไม่มากกว่าราคาสูงสุด';
+    }
+
+    if (priceError) {
+      priceError.textContent = msg;  
+    }
+
+    if (!isValid) {
+      minInput.classList.add('input-error');
+      maxInput.classList.add('input-error');
+    } else {
+      minInput.classList.remove('input-error');
+      maxInput.classList.remove('input-error');
+    }
+
+    applyBtn.disabled = !isValid;
+
+    if (!isValid && showShake) {
+      minInput.classList.add('shake');
+      maxInput.classList.add('shake');
+      setTimeout(() => {
+        minInput.classList.remove('shake');
+        maxInput.classList.remove('shake');
+      }, 350);
+    }
+
+    return isValid;
+  }
+
+  minInput?.addEventListener('input', () => validateFilterInputs());
+  maxInput?.addEventListener('input', () => validateFilterInputs());
+  applyBtn?.addEventListener('click', (e) => {
+    const ok = validateFilterInputs(true);
+    if (!ok) {
+      e.preventDefault();
+      return;
+    }
+  });
+
+  validateFilterInputs();
+});
+</script>
+
 
   <script th:src="@{/js/main.js}" defer></script>
   <script th:src="@{/js/search.js}" defer></script>
