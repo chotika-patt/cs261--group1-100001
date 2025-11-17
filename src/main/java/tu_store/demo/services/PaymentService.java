@@ -14,16 +14,17 @@ import org.springframework.util.StringUtils;
 import tu_store.demo.dto.InitiatePaymentRequest;
 import tu_store.demo.dto.InitiatePaymentResponse;
 import tu_store.demo.dto.PaymentStatusResponse;
+import tu_store.demo.models.Cart;
 import tu_store.demo.models.Payment;
 import tu_store.demo.models.PaymentLog;
 import tu_store.demo.models.enums.PaymentStatus;
+import tu_store.demo.repositories.CartRepository;
 import tu_store.demo.repositories.PaymentLogRepository;
 import tu_store.demo.repositories.PaymentRepository;
 import tu_store.demo.services.payment.ProviderClient;
 import tu_store.demo.services.payment.ProviderClientFactory;
 import tu_store.demo.services.payment.ProviderResponse;
 import tu_store.demo.services.payment.ProviderWebhookEvent;
-import tu_store.demo.services.payment.ProviderClientFactory;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -48,6 +49,9 @@ public class PaymentService {
 
     @Autowired
     private tu_store.demo.services.payment.ProviderClientFactory providerClientFactory;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -324,5 +328,52 @@ public class PaymentService {
         paymentRepository.save(p);
 
         log(p.getPaymentId(), "PAYMENT_EXPIRED", "expiredByScheduler");
+    }
+
+    // ================================================================
+    // NEW: markPaymentAsPaid sequence: persist payment -> update order -> clear cart
+    // ================================================================
+    @Transactional
+    public void markPaymentAsPaid(Long paymentId, Long userId) {
+        if (paymentId == null) throw new IllegalArgumentException("paymentId required");
+        Payment p = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new IllegalArgumentException("payment not found"));
+
+        if (!p.getUserId().equals(userId)) throw new AccessDeniedException("not your payment");
+
+        // 1) Update payment to PAID and persist immediately
+        p.setStatus(PaymentStatus.PAID);
+        p.setUpdatedAt(LocalDateTime.now());
+        paymentRepository.saveAndFlush(p); // ensure persisted before order update
+        log(p.getPaymentId(), "MARKED_PAID_BY_USER", "marked by userId=" + userId);
+
+        // 2) Then mark order as PAID using existing order service
+        try {
+            if (p.getOrderId() != null) {
+                orderService.updateStatusToPaid(p.getOrderId(), p.getPaymentRef());
+                log(p.getPaymentId(), "ORDER_MARKED_PAID", "orderId=" + p.getOrderId());
+            } else {
+                log(p.getPaymentId(), "ORDER_MARK_PAID_SKIPPED", "no orderId on payment");
+            }
+        } catch (Exception e) {
+            log(p.getPaymentId(), "ORDER_UPDATE_FAILED", e.getMessage());
+            // rethrow so transaction will roll back (payment status will be undone)
+            throw e;
+        }
+
+        // 3) Clear / deactivate user's active cart (best-effort; do not fail the whole flow if cart clear fails)
+        try {
+            Cart cart = cartRepository.findFirstByUserUserIdAndIsActiveTrue(userId);
+            if (cart != null) {
+                cart.setActive(false);
+                cartRepository.save(cart);
+                log(p.getPaymentId(), "CART_CLEARED", "cartId=" + cart.getCartId());
+            } else {
+                log(p.getPaymentId(), "CART_NOT_FOUND", "no active cart");
+            }
+        } catch (Exception e) {
+            log(p.getPaymentId(), "CART_CLEAR_FAILED", e.getMessage());
+            // don't abort — cart clear failure should not break the paid flow (already logged)
+        }
     }
 }

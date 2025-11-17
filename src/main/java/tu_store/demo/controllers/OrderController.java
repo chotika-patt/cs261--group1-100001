@@ -45,16 +45,26 @@ public class OrderController {
         Long userId = userService.getUserIdBySession(session);
         if(userId == null) throw new ApiException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "Please login first.");
         var cart = cartService.getOrCreateCartByUserId(userId);
-        if(cart == null || cart.getItems() == null || cart.getItems().isEmpty())
+        if (cart == null || cart.getItems() == null || cart.getItems().isEmpty()) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "EMPTY_CART", "ตะกร้าว่าง");
+        }
 
-        // service will validate product existence/status/stock
-        var order = orderService.createOrder(cart);
+        // if there's already an order for this cart, ensure it's not PAID/COMPLETED
+        Order existing = orderService.getOrderByCartId(cart.getCartId());
+        if (existing != null) {
+            if (existing.getStatus() == OrderStatus.PAID || existing.getStatus() == OrderStatus.COMPLETED) {
+                // create a fresh order instead of returning the old paid one
+                existing = null;
+            } else {
+                // return existing draft/pending order
+                OrderDraftResponse resp = orderService.createOrderDraftResponse(existing);
+                return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+            }
+        }
 
-
+        // create new order
+        Order order = orderService.createOrder(cart);
         OrderDraftResponse resp = orderService.createOrderDraftResponse(order);
-
-
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 

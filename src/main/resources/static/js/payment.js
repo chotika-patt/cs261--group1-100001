@@ -1,6 +1,3 @@
-// payment.js — confirm button simulates PAID after a short loading delay
-// Drop this into src/main/resources/static/js/payment.js (replace existing)
-
 document.addEventListener("DOMContentLoaded", () => {
   // ------------------------------
   // DOM references
@@ -39,7 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
     initiate: "/api/payments/initiate",
     status: (id) => `/api/payments/${id}`,
     cancel: (id) => `/api/payments/${id}/cancel`,
-    createDraft: "/api/orders/draft"
+    createDraft: "/api/orders/draft",
+    markPaid: (id) => `/api/payments/${id}/markPaid`
   };
 
   // ------------------------------
@@ -421,7 +419,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ------------------------------
-  // Confirm button: simulate PAID after loading delay
+  // Confirm button: simulate PAID after loading delay, then call server to finalize
   // ------------------------------
   confirmBtn?.addEventListener("click", async () => {
     // disable the confirm button to avoid double-clicks
@@ -434,8 +432,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // show loading card to simulate processing
     showOnly(loadingCard);
 
-    // wait for configured delay, then simulate PAID
-    setTimeout(() => {
+    // wait for configured delay, then simulate PAID and call backend
+    setTimeout(async () => {
       const simulated = {
         paymentId: currentPaymentId,
         status: "PAID",
@@ -444,7 +442,31 @@ document.addEventListener("DOMContentLoaded", () => {
         currency: lastKnownCurrency || "THB"
       };
 
-      handlePaymentStatus(simulated);
+      // Call server to mark payment as paid -> server will update payment, order and clear cart
+      try {
+        const headers = Object.assign({ "Content-Type": "application/json" }, getCsrfHeaders());
+        const resp = await fetch(API.markPaid(currentPaymentId), {
+          method: "POST",
+          credentials: "same-origin",
+          headers
+        });
+
+        if (!resp.ok) {
+          let body = null;
+          try { body = await resp.json(); } catch (e) { body = await resp.text().catch(()=>null); }
+          console.error("markPaid failed", resp.status, body);
+          showOnly(failCard);
+          showErrorMessageUI(body?.message || "ไม่สามารถยืนยันการชำระเงินได้");
+          return;
+        }
+
+        // success — update UI to PAID
+        handlePaymentStatus(simulated);
+      } catch (e) {
+        console.error("markPaid error", e);
+        showOnly(failCard);
+        showErrorMessageUI("Network error while finalizing payment");
+      }
     }, CONFIRM_SIMULATED_DELAY_MS);
   });
 

@@ -71,4 +71,26 @@ public class PaymentController {
     public ResponseEntity<?> webhook(@PathVariable String provider, @RequestHeader(value="X-Signature", required = false) String sig, @RequestBody String body) {
         return paymentService.handleWebhook(provider, sig, body);
     }
+
+    // ---------------------------
+    // NEW: mark payment as paid (called by frontend confirm)
+    // ---------------------------
+    @PostMapping("/{paymentId:\\d+}/markPaid")
+    public ResponseEntity<?> markPaid(HttpSession session, @PathVariable Long paymentId) {
+        Long userId = userService.getUserIdBySession(session);
+        if (userId == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("errorCode","UNAUTHORIZED","message","Please login"));
+
+        try {
+            paymentService.markPaymentAsPaid(paymentId, userId);
+            return ResponseEntity.ok(Map.of("message","ok"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("errorCode","NOT_FOUND","message", e.getMessage()));
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("errorCode","UNAUTHORIZED","message", "not your payment"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorCode","INTERNAL_ERROR","message","Could not mark payment as paid"));
+        }
+    }
 }
+

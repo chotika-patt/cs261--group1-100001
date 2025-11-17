@@ -57,12 +57,23 @@ public class OrderService {
 
     @Autowired private NotificationService notificationService;
 
+    public Order getOrderByCartId(Long cartId) {
+        return orderRepository.findFirstByCartCartId(cartId);
+    }
+
     // -----------------------------------------------------
     // CREATE ORDER
     // -----------------------------------------------------
     @Transactional
     public Order createOrder(Cart cart){
         Order order = orderRepository.findFirstByCartCartId(cart.getCartId());
+        if (order != null) {
+            if (order.getStatus() == OrderStatus.PAID || order.getStatus() == OrderStatus.COMPLETED) {
+                order = null; // force new order creation
+            } else {
+                return order;
+            }
+        }
 
         if(order == null){
 
