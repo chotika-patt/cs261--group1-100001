@@ -94,20 +94,24 @@
       itemEl.dataset.productId = productId;
 
       // Product name and optional image (uses item.product if provided)
-      const productName = (item.product && (item.product.name || item.product.title)) || `Product #${productId}`;
-      const imageUrl = (item.product && item.product.image) || null;
-      const description = (item.product && item.product.description) || '';
+      const productName = item.productName || `Product #${productId}`;
+
+      const imageUrl = item.productImage 
+        ? `/product_img/${item.productImage}`
+        : null;
+
+
 
       itemEl.innerHTML = `
         <div class="cart-image">
-          ${imageUrl ? `<img src="${imageUrl}" alt="${productName}" style="max-width:80px;max-height:80px;object-fit:cover"/>` : 'รูป'}
+          ${imageUrl ? `<img src="${imageUrl}" alt="${productName}" >` : 'รูป'}
         </div>
         <div class="cart-details">
           <div class="row">
             <span class="product-name">${escapeHtml(productName)}</span>
             <span class="price unit-price">${formatCurrency(unitPrice)}</span>
           </div>
-          <div class="row product-desc">${escapeHtml(description)}</div>
+
           <div class="row">
             <span>คาดการณ์วันที่จะจัดส่ง <small>(จัดส่ง 2-3 วัน)</small></span>
             <span class="delivery">รับสินค้าด้วยตัวเอง</span>

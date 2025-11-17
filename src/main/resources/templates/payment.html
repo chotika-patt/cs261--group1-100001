@@ -122,16 +122,19 @@
     </div>
     <!--  QR Payment Popup -->
     <div class="qr-popup" id="qrPopup">
-        <div class="qr-card">
-            <img src="/img/qrcode.jpg" alt="QR Code">
-            <h2>โปรดชำระเงินภายในเวลา</h2>
-            <p class="countdown"><span id="countdown">60</span> วินาที</p>
-            <p class="desc">เมื่อชำระเงินเสร็จสิ้นแล้ว กรุณารอการยืนยัน</p>
-            <div class="button-group">
-                <button id="confirmBtn" class="btn-confirm">ยืนยันการชำระเงิน</button>
-                <button id="newQRBtn" class="btn-newqr" style="display:none;">สร้าง QR ใหม่</button>
-            </div>
+    <div class="qr-card">
+        <span class="close-qr-btn" id="closeQrBtn">&times;</span>
+        
+        <img src="/img/qrcode.jpg" alt="QR Code">
+        <h2>โปรดชำระเงินภายในเวลา</h2>
+        <p class="countdown"><span id="countdown">60</span> วินาที</p>
+        <p class="desc">เมื่อชำระเงินเสร็จสิ้นแล้ว กรุณารอการยืนยัน</p>
+        <div class="button-group">
+            <button id="confirmBtn" class="btn-confirm">ยืนยันการชำระเงิน</button>
+            <button id="newQRBtn" class="btn-newqr" style="display:none;">สร้าง QR ใหม่</button>
         </div>
+    </div>
+</div>
 
         <!--  Loading -->
         <div class="loading-card" id="loadingCard" style="display:none;">
@@ -238,9 +241,10 @@
                   </div>
               </div>
 
-              <!-- ปุ่มตกลง -->
-              <button class="filter-confirm-btn" id="filter-confirm-button">ตกลง</button>
-
+              <div class="filter-button-container">
+                <button class="filter-clear-btn" id="filter-clear-button">ล้าง</button>
+                <button class="filter-confirm-btn" id="filter-confirm-button">ตกลง</button>
+            </div>
           </div>
       </div>
   </div>
@@ -265,6 +269,19 @@ document.addEventListener("DOMContentLoaded", function() {
             overlay.classList.remove('show');
         });
     }
+});
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const closeQrBtn = document.getElementById("closeQrBtn");
+    const qrPopup = document.getElementById("qrPopup");
+
+    if (closeQrBtn && qrPopup) {
+        closeQrBtn.addEventListener("click", function() {
+            qrPopup.style.display = "none";
+        });
+    }
+
 });
 </script>
 <script th:src="@{/js/main.js}" defer></script>

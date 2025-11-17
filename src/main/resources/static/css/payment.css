@@ -109,6 +109,7 @@ body {
 }
 
 .qr-card {
+    position: relative;
     background: #fff;
     border-radius: 16px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -606,4 +607,18 @@ body {
     .detail-list {
         font-size: 12.5px;
     }
+}
+/* 2. กำหนดสไตล์และตำแหน่งของปุ่ม X */
+.close-qr-btn {
+    position: absolute;
+    top: 10px;        /* ระยะห่างจากขอบบน */
+    right: 15px;       /* ระยะห่างจากขอบขวา */
+    font-size: 28px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+    line-height: 1;
+}
+.close-qr-btn:hover {
+    color: #000;
 }
