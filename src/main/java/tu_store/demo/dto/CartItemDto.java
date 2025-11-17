@@ -5,9 +5,11 @@ public class CartItemDto {
     private Long productId;
     private int quantity;
     private long price;
+    private String size;
 
     // ⭐ NEW
-    private String size;
+    private String productName;
+    private String productImage;
 
     public Long getProductId() {
         return productId;
@@ -33,12 +35,29 @@ public class CartItemDto {
         this.price = price;
     }
 
-    // ⭐ NEW
     public String getSize() {
         return size;
     }
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    // ⭐⭐ NEW — name
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    // ⭐⭐ NEW — image
+    public String getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
     }
 }
