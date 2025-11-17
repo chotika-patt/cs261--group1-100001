@@ -11,7 +11,6 @@ import jakarta.persistence.*;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_id")
     private Long reviewId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,11 +31,9 @@ public class Review {
     private String comment;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReviewImage> images = new ArrayList<>();;
+    private List<ReviewImage> images = new ArrayList<>();
 
-    @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
-
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
@@ -50,68 +47,22 @@ public class Review {
         return images != null && !images.isEmpty();
     }
 
-    public Review(){}
-    
-    public void setBuyer(User buyer) {
-        this.buyer = buyer;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
-    public void setImages(List<ReviewImage> images) {
-        this.images = images;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public User getBuyer() {
-        return buyer;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public List<ReviewImage> getImages() {
-        return images;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public Long getReviewId() {
-        return reviewId;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
+    // getters & setters
+    public Long getReviewId() { return reviewId; }
+    public Order getOrder() { return order; }
+    public void setOrder(Order order) { this.order = order; }
+    public User getBuyer() { return buyer; }
+    public void setBuyer(User buyer) { this.buyer = buyer; }
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
+    public Integer getRating() { return rating; }
+    public void setRating(Integer rating) { this.rating = rating; }
+    public String getComment() { return comment; }
+    public void setComment(String comment) { this.comment = comment; }
+    public List<ReviewImage> getImages() { return images; }
+    public void setImages(List<ReviewImage> images) { this.images = images; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public LocalDateTime getDeletedAt() { return deletedAt; }
+    public void setDeletedAt(LocalDateTime deletedAt) { this.deletedAt = deletedAt; }
 }

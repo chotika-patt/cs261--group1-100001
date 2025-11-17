@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import tu_store.demo.dto.ReviewResponse;
 import tu_store.demo.models.Category;
 import tu_store.demo.models.Product;
 import tu_store.demo.models.ProductStatus;
@@ -24,6 +25,7 @@ import tu_store.demo.models.UserRole;
 import org.springframework.web.bind.annotation.RequestParam;
 import tu_store.demo.repositories.ProductRepository;
 import tu_store.demo.repositories.UserRepository;
+import tu_store.demo.services.ReviewService;
 import tu_store.demo.services.UserService;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -32,6 +34,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Controller
 public class PageController {
 
+    @Autowired
+    private ReviewService reviewService;
     @Autowired
     private ProductRepository productRepository;
 
@@ -216,6 +220,9 @@ public class PageController {
             model.addAttribute("errorMessage", "สินค้านี้ไม่มีอยู่");
             return "error_page"; // or redirect to a 404 page
         }
+
+        List<ReviewResponse> reviews = reviewService.getReviewsByProductId(productId);
+        model.addAttribute("reviews", reviews);
         if (username == null) {
             model.addAllAttributes(Map.of(
                 "username", "Guest",
@@ -236,6 +243,7 @@ public class PageController {
         model.addAttribute("product", product);
         model.addAttribute("stock", product.getStock());
         model.addAttribute("productId", product.getProductId());
+        
         return "product_detail";
     }
     @GetMapping("/addProduct")

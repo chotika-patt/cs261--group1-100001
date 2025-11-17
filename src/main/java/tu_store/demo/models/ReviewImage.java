@@ -14,7 +14,7 @@ public class ReviewImage {
     @Column(name = "image_id")
     private Long imageId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id", nullable = false)
     private Review review;
 
@@ -27,41 +27,19 @@ public class ReviewImage {
     private Long size;
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
+    public ReviewImage() {} // default constructor สำหรับ JPA
 
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
-    }
+    // getters
+    public Long getImageId() { return imageId; }
+    public Review getReview() { return review; }
+    public String getFilePath() { return filePath; }
+    public String getMimeType() { return mimeType; }
+    public Long getSize() { return size; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
 
-    public void setReview(Review review) {
-        this.review = review;
-    }
-
-    public void setSize(Long size) {
-        this.size = size;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public Long getImageId() {
-        return imageId;
-    }
-
-    public String getMimeType() {
-        return mimeType;
-    }
-    public Review getReview() {
-        return review;
-    }
-    public Long getSize() {
-        return size;
-    }
+    // setters
+    public void setReview(Review review) { this.review = review; }
+    public void setFilePath(String filePath) { this.filePath = filePath; }
+    public void setMimeType(String mimeType) { this.mimeType = mimeType; }
+    public void setSize(Long size) { this.size = size; }
 }
