@@ -254,4 +254,39 @@ public class OrderController {
 
         return ResponseEntity.ok(order.getShipmentTracking());
     }
+
+    @PostMapping("/{orderId}/decision")
+    public ResponseEntity<?> decideOrder(
+            HttpSession session,
+            @PathVariable Long orderId,
+            @RequestBody Map<String, String> body) {
+
+        Long userId = userService.getUserIdBySession(session);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message","Please login"));
+        }
+
+        String decision = body.get("decision");
+        if (decision == null) {
+            return ResponseEntity.badRequest().body(Map.of("message","Missing decision"));
+        }
+
+        Order order = orderService.getOrderById(orderId);
+        if (order == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message","Order not found"));
+        }
+
+        // Ensure the caller is the seller of this order
+        if (order.getSeller() == null || !order.getSeller().getUser_id().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message","Not allowed"));
+        }
+
+        boolean ok = orderService.applySellerDecision(order, decision.toUpperCase(), userId);
+
+        if (!ok) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message","Cannot apply decision"));
+        }
+
+        return ResponseEntity.ok(Map.of("message","success"));
+    }
 }

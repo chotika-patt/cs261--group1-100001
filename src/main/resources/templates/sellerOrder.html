@@ -53,15 +53,7 @@
       <li><a href="#">จัดการสินค้า</a></li>
       <li><a th:href="@{/sellerOrders}">คำสั่งซื้อ</a></li>
       <li><a href="#">ตั้งค่าร้านค้า</a></li>
-      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
     </ul>
-    <div class="search-bar-replacement">
-      <div class="search-input-container">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="ค้นหาสินค้าในร้านของคุณ...">
-      </div>
-      <button class="search-close-btn" id="search-close"><i class="fa-solid fa-xmark"></i></button>
-    </div>
   </nav>
 <h1 class="page-title">รายละเอียดคำสั่งซื้อ</h1>
 
@@ -212,6 +204,27 @@
     </div>
   </div>
 </div>
+
+ <!-- ======= Popup ยืนยันออกจากระบบ ======= -->
+  <div class="logout-modal" id="logout-modal">
+    <div class="modal-content">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <p>คุณต้องการออกจากระบบหรือไม่</p>
+      <div class="modal-buttons">
+        <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+        <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+      </div>
+      <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+    </div>
+  </div>
+
+  <!-- ======= Popup ออกจากระบบสำเร็จ ======= -->
+  <div class="logout-success" id="logout-success">
+    <div class="success-content">
+      <i class="fa-solid fa-circle-check"></i>
+      <p>ออกจากระบบสำเร็จแล้ว</p>
+    </div>
+  </div>
 <script>
 (() => {
   /* ===== Confirm Overlay helpers ===== */

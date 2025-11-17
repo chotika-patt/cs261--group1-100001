@@ -6,30 +6,33 @@ import org.springframework.stereotype.Service;
 import tu_store.demo.dto.CartItemDto;
 import tu_store.demo.models.*;
 import tu_store.demo.repositories.*;
-// import tu_store.demo.services.*;
 
 @Service
 public class CartItemService {
-
 
     @Autowired
     private CartItemRepository cartItemRepository;
 
     @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
     private ProductRepository productRepository;
 
+    // ========================= CREATE ITEM =========================
 
-    public CartItem createItem(Cart cart, Product product, int qty) {
-        return new CartItem(cart, product, qty);
+    public CartItem createItem(Cart cart, Product product, int qty, String size) {
+
+        if (qty <= 0) return null;
+
+        // สินค้าไม่มี size → บังคับให้ size = null
+        if (size != null && size.trim().isEmpty()) size = null;
+
+        return new CartItem(cart, product, qty, size);
     }
 
     public CartItem createItem(Cart cart, CartItemDto dto) {
         if (dto == null) return null;
+
         Long productId = dto.getProductId();
-        if (productId == null) return null; // nothing to create
+        if (productId == null) return null;
 
         Product product = productRepository.findFirstByProductId(productId);
         if (product == null) return null;
@@ -37,80 +40,33 @@ public class CartItemService {
         int qty = dto.getQuantity();
         if (qty <= 0) return null;
 
-        return new CartItem(cart, product, qty);
+        String size = dto.getSize();
+        if (size != null && size.trim().isEmpty()) size = null;
+
+        return new CartItem(cart, product, qty, size);
     }
+
+    // ========================= Convert to DTO =========================
 
     public CartItemDto createCartItemResponse(CartItem item){
         CartItemDto dto = new CartItemDto();
-        dto.setPrice(item.getProduct().getPrice());
         dto.setProductId(item.getProductId());
         dto.setQuantity(item.getQuantity());
+        dto.setPrice(item.getProduct().getPrice());
+
+        // ⭐ NEW
+        dto.setSize(item.getSize());
 
         return dto;
     }
 
-
     public double calculateTotalPrice(CartItem item){
-        if(item == null) return 0;
         return item.getQuantity() * item.getProduct().getPrice();
     }
 
     public boolean isStockAvailable(CartItem item, int qty){
-        if(item == null) return false;
-
-        Product product = item.getProduct();
-        if (product.getStock() >= qty){
-            return true;
-        }
-        else return false;
+        if (item == null) return false;
+        return item.getProduct().getStock() >= qty;
     }
 
-    public CartItem findCartItemFromCart(Cart cart, CartItem oldItem, boolean retItemInputIfNull){
-        if(cart == null || oldItem == null) return null;
-  
-        CartItem item = cart.getItems().stream()
-        .filter(itemI -> itemI.getProductId() == oldItem.getProductId()).findFirst().orElse(null);
-
-        if(item == null && retItemInputIfNull == true) item = oldItem;
-
-        return item;
-    }
-    public CartItem findCartItemFromCart(Cart cart, CartItem oldItem){
-        return findCartItemFromCart(cart, oldItem, false);
-    }
-
-    public void removeItem(Cart cart, CartItem item) {
-        item = findCartItemFromCart(cart, item);
-        
-        if(item == null) return;
-
-        cart.getItems().remove(item);
-        cartItemRepository.delete(item);
-        cartRepository.save(cart);
-    }
-
-    public void setQuantity(CartItem item, int qty){
-        item = findCartItemFromCart(item.getCart(), item);
-
-        if(item == null) return;
-
-        if(!isStockAvailable(item, qty)) return;
-        if(qty <= 0){
-            removeItem(item.getCart(), item);
-            return;
-        }
-
-        item.setQuantity(qty);
-        cartItemRepository.save(item);
-    }
-
-    public void changeQuantityBy(CartItem item, int qty){
-        if(item == null) return;
-        if(qty + item.getQuantity() <= 0){
-            removeItem(item.getCart(), item);
-        }
-        else{
-            setQuantity(item, item.getQuantity() + qty);
-        }
-    }
 }

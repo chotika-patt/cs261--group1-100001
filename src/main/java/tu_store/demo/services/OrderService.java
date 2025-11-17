@@ -104,13 +104,18 @@ public class OrderService {
         response.setOrderId(order.getOrderId());
         response.setTotalPrice(order.getTotalPrice());
         response.setStatus(order.getStatus());
+        response.setShopName(order.getSeller().getOrganizationType());
+        response.setProductName(order.getItems().get(0).getProduct().getName());
+        response.setImagePath(order.getItems().get(0).getProduct().getMain_image());
 
         ShipmentTracking st = order.getShipmentTracking();
         if(st != null){
             response.setTrackingCode(st.getTrackingNumber());
+            response.setsTrackingStatus(st.getStatus());
         }
         else{
             response.setTrackingCode("");
+            response.setsTrackingStatus(null);
         }
         
         Integer q = 0;
@@ -538,5 +543,52 @@ public class OrderService {
         }
 
         System.out.println("[ORDER] updateStatusToPaid completed for orderId=" + orderId);
+    }
+
+    @Transactional
+    public boolean applySellerDecision(Order order, String decision, Long sellerUserId){
+        if(order == null || decision == null) return false;
+        if(order.getSeller() == null || !order.getSeller().getUser_id().equals(sellerUserId)) return false;
+        // cannot act on completed/cancelled orders
+        if(order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.COMPLETED) return false;
+
+        // Basic decision handling
+        if("ACCEPT".equalsIgnoreCase(decision)) {
+            OrderStatus prev = order.getStatus();
+            order.setStatus(OrderStatus.PAID);
+            orderRepository.saveAndFlush(order);
+
+            // create shipment tracking if not exists
+            try {
+                ShipmentTracking st = shipmentTrackingService.getOrCreateShipmentTracking(order);
+                order.setShipmentTracking(st);
+                orderRepository.saveAndFlush(order);
+            } catch(Exception e) {
+                // log but continue
+                System.err.println("[ORDER] failed to create shipment tracking: " + e.getMessage());
+            }
+
+            // create status log
+            orderStatusLogService.createOrderLog(order, prev, order.getStatus());
+
+            return true;
+        } else if ("REJECT".equalsIgnoreCase(decision)) {
+            // mark cancelled and log
+            OrderStatus prev = order.getStatus();
+            order.setStatus(OrderStatus.CANCELLED);
+            orderRepository.saveAndFlush(order);
+
+            // if shipment tracking exists, mark cancelled too
+            ShipmentTracking st = order.getShipmentTracking();
+            if(st != null) {
+                shipmentTrackingService.updateStatus(order, ShipmentTrackingStatus.CANCELLED);
+            }
+
+            orderStatusLogService.createOrderLog(order, prev, OrderStatus.CANCELLED);
+
+            return true;
+        }
+
+        return false;
     }
 }

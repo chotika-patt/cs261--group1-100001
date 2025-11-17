@@ -118,6 +118,11 @@ public class PageController {
 
     @GetMapping("/buyerTemp")
     public String buyerTempPage(HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+        User buyer = userService.findByUsername(username);
+        if (username == null) return "redirect:/login";
+        else if(buyer == null || buyer.getRole() != UserRole.CLIENT) return "redirect:/";
+
         model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("email", session.getAttribute("email"));
         model.addAttribute("phone", session.getAttribute("phone"));
@@ -130,10 +135,8 @@ public class PageController {
     public String sellerTempPage(HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
         User seller = userService.findByUsername(username);
-       
-        if (username == null) {
-            return "redirect:/";
-        }
+        if (username == null) return "redirect:/login";
+        else if(seller == null || seller.getRole() != UserRole.SELLER) return "redirect:/";
         
         String verifiedStatus;
         if (Boolean.TRUE.equals(seller.getVerified())) {
@@ -245,6 +248,11 @@ public class PageController {
     }
     @GetMapping("/addProduct")
     public String addProductPage(HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+        User seller = userService.findByUsername(username);
+        if (username == null) return "redirect:/login";
+        else if(seller == null || seller.getRole() != UserRole.SELLER) return "redirect:/";
+
         model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("email", session.getAttribute("email"));
         model.addAttribute("phone", session.getAttribute("phone"));
@@ -253,9 +261,10 @@ public class PageController {
     @GetMapping("/product_edit/{id}")
     public String editProductPage(@PathVariable Long id, HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
-        if (username == null) {
-            return "redirect:/login";
-        }
+        User seller = userService.findByUsername(username);
+        if (username == null) return "redirect:/login";
+        else if(seller == null || seller.getRole() != UserRole.SELLER) return "redirect:/";
+
 
         model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("email", session.getAttribute("email"));
@@ -310,5 +319,76 @@ public class PageController {
     public String showForgetPasswordPage() {
         return "forget_password";
     }
-}
+    @GetMapping("/order-status-check")
+    public String orderStatusPage(HttpSession session, Model model) { // เปลี่ยนชื่อฟังก์ชันให้ตรงกับหน้าที่
+        String username = (String) session.getAttribute("username");
+        User buyer = userService.findByUsername(username);
+        if (username == null) {
+            return "redirect:/login";
+        }else if(buyer == null || buyer.getRole() != UserRole.CLIENT){
+            return "redirect:/";
+        }
 
+        model.addAttribute("username", "Guest");
+        model.addAttribute("email", "-");
+        model.addAttribute("phone", "-");
+        return "order-status-check"; // ✅ ชี้ไปที่ templates/order_status_check.html
+    }
+
+     @GetMapping("/order-detail-waiting")
+    public String orderDetailWaitingPage(HttpSession session, Model model) { // เปลี่ยนชื่อฟังก์ชันให้ตรงกับหน้าที่
+        String username = (String) session.getAttribute("username");
+        User buyer = userService.findByUsername(username);
+        if (username == null) {
+            return "redirect:/login";
+        }else if(buyer == null || buyer.getRole() != UserRole.CLIENT){
+            return "redirect:/";
+        }
+
+        model.addAttribute("username", "Guest");
+        model.addAttribute("email", "-");
+        model.addAttribute("phone", "-");
+        return "order-detail-waiting"; // ✅ ชี้ไปที่ templates/order_status_check.html
+    }
+
+    @GetMapping("/sellerOrder")
+    public String sellerOrderPage(HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+        User seller = userService.findByUsername(username);
+        if (username == null) {
+            return "redirect:/login";
+        }else if(seller == null || seller.getRole() != UserRole.SELLER){
+            return "redirect:/";
+        }
+        
+        String verifiedStatus;
+        if (Boolean.TRUE.equals(seller.getVerified())) {
+            verifiedStatus = "อนุมัติการขายแล้ว";
+        } else {
+            verifiedStatus = "ยังไม่อนุมัติการขาย";
+        }
+        model.addAttribute("username", username);
+        model.addAttribute("email", session.getAttribute("email"));
+        model.addAttribute("phone", session.getAttribute("phone"));
+        model.addAttribute("verifiedStatus", verifiedStatus);
+        List<Product> products = productRepository.findBySeller(seller);
+        model.addAttribute("products", products);
+        return "sellerOrder";
+    };
+    @GetMapping("/payment")
+    public String showPaymentPage(HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+        User buyer = userService.findByUsername(username);
+        if (username == null) {
+            return "redirect:/login";
+        }else if(buyer == null || buyer.getRole() != UserRole.CLIENT){
+            return "redirect:/";
+        }
+        model.addAttribute("username", username);
+        model.addAttribute("email", session.getAttribute("email"));
+
+        return "payment"; // ✅ ต้องมีไฟล์ชื่อ 'payment.html' อยู่ใน 'src/main/resources/templates/'
+    }
+
+
+}

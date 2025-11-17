@@ -41,14 +41,15 @@
           <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
   </div>
 
+  
   <!-- ======= Navbar ล่าง ======= -->
-    <nav class="nav-bottom">
+  <nav class="nav-bottom">
     <ul class="menu">
         <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
 
         <li class="dropdown-category">
         <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
-        <div class="overlay"></div> <!-- สำหรับ liquid glass -->
+        <div class="overlay"></div>
         <div class="dropdown-content">
               <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
               <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
@@ -57,43 +58,45 @@
               <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
         </div>
       </li>
-      <li><a href="#">เช็คสถานะ</a></li>
+
+      <li><a th:href="@{/order-status-check}">เช็คสถานะ</a></li>
       <li><a href="#">ติดต่อเรา</a></li>
       <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-    </ul> 
-    <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
+    </ul>
+
     <div class="search-bar-replacement">
       <div class="search-input-container">
         <i class="fa-solid fa-magnifying-glass"></i>
         <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+        <div id="search-suggestions" class="suggestions-list"></div>
       </div>
+
       <button class="search-close-btn" id="search-close">
         <i class="fa-solid fa-xmark"></i>
       </button>
+
+      <button id="filter-icon" class="search-filter-btn">
+         <i class="fa-solid fa-filter"> ตัวกรอง</i>
+      </button>
     </div>
-    <div id="search-results"></div>
+
   </nav>
-  
+
   <!-- Main Cart -->
   <main class="cart-container">
     <h1>นี่คือรายการที่อยู่ในตะกร้าของคุณ</h1>
     <p class="subtitle">รับบริการรับประกันคุณภาพทุกคำสั่งซื้อ</p>
     <button class="pay-btn-top">ชำระเงิน</button>
 
-    <div class="cart-item">
-      <div class="cart-image">รูป</div>
-      <div class="cart-details">
-        <div class="row">
-          <span>ชื่อสินค้า</span>
-          <span class="price">ราคา</span>
-        </div>
-        <div class="row">รายละเอียด</div>
-        <div class="row">
-          <span>คาดการณ์วันที่จะจัดส่ง <small>(จัดส่ง 2-3 วัน)</small></span>
-          <span class="delivery">รับสินค้าด้วยตัวเอง</span>
-        </div>
-      </div>
-    </div>
+      <!-- Cart items rendered by cart.js -->
+      <div id="cart-items"></div>
+
+      <!-- Template shown when cart is empty (hidden by default) -->
+      <template id="empty-cart-template">
+          <div class="empty-cart">
+              <p>ตะกร้าของคุณว่างเปล่า — เริ่มช้อปเลย!</p>
+          </div>
+      </template>
 
     <div class="summary">
       <div class="row">
@@ -131,7 +134,101 @@
         <p>ออกจากระบบสำเร็จแล้ว</p>
     </div>
 </div>
+
+<!-- ======================= FILTER OVERLAY ======================= -->
+
+  <div id="filter-overlay" class="overlay-container">
+      <div class="modal-content">
+
+          <div class="filter-headbar">
+              <h3>
+                <i class="fa-solid fa-filter"></i>
+                <span>ตัวกรอง</span>
+              </h3>
+
+              <div class="filter-categories">
+                  <div class="category-row">
+                    <div class="category-label">
+                        <span>หมวดหมู่ :</span>
+                    </div>
+
+                    <div class="category-buttons">
+                        <button class="cat-btn" data-category="SHIRT">เสื้อ</button>
+                        <button class="cat-btn" data-category="BAG">กระเป๋า</button>
+                        <button class="cat-btn" data-category="STUDENT_UNIFORM">เครื่องแบบนักศึกษา</button>
+                        <button class="cat-btn" data-category="GENERAL_PURPOSE">ของใช้ทั่วไป</button>
+                        <button class="cat-btn" data-category="MEMORABILIA">ของที่ระลึก</button>
+                    </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="filter-body">
+
+              <!-- ช่วงราคา -->
+              <div class="filter-section">
+                  <h4>ช่วงราคา</h4>
+                  <div class="price-range">
+                      <input type="number" placeholder="ใส่ราคาต่ำสุด" id="min-price" class="price-input">
+                      <a>-</a>
+                      <input type="number" placeholder="ใส่ราคาสูงสุด" id="max-price" class="price-input">
+                      <span class="price-unit">บาท</span>
+                  </div>
+              </div>
+
+              <!-- สถานะสินค้า -->
+              <div class="filter-section">
+                  <h4>สถานะสินค้า</h4>
+                  <div class="status-buttons">
+                      <button class="status-btn" data-status="AVAILABLE">พร้อมจัดส่ง</button>
+                      <button class="status-btn" data-status="PRE_ORDER">PRE-ORDER</button>
+                  </div>
+              </div>
+
+              <!-- คะแนน -->
+              <div class="filter-section">
+                  <h4>คะแนน</h4>
+                  <div class="rating-buttons">
+                      <button class="rating-btn" data-rating="5">5 ⭐</button>
+                      <button class="rating-btn" data-rating="4">4 ⭐</button>
+                      <button class="rating-btn" data-rating="3">3 ⭐</button>
+                      <button class="rating-btn" data-rating="2">2 ⭐</button>
+                      <button class="rating-btn" data-rating="1">1 ⭐</button>
+                  </div>
+              </div>
+
+              <!-- ปุ่มตกลง -->
+              <button class="filter-confirm-btn" id="filter-confirm-button">ตกลง</button>
+
+          </div>
+      </div>
+  </div>
+  <script>
+// =========================== CATEGORY DROPDOWN ===========================
+document.addEventListener("DOMContentLoaded", function() {
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    const overlay = document.querySelector('.overlay');
+
+    if (dropdownToggle) {
+        dropdownToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            dropdownContent.classList.toggle('show');
+            overlay.classList.toggle('show');
+        });
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            dropdownContent.classList.remove('show');
+            overlay.classList.remove('show');
+        });
+    }
+});
+</script>
+
 <script th:src="@{/js/main.js}" defer></script>
 <script th:src="@{/js/search.js}" defer></script>
+<script th:src="@{/js/cart.js}" defer></script>
 </body>
 </html>

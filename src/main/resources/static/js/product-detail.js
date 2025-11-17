@@ -1,11 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-
     const metaStockEl = document.getElementById("meta-stock");
     const metaProductEl = document.getElementById("meta-product-id");
-
     const stock = Number(metaStockEl?.content) || 0;
     const productId = Number(metaProductEl?.content) || 0;
-
+    
     console.log("Product ID:", productId);
     console.log("Stock:", stock);
 

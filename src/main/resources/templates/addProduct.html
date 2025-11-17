@@ -39,26 +39,15 @@
           <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
   </div>
 
-  <!-- ======= Navbar ล่าง ======= -->
-    <nav class="nav-bottom">
+  <!-- ======= Navbar ด้านล่าง ======= -->
+  <nav class="nav-bottom">
     <ul class="menu">
-        <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
-
-        <li class="dropdown-category">
-        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
-        <div class="overlay"></div> <!-- สำหรับ liquid glass -->
-        <div class="dropdown-content">
-              <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
-              <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
-              <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
-              <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
-              <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
-        </div>
-      </li>
-      <li><a href="#">เช็คสถานะ</a></li>
-      <li><a href="#">ติดต่อเรา</a></li>
-      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-    </ul> 
+      <li><a th:href="@{/sellerTemp}">แดชบอร์ด</a></li>
+      <li><a href="#">จัดการสินค้า</a></li>
+      <li><a th:href="@{/sellerOrder}">คำสั่งซื้อ</a></li>
+      <li><a href="#">ตั้งค่าร้านค้า</a></li>
+    </ul>
+  </nav>
     <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
     <div class="search-bar-replacement">
       <div class="search-input-container">
