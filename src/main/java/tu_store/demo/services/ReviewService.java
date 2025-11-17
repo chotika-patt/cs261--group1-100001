@@ -193,23 +193,50 @@ public class ReviewService {
         return responses;
     }
 
+    // ReviewService.java
     public ReviewResponse createReviewResponse(Review review){
         if(review == null) return null;
+
         ReviewResponse response = new ReviewResponse();
-        response.setComment(review.getComment());
-        response.setCreatedAt(review.getCreatedAt());
+        response.setReviewId(review.getReviewId());
         response.setOrderId(review.getOrder().getOrderId());
         response.setProductId(review.getProduct().getProductId());
         response.setRating(review.getRating());
-        response.setReviewId(review.getReviewId());
+        response.setComment(review.getComment());
+        response.setCreatedAt(review.getCreatedAt());
 
-        boolean hasImage = false;
-        if(review.getImages() != null && !review.getImages().isEmpty()) hasImage = true;
-
+        // ตรวจสอบว่ามีรูปหรือไม่
+        boolean hasImage = review.getImages() != null && !review.getImages().isEmpty();
         response.setHasImages(hasImage);
+
+        // ✅ เพิ่ม buyerName จาก username
+        response.setBuyerName(
+            review.getBuyer() != null ? review.getBuyer().getUsername() : "ผู้ใช้ไม่ระบุชื่อ"
+        );
+
+        // ✅ เพิ่ม list ของ image URLs ถ้ามี
+        if (hasImage) {
+            List<String> imageUrls = new ArrayList<>();
+            for (ReviewImage img : review.getImages()) {
+                imageUrls.add("/review_img/" + img.getFilePath()); // URL mapping ตามจริง
+            }
+            response.setImageUrls(imageUrls);
+        }
 
         return response;
     }
+
+    public List<ReviewResponse> getReviewsByProductId(Long productId) {
+        List<Review> reviews = reviewRepository.findAllByProductProductId(productId);
+        List<ReviewResponse> responses = new ArrayList<>();
+
+        for (Review r : reviews) {
+            responses.add(createReviewResponse(r));
+        }
+
+        return responses;
+    }
+
     public Page<ReviewResponse> getReviewPageResponseWithFilters(
         Long productId,
         String search,
@@ -229,4 +256,5 @@ public class ReviewService {
     public boolean isReviewExist(Long buyerId, Long productId, Long orderId){  
         return reviewRepository.existsByBuyerUserIdAndProductProductIdAndOrderOrderId(buyerId, productId, orderId);
     }
+
 }

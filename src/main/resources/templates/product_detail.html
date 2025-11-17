@@ -39,7 +39,6 @@
         </a>
     </div>
 </nav>
-
 <div class="left-logo">
     <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
 </div>
@@ -51,7 +50,7 @@
 
         <li class="dropdown-category">
             <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
-            <div class="overlay"></div>
+            <div class="overlay"></div> <!-- สำหรับ liquid glass -->
             <div class="dropdown-content">
                 <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
                 <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
@@ -64,7 +63,7 @@
         <li><a href="#">ติดต่อเรา</a></li>
         <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
     </ul>
-
+    <!-- แถบค้นหาแบบใหม่ (แทนที่เมนู) -->
     <div class="search-bar-replacement">
         <div class="search-input-container">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -102,24 +101,20 @@
             หมวดหมู่ : <span th:text="${product.category}"></span>
         </p>
 
-        <!-- ⭐ เพิ่ม hidden input เพื่อเก็บ size -->
-        <input type="hidden" id="selected-size" value="M">
-
-        <!-- ⭐ ปุ่มไซส์แบบใหม่ -->
         <div class="product-size">
             <span class="label">ขนาด :</span>
             <div class="size-options">
-                <button class="size-btn" data-size="XS">XS</button>
-                <button class="size-btn" data-size="S">S</button>
-                <button class="size-btn active" data-size="M">M</button>
-                <button class="size-btn" data-size="L">L</button>
-                <button class="size-btn disabled" disabled data-size="XL">XL</button>
-                <button class="size-btn disabled" disabled data-size="2XL">2XL</button>
+                <button class="size-btn">XS</button>
+                <button class="size-btn">S</button>
+                <button class="size-btn active">M</button>
+                <button class="size-btn">L</button>
+                <button class="size-btn disabled" disabled>XL</button>
+                <button class="size-btn disabled" disabled>2XL</button>
             </div>
         </div>
 
         <p class="stock-status">
-            สถานะ :
+            สถานะ : 
             <span id="stock-status-text" class="in-stock">
                 พร้อมจัดส่ง (<span id="stock-count"></span> ชิ้นในคลัง)
             </span>
@@ -144,10 +139,144 @@
 </div>
 
 
-<!-- รีวิว, รูปเพิ่มเติม, อื่นๆ (เหมือนเดิม) -->
+<!--  รายละเอียดสินค้าแบบ Dropdown -->
+<div class="product-detail-describe">
+    <button class="detail-toggle" id="toggle-detail">
+        รายละเอียดสินค้า <i class="fa-solid fa-chevron-down"></i>
+    </button>
 
+    <div class="detail-content" id="detail-content">
+        <p th:text= "${product.description}"></p>
+    </div>
+</div>
+
+<!-- รูปภาพสินค้าเพิ่มเติม -->
+<div class="product-more-images">
+    <button class="image-toggle" id="toggle-images">
+        รูปภาพสินค้าเพิ่มเติม <i class="fa-solid fa-chevron-down"></i>
+    </button>
+
+    <div class="image-gallery" id="image-gallery">
+        <div class="image-item">
+            <img src="/img/ballshirt_tu-cu.png" alt="front">
+        </div>
+        <div class="image-item">
+            <img src="/img/เพิ่มเติม2.png" alt="back">
+        </div>
+        <div class="image-item">
+            <img src="/img/เพิ่มเติม3.png" alt="model1">
+        </div>
+        <div class="image-item">
+            <img src="/img/เพิ่มเติม4.png" alt="model2">
+        </div>
+    </div>
+</div>
+<!-- รีวิวสินค้า -->
+<div class="product-review-section">
+    <button class="review-toggle" id="toggle-review">
+        ⭐ รีวิวสินค้าและคะแนน 
+        (<span th:text="${#lists.size(reviews)}">0</span> ความคิดเห็น)
+        <i class="fa-solid fa-chevron-down"></i>
+    </button>
+</div>
+
+<div class="review-box" id="review-box">
+
+    <!-- หากไม่มีรีวิว -->
+    <div th:if="${#lists.isEmpty(reviews)}" class="no-review">
+        ⭐ ยังไม่มีรีวิวสำหรับสินค้านี้
+    </div>
+
+    <!-- หากมีรีวิว -->
+    <div class="review-list" th:if="${!#lists.isEmpty(reviews)}">
+        <div class="review-item" th:each="r : ${reviews}">
+            <!-- Header (avatar + name + size / color / quantity) -->
+            <div class="review-header">
+                <div class="review-avatar"></div>
+                <div>
+                    <strong th:text="${r.buyerName}"></strong>
+                    <p class="review-detail" 
+                       th:text="'ขนาด (' + (r.size != null ? r.size : '-') 
+                       + '), สี ' + (r.color != null ? r.color : '-') 
+                       + ' x' + (r.quantity != null ? r.quantity : 1)">
+                    </p>
+                </div>
+            </div>
+
+            <!-- Stars -->
+            <div class="review-stars">
+                <span th:each="i : ${#numbers.sequence(1, r.rating)}">⭐</span>
+            </div>
+
+            <!-- Comment -->
+            <p class="review-text" th:text="${r.comment != null ? r.comment : '-'}"></p>
+
+            <!-- Review Images -->
+            <div class="review-images" th:if="${r.imageUrls != null and !#lists.isEmpty(r.imageUrls)}">
+                <img th:each="imgUrl : ${r.imageUrls}" th:src="@{${imgUrl}}" alt="review-image">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+        <!--  Pagination -->
+        <div class="review-pagination">
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">...</button>
+            <button class="page-btn">100</button>
+        </div>
+    </div>
+
+<div class="product-buttons">
+    <button class="buy-btn">
+        <i class="fa-solid fa-check"></i> สั่งซื้อทันที
+    </button>
+
+</div>
+
+<div class="logout-modal" id="logout-modal">
+    <div class="modal-content">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <p>คุณต้องการออกจากระบบหรือไม่</p>
+        <div class="modal-buttons">
+            <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+            <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+        </div>
+        <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+    </div>
+</div>
+
+<div class="logout-success" id="logout-success">
+    <div class="success-content">
+        <i class="fa-solid fa-circle-check"></i>
+        <p>ออกจากระบบสำเร็จแล้ว</p>
+    </div>
+</div>
+<script>
+  // Dropdown หมวดหมู่สินค้า//
+  document.addEventListener("DOMContentLoaded", function() {
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    const overlay = document.querySelector('.overlay');
+
+    dropdownToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdownContent.classList.toggle('show');
+      overlay.classList.toggle('show');
+    });
+
+    overlay.addEventListener('click', function() {
+      dropdownContent.classList.remove('show');
+      overlay.classList.remove('show');
+    });
+  });
+</script>
 <script th:src="@{/js/main.js}" defer></script>
 <script th:src="@{/js/product-detail.js}" defer></script>
-
+<script th:src="@{/js/search.js}" defer></script>
 </body>
 </html>
+

@@ -16,28 +16,12 @@
 
  <!-- ======= Navbar บนสุด ======= -->
   <nav class="nav-top">
-      <div class="right-buttons">
-      <div class="user-menu">
-        <button class="user-btn" id="user-btn">
-          <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
-          <div class="user-icon"><i class="fa-solid fa-user"></i></div>
-        </button>
-
-        <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
-          <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
-          <div class="avatar"><i class="fa-solid fa-user"></i></div>
-          <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
-          <div class="info">
-            <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
-            <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
-          </div>
-          <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+        <div class="right-buttons">
+            <a th:href="@{/login}" class="btn">เข้าสู่ระบบ / ลงทะเบียน</a>
+            <a th:href="@{/login}" class="cart-icon">
+                <span class="material-symbols-outlined">shopping_cart</span>
+            </a>
         </div>
-      </div>
-      <a th:href="@{/cart}" class="cart-icon">
-        <span class="material-symbols-outlined">shopping_cart</span>
-      </a>
-    </div>
   </nav>
 
   <div class="left-logo">
@@ -174,72 +158,54 @@
         </div>
     </div>
 </div>
-<!-- รีวิวสินค้า -->
+<!-- ⭐ REVIEW SECTION -->
 <div class="product-review-section">
     <button class="review-toggle" id="toggle-review">
-        ⭐️รีวิวสินค้าและคะแนน (240 ความคิดเห็น)
+        ⭐ รีวิวสินค้าและคะแนน 
+        (<span th:text="${#lists.size(reviews)}"></span> ความคิดเห็น)
         <i class="fa-solid fa-chevron-down"></i>
     </button>
 </div>
+
 <div class="review-box" id="review-box">
-    <div class="review-list">
-        <!-- รีวิว 1 -->
-        <div class="review-item">
-            <div class="review-header">
-                <div class="review-avatar"></div>
-                <div>
-                    <strong>แฟรงค์ เฟิร์ท</strong>
-                    <p class="review-detail">ขนาด (M), สี แดง x1</p>
-                </div>
-            </div>
-            <div class="review-stars">⭐️⭐️⭐️⭐️⭐️</div>
-            <p class="review-text">
-                เสื้อเชียร์จุฬาฯ ธรรมศาสตร์ปี 2567 เนื้อผ้าดีมาก สีสวยสด พิมพ์ลายคมชัด ใส่สบาย ไม่ร้อน เหมาะกับงานฟุตบอลมาก!
-            </p>
-            <div class="review-images">
-                <img src="/img/เพิ่มเติม3.png" alt="">
-                <img src="/img/เพิ่มเติม4.png" alt="">
-            </div>
-        </div>
 
-        <!-- รีวิว 2 -->
-        <div class="review-item">
-            <div class="review-header">
-                <div class="review-avatar"></div>
-                <div>
-                    <strong>เคน เอสลัสบัน</strong>
-                    <p class="review-detail">ขนาด (XL), สี แดง x1</p>
-                </div>
-            </div>
-            <div class="review-stars">⭐️⭐️⭐️⭐️⭐️</div>
-            <p class="review-text">
-                ของถึงไว ผ้าดีมาก ใส่แล้วเย็นสบาย ไม่ร้อนเลย เหมาะกับการใส่วันกิจกรรม ราคาก็คุ้มค่า
-            </p>
-            <div class="review-images">
-                <img src="/img/เพิ่มเติม3.png" alt="">
-                <img src="/img/เพิ่มเติม4.png" alt="">
-            </div>
-        </div>
+    <!-- หากไม่มีรีวิว -->
+    <div th:if="${#lists.isEmpty(reviews)}" class="no-review">
+        ⭐ ยังไม่มีรีวิวสำหรับสินค้านี้
+    </div>
 
-        <!-- รีวิว 3 -->
-        <div class="review-item">
+    <!-- หากมีรีวิว -->
+    <div class="review-list" th:if="${!#lists.isEmpty(reviews)}">
+        <div class="review-item" th:each="r : ${reviews}">
+            <!-- Header (avatar + name + size / color / quantity) -->
             <div class="review-header">
                 <div class="review-avatar"></div>
                 <div>
-                    <strong>มุก มณีวรรณ</strong>
-                    <p class="review-detail">ขนาด (S), สี แดง x1</p>
+                    <strong th:text="${r.buyerName}"></strong>
+                    <p class="review-detail" 
+                       th:text="'ขนาด (' + (r.size != null ? r.size : '-') 
+                       + '), สี ' + (r.color != null ? r.color : '-') 
+                       + ' x' + (r.quantity != null ? r.quantity : 1)">
+                    </p>
                 </div>
             </div>
-            <div class="review-stars">⭐️⭐️⭐️⭐️⭐️</div>
-            <p class="review-text">
-                ชอบมากค่ะ คุณภาพดีเหมือนในรูป ส่งไว แพ็กดี ใส่แล้วพอดีตัว สั่งเพิ่มแน่นอน ❤️
-            </p>
-            <div class="review-images">
-                <img src="/img/เพิ่มเติม3.png" alt="">
-                <img src="/img/เพิ่มเติม4.png" alt="">
+
+            <!-- Stars -->
+            <div class="review-stars">
+                <span th:each="i : ${#numbers.sequence(1, r.rating)}">⭐</span>
             </div>
+
+            <!-- Comment -->
+            <p class="review-text" th:text="${r.comment != null ? r.comment : '-'}"></p>
+
+            <!-- Review Images -->
+            <div class="review-images" th:if="${r.imageUrls != null and !#lists.isEmpty(r.imageUrls)}">
+                <img th:each="imgUrl : ${r.imageUrls}" th:src="@{${imgUrl}}" alt="review-image">
+            </div>
+
         </div>
     </div>
+</div>
 
     <!--  Pagination -->
     <div class="review-pagination">
@@ -283,10 +249,28 @@
         <p>ออกจากระบบสำเร็จแล้ว</p>
     </div>
 </div>
+<script>
+  // Dropdown หมวดหมู่สินค้า//
+  document.addEventListener("DOMContentLoaded", function() {
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    const overlay = document.querySelector('.overlay');
 
+    dropdownToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdownContent.classList.toggle('show');
+      overlay.classList.toggle('show');
+    });
 
+    overlay.addEventListener('click', function() {
+      dropdownContent.classList.remove('show');
+      overlay.classList.remove('show');
+    });
+  });
+</script>    
 <script th:src="@{/js/product-detail.js}" defer></script>
 <script th:src="@{/js/main.js}" defer></script>
+<script th:src="@{/js/search.js}" defer></script>
 </body>
 </html>
 
