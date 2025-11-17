@@ -5,22 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta id="meta-stock" th:content="${stock}">
     <meta id="meta-product-id" th:content="${productId}">
-    <meta id="meta-has-size" th:content="${product.hasSize}">
-    <title>รายละเอียดสินค้า</title>
-
+    <title>ตะกร้าสินค้า</title>
     <link rel="icon" type="image/png" href="/img/Logo.png">
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" th:href="@{/css/product-detail.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" th:href="@{/css/product-detail.css}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
-
 <body>
 
-<!-- NAV TOP -->
+<!-- ======= Navbar บนสุด ======= -->
 <nav class="nav-top">
     <div class="right-buttons">
-
         <div class="user-menu">
             <button class="user-btn" id="user-btn">
                 <span class="user-text" th:text="${session.username != null} ? ${session.username} : 'Guest'">Guest</span>
@@ -30,19 +26,17 @@
             <div class="dropdown" id="user-dropdown" th:if="${session.username != null}">
                 <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
                 <div class="avatar"><i class="fa-solid fa-user"></i></div>
-                <h4 th:text="${username}">username</h4>
+                <h4 th:text="${username}">ชื่อบัญชีผู้ใช้</h4>
                 <div class="info">
-                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}"></span></p>
-                    <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}"></span></p>
+                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">username@gmail.com</span></p>
+                    <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">xxx-xxx-xxxx</span></p>
                 </div>
                 <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
             </div>
         </div>
-
         <a th:href="@{/cart}" class="cart-icon">
             <span class="material-symbols-outlined">shopping_cart</span>
         </a>
-
     </div>
 </nav>
 
@@ -50,7 +44,7 @@
     <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
 </div>
 
-<!-- NAV BOTTOM -->
+<!-- ======= Navbar ล่าง ======= -->
 <nav class="nav-bottom">
     <ul class="menu">
         <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
@@ -59,14 +53,13 @@
             <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
             <div class="overlay"></div>
             <div class="dropdown-content">
-                <a href="/product?category=SHIRT">เสื้อ</a>
-                <a href="/product?category=BAG">กระเป๋า</a>
-                <a href="/product?category=STUDENT_UNIFORM">เครื่องแบบนักศึกษา</a>
-                <a href="/product?category=GENERAL_PURPOSE">ของใช้ทั่วไป</a>
-                <a href="/product?category=MEMORABILIA">ของที่ระลึก</a>
+                <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
+                <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
+                <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
+                <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
+                <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
             </div>
         </li>
-
         <li><a href="#">เช็คสถานะ</a></li>
         <li><a href="#">ติดต่อเรา</a></li>
         <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
@@ -77,67 +70,63 @@
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
         </div>
-
         <button class="search-close-btn" id="search-close">
             <i class="fa-solid fa-xmark"></i>
         </button>
     </div>
-
     <div id="search-results"></div>
 </nav>
 
-<!-- PRODUCT DETAIL -->
+<!-- ======= ส่วนแสดงสินค้า ======= -->
 <div class="supplier-bar">
     <span class="shop-icon"><i class="fa-solid fa-store"></i></span>
-    <span class="supplier-name" th:text="${product.sellerName}">ผู้ขาย</span>
+    <span class="supplier-name">ชุมนุมเชียร์แห่งมหาวิทยาลัยธรรมศาสตร์</span>
 </div>
 
 <div class="product-container">
 
+    <!-- รูปสินค้า -->
     <div class="product-detail-photo">
-        <img th:src="@{/product_img/{file}(file=${product.main_image})}" alt="Product Image">
+        <img th:src="@{/product_img/{file}(file=${product.main_image})}" alt="">
     </div>
 
+    <!-- กล่องข้อมูลสินค้า -->
     <div class="product-detail-main">
-
         <div class="product-buttons">
-            <button class="add-cart-btn">เพิ่มลงตะกร้า</button>
+            <button style="text-decoration: none;" class="add-cart-btn">เพิ่มลงตะกร้า</button>
         </div>
 
-        <h2 class="product-name" th:text="${product.name}"></h2>
+        ชื่อสินค้า: <h2 class="product-name" th:text="${product.name}"></h2>
 
         <p class="product-category">
-            หมวดหมู่ :
-            <span th:text="${product.category}"></span>
+            หมวดหมู่ : <span th:text="${product.category}"></span>
         </p>
 
-        <!-- HIDDEN SIZE FIELD -->
-        <input type="hidden" id="selected-size" value="">
+        <!-- ⭐ เพิ่ม hidden input เพื่อเก็บ size -->
+        <input type="hidden" id="selected-size" value="M">
 
-        <!-- SIZE SELECTOR -->
-        <div class="product-size" id="size-box" 
-             th:if="${product.hasSize}">
+        <!-- ⭐ ปุ่มไซส์แบบใหม่ -->
+        <div class="product-size">
             <span class="label">ขนาด :</span>
-
             <div class="size-options">
-                <button class="size-btn" th:each="s : ${product.sizes}"
-                        th:data-size="${s}"
-                        th:text="${s}"></button>
+                <button class="size-btn" data-size="XS">XS</button>
+                <button class="size-btn" data-size="S">S</button>
+                <button class="size-btn active" data-size="M">M</button>
+                <button class="size-btn" data-size="L">L</button>
+                <button class="size-btn disabled" disabled data-size="XL">XL</button>
+                <button class="size-btn disabled" disabled data-size="2XL">2XL</button>
             </div>
         </div>
 
-        <!-- STOCK STATUS -->
         <p class="stock-status">
             สถานะ :
-            <span id="stock-status-text">
-                พร้อมจัดส่ง (<span id="stock-count" th:text="${stock}"></span> ชิ้น)
+            <span id="stock-status-text" class="in-stock">
+                พร้อมจัดส่ง (<span id="stock-count"></span> ชิ้นในคลัง)
             </span>
         </p>
 
-        <!-- QUANTITY -->
         <div class="product-quantity">
             <span class="label">จำนวน :</span>
-
             <div class="quantity-selector">
                 <button class="qty-btn minus">-</button>
                 <input type="text" id="quantity" value="1" readonly>
@@ -145,19 +134,18 @@
             </div>
         </div>
 
-        <!-- PRICE -->
         <div class="price-box">
             <div class="price">
                 <span class="price-label">ราคา</span>
-                <span class="price-value" th:text="${product.price} + ' บาท'">0 บาท</span>
+                <span class="price-value" th:text="${product.price} + ' บาท'">-</span>
             </div>
         </div>
-
     </div>
-
 </div>
 
-<!-- JS -->
+
+<!-- รีวิว, รูปเพิ่มเติม, อื่นๆ (เหมือนเดิม) -->
+
 <script th:src="@{/js/main.js}" defer></script>
 <script th:src="@{/js/product-detail.js}" defer></script>
 
