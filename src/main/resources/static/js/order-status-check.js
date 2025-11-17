@@ -59,6 +59,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!bucket) return;
     
       const shopName = order.shopName ?? "ไม่ทราบชื่อร้าน";
+      let sizeText = order.size ?? "";
+      let colorText = order.color ?? "";
+      let spaceText = "";
+      if(sizeText != "") sizeText = "ขนาด (" + sizeText + ")"
+      if(colorText != "") colorText = "สี (" + colorText + ")"
+      if(sizeText != "" && colorText != "") spaceText = ", "
 
       const card = `
         <article class="order-card order-item">
@@ -70,7 +76,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <div class="product-thumb-box"><div class="icon"><span class="material-symbols-outlined">image</span><small><img src="/product_img/${order.imagePath}" alt="รูปสินค้า" /></small></div></div>
                 <div class="product-info">
                 <div class="product-title"><a href="order-detail-preparing">${order.productName}</a></div>
-                <div class="product-meta">ขนาด (L), สี (ขาว) x1 <div class="price">฿${order.totalPrice}</div></div>
+                <div class="product-meta">${sizeText}${spaceText}${colorText} x${order.quantity} <div class="price">฿${order.totalPrice}</div></div>
                 <div class="order-status-line">สถานะคำสั่งซื้อ : <span class="status status--${mapStatus(order)}">${translateStatus(order)}</span></div>
                 </div>
             </div>
@@ -93,6 +99,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     }else{
         const order = orders[0];
     const shopName = order.shopName ?? "ไม่ทราบชื่อร้าน";
+    let sizeText = order.size ?? "";
+    let colorText = order.color ?? "";
+    let spaceText = "";
+    if(sizeText != "") sizeText = "ขนาด (" + sizeText + ")"
+    if(colorText != "") colorText = "สี (" + colorText + ")"
+    if(sizeText != "" && colorText != "") spaceText = ", "
+
     const card = `
         <article class="order-card order-item" data-demo="true" data-status="payment">
           <div class="order-card__meta">
@@ -111,7 +124,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               <div class="product-title">
                 <a style="text-decoration: none;" th:href="@{/order-detail-waiting}">${order.productName}</a>
               </div>
-              <div class="product-meta">ขนาด (M), สี (แดง) x1 <div class="price">฿${order.totalPrice}</div></div>
+              <div class="product-meta">${sizeText}${spaceText}${colorText} x${order.quantity}  <div class="price">฿${order.totalPrice}</div></div>
               <div class="order-status-line">
                 สถานะคำสั่งซื้อ : <span class="status status--${mapStatus(order)}">${translateStatus(order)}</span>
               </div>
