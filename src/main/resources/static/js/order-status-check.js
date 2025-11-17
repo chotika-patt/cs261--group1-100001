@@ -1,7 +1,7 @@
 
 
 function mapStatus(order) {
-  if (order.paymentStatus === "WAITING" || order.paymentStatus === "PENDING") {
+  if (order.status === "PENDING" || order.paymentStatus === "PENDING") {
     return "pending";
   }
 

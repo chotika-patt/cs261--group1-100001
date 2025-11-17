@@ -329,9 +329,9 @@ public class PageController {
             return "redirect:/";
         }
 
-        model.addAttribute("username", "Guest");
-        model.addAttribute("email", "-");
-        model.addAttribute("phone", "-");
+        model.addAttribute("username", session.getAttribute("username"));
+        model.addAttribute("email", session.getAttribute("email"));
+        model.addAttribute("phone", session.getAttribute("phone"));
         return "order-status-check"; // ✅ ชี้ไปที่ templates/order_status_check.html
     }
 
@@ -345,9 +345,9 @@ public class PageController {
             return "redirect:/";
         }
 
-        model.addAttribute("username", "Guest");
-        model.addAttribute("email", "-");
-        model.addAttribute("phone", "-");
+        model.addAttribute("username", session.getAttribute("username"));
+        model.addAttribute("email", session.getAttribute("email"));
+        model.addAttribute("phone", session.getAttribute("phone"));
         return "order-detail-waiting"; // ✅ ชี้ไปที่ templates/order_status_check.html
     }
 
@@ -384,8 +384,9 @@ public class PageController {
         }else if(buyer == null || buyer.getRole() != UserRole.CLIENT){
             return "redirect:/";
         }
-        model.addAttribute("username", username);
+        model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("email", session.getAttribute("email"));
+        model.addAttribute("phone", session.getAttribute("phone"));
 
         return "payment"; // ✅ ต้องมีไฟล์ชื่อ 'payment.html' อยู่ใน 'src/main/resources/templates/'
     }
