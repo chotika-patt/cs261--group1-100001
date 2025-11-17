@@ -194,7 +194,7 @@
             <div class="review-header">
                 <div class="review-avatar"></div>
                 <div>
-                    <strong th:text="${r.buyerName != null ? r.buyerName : 'ผู้ใช้ไม่ระบุชื่อ'}"></strong>
+                    <strong th:text="${r.buyerName}"></strong>
                     <p class="review-detail" 
                        th:text="'ขนาด (' + (r.size != null ? r.size : '-') 
                        + '), สี ' + (r.color != null ? r.color : '-') 

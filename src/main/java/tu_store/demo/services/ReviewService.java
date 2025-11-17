@@ -193,23 +193,50 @@ public class ReviewService {
         return responses;
     }
 
+    // ReviewService.java
     public ReviewResponse createReviewResponse(Review review){
         if(review == null) return null;
+
         ReviewResponse response = new ReviewResponse();
-        response.setComment(review.getComment());
-        response.setCreatedAt(review.getCreatedAt());
+        response.setReviewId(review.getReviewId());
         response.setOrderId(review.getOrder().getOrderId());
         response.setProductId(review.getProduct().getProductId());
         response.setRating(review.getRating());
-        response.setReviewId(review.getReviewId());
+        response.setComment(review.getComment());
+        response.setCreatedAt(review.getCreatedAt());
 
-        boolean hasImage = false;
-        if(review.getImages() != null && !review.getImages().isEmpty()) hasImage = true;
-
+        // ตรวจสอบว่ามีรูปหรือไม่
+        boolean hasImage = review.getImages() != null && !review.getImages().isEmpty();
         response.setHasImages(hasImage);
+
+        // ✅ เพิ่ม buyerName จาก username
+        response.setBuyerName(
+            review.getBuyer() != null ? review.getBuyer().getUsername() : "ผู้ใช้ไม่ระบุชื่อ"
+        );
+
+        // ✅ เพิ่ม list ของ image URLs ถ้ามี
+        if (hasImage) {
+            List<String> imageUrls = new ArrayList<>();
+            for (ReviewImage img : review.getImages()) {
+                imageUrls.add("/review_img/" + img.getFilePath()); // URL mapping ตามจริง
+            }
+            response.setImageUrls(imageUrls);
+        }
 
         return response;
     }
+
+    public List<ReviewResponse> getReviewsByProductId(Long productId) {
+        List<Review> reviews = reviewRepository.findAllByProductProductId(productId);
+        List<ReviewResponse> responses = new ArrayList<>();
+
+        for (Review r : reviews) {
+            responses.add(createReviewResponse(r));
+        }
+
+        return responses;
+    }
+
     public Page<ReviewResponse> getReviewPageResponseWithFilters(
         Long productId,
         String search,
@@ -228,41 +255,6 @@ public class ReviewService {
 
     public boolean isReviewExist(Long buyerId, Long productId, Long orderId){  
         return reviewRepository.existsByBuyerUserIdAndProductProductIdAndOrderOrderId(buyerId, productId, orderId);
-    }
-
-
-    public List<ReviewResponse> getReviewsByProductId(Long productId) {
-        List<Review> reviews = reviewRepository.findAllByProductProductId(productId);
-        List<ReviewResponse> responses = new ArrayList<>();
-
-        for (Review r : reviews) {
-            ReviewResponse res = new ReviewResponse();
-            res.setReviewId(r.getReviewId());
-            res.setOrderId(r.getOrder().getOrderId());
-            res.setProductId(r.getProduct().getProductId());
-            res.setRating(r.getRating());
-            res.setComment(r.getComment());
-            res.setCreatedAt(r.getCreatedAt());
-
-            // ตรวจสอบว่ามีรูปหรือไม่
-            boolean hasImage = r.getImages() != null && !r.getImages().isEmpty();
-            res.setHasImages(hasImage);
-
-            // ใส่ list ของ image URLs สำหรับ Thymeleaf
-            if (hasImage) {
-                List<String> imageUrls = new ArrayList<>();
-                for (ReviewImage img : r.getImages()) {
-                    imageUrls.add("/review_img/" + img.getFilePath()); // สมมติ URL mapping
-                }
-                // เพิ่ม transient property สำหรับ HTML
-                // เราสามารถใช้ Map หรือแก้ DTO เพิ่ม field imageUrls
-                res.setImageUrls(imageUrls);
-            }
-
-            responses.add(res);
-        }
-
-        return responses;
     }
 
 }
