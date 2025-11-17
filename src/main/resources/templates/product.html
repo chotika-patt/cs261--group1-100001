@@ -3,26 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="/img/Logo.png">
-    <link rel="stylesheet" th:href="@{/css/styles.css}" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <title>Product Page</title>
+
+    <link rel="icon" type="image/png" href="/img/Logo.png">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
         .product-grid a { text-decoration:none; }
+
         .filter-tags-container {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin: 15px 0;
         }
+
         .filter-tag {
             background: #e8e8e8;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 14px;
         }
+
         .search-loading-container {
             display: none;
             justify-content: center;
@@ -30,6 +34,7 @@
             flex-direction: column;
             margin-top: 40px;
         }
+
         .search-not-found-container {
             display: none;
             text-align: center;
@@ -40,7 +45,7 @@
 
 <body>
 
-<!-- ===== NAV TOP ===== -->
+<!-- NAV TOP -->
 <nav class="nav-top">
     <div class="right-buttons">
         <div class="user-menu">
@@ -60,6 +65,7 @@
                 <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
             </div>
         </div>
+
         <a th:href="@{/cart}" class="cart-icon">
             <span class="material-symbols-outlined">shopping_cart</span>
         </a>
@@ -70,51 +76,58 @@
     <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
 </div>
 
-<!-- ======= Navbar ล่าง ======= -->
-  <nav class="nav-bottom">
+<!-- NAV BOTTOM -->
+<nav class="nav-bottom">
     <ul class="menu">
         <li><a th:href="@{/buyerTemp}">หน้าหลัก</a></li>
 
         <li class="dropdown-category">
-        <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า <i class="fa-solid fa-chevron-down"></i></a>
-        <div class="overlay"></div>
-        <div class="dropdown-content">
-              <a th:href="@{'/category/' + 'SHIRT'}">เสื้อ</a>
-              <a th:href="@{'/category/' + 'BAG'}">กระเป๋า</a>
-              <a th:href="@{'/category/' + 'STUDENT_UNIFORM'}">เครื่องแบบนักศึกษา</a>
-              <a th:href="@{'/category/' + 'GENERAL_PURPOSE'}">ของใช้ทั่วไป</a>
-              <a th:href="@{'/category/' + 'MEMORABILIA'}">ของที่ระลึก</a>
-        </div>
-      </li>
+            <a href="#" class="dropdown-toggle">หมวดหมู่สินค้า 
+                <i class="fa-solid fa-chevron-down"></i>
+            </a>
 
-      <li><a th:href="@{/order-status-check}">เช็คสถานะ</a></li>
-      <li><a href="#">ติดต่อเรา</a></li>
-      <li><a href="#" id="search-icon"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+            <div class="overlay"></div>
+
+            <div class="dropdown-content">
+                <a href="/product?category=SHIRT">เสื้อ</a>
+                <a href="/product?category=BAG">กระเป๋า</a>
+                <a href="/product?category=STUDENT_UNIFORM">เครื่องแบบนักศึกษา</a>
+                <a href="/product?category=GENERAL_PURPOSE">ของใช้ทั่วไป</a>
+                <a href="/product?category=MEMORABILIA">ของที่ระลึก</a>
+            </div>
+        </li>
+
+        <li><a href="#">เช็คสถานะ</a></li>
+        <li><a href="#">ติดต่อเรา</a></li>
+
+        <li><a href="#" id="search-icon">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </a></li>
     </ul>
 
     <div class="search-bar-replacement">
-      <div class="search-input-container">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
-        <div id="search-suggestions" class="suggestions-list"></div>
-      </div>
+        <div class="search-input-container">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="search-input" placeholder="ค้นหาสินค้าที่คุณต้องการ...">
+            <div id="search-suggestions" class="suggestions-list"></div>
+        </div>
 
-      <button class="search-close-btn" id="search-close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+        <button class="search-close-btn" id="search-close">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
 
-      <button id="filter-icon" class="search-filter-btn">
-         <i class="fa-solid fa-filter"> ตัวกรอง</i>
-      </button>
+        <button id="filter-icon" class="search-filter-btn">
+            <i class="fa-solid fa-filter"></i> ตัวกรอง
+        </button>
     </div>
+</nav>
 
-  </nav>
-
-<!-- ===== PRODUCT SECTION ===== -->
+<!-- PRODUCT SECTION -->
 <div class="product-section">
+
     <div class="product-header">
         <h1 id="page-title">รายการสินค้าทั้งหมด</h1>
-        <p><a th:href="@{/product_no_login}">ดูทั้งหมด</a></p>
+        <p><a href="/product">ดูทั้งหมด</a></p>
     </div>
 
     <!-- FILTER TAGS -->
@@ -126,70 +139,27 @@
         <p>กำลังดำเนินการ...</p>
     </div>
 
-    <!-- Not Found -->
+    <!-- Not found -->
     <div id="search-not-found" class="search-not-found-container">
         <i class="fa-solid fa-circle-xmark"></i>
         <p>ค้นหา: <strong id="search-query-text"></strong></p>
         <h2>ไม่พบสินค้า</h2>
     </div>
 
-    <!-- Product Grid -->
-    <div id="product-grid" class="product-grid">
-        <a th:each="product : ${products}"
-           th:href="@{'/product_detail/' + ${product.productId}}"
-           class="product-card-link">
+    <!-- PRODUCT GRID (JS RENDER ONLY — ไม่มี thymeleaf แล้ว) -->
+    <div id="product-grid" class="product-grid"></div>
 
-            <div class="product-card">
-                <div class="product-image">
-                    <img th:if="${product.main_image != null}"
-                         th:src="@{/product_img/{file}(file=${product.main_image})}"
-                         alt="Product">
-                </div>
-                <div class="product-info">
-                    <span class="product-name" th:text="${product.name}">Product Name</span>
-                    <span class="product-price" th:text="'฿ ' + ${product.price}">฿0</span>
-                </div>
-            </div>
-        </a>
-    </div>
 </div>
 
-<!-- LOGOUT MODAL -->
-<div class="logout-modal" id="logout-modal">
+<!-- FILTER OVERLAY -->
+<div id="filter-overlay" class="overlay-container">
     <div class="modal-content">
-        <i class="fa-solid fa-circle-exclamation"></i>
-        <p>คุณต้องการออกจากระบบหรือไม่?</p>
-        <div class="modal-buttons">
-            <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
-            <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
-        </div>
-        <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
-    </div>
-</div>
 
-<div class="logout-success" id="logout-success">
-    <div class="success-content">
-        <i class="fa-solid fa-circle-check"></i>
-        <p>ออกจากระบบสำเร็จแล้ว</p>
-    </div>
-</div>
-
-  <!-- ======================= FILTER OVERLAY ======================= -->
-
-  <div id="filter-overlay" class="overlay-container">
-      <div class="modal-content">
-
-          <div class="filter-headbar">
-              <h3>
-                <i class="fa-solid fa-filter"></i>
-                <span>ตัวกรอง</span>
-              </h3>
-
-              <div class="filter-categories">
-                  <div class="category-row">
-                    <div class="category-label">
-                        <span>หมวดหมู่ :</span>
-                    </div>
+        <div class="filter-headbar">
+            <h3><i class="fa-solid fa-filter"></i> ตัวกรอง</h3>
+            <div class="filter-categories">
+                <div class="category-row">
+                    <div class="category-label"><span>หมวดหมู่ :</span></div>
 
                     <div class="category-buttons">
                         <button class="cat-btn" data-category="SHIRT">เสื้อ</button>
@@ -198,92 +168,78 @@
                         <button class="cat-btn" data-category="GENERAL_PURPOSE">ของใช้ทั่วไป</button>
                         <button class="cat-btn" data-category="MEMORABILIA">ของที่ระลึก</button>
                     </div>
-                  </div>
-              </div>
-          </div>
+                </div>
+            </div>
+        </div>
 
-          <div class="filter-body">
+        <div class="filter-body">
+            
+            <div class="filter-clear-inline">
+                <button class="filter-clear-btn" id="filter-clear-button">ล้างตัวกรอง</button>
+            </div>
+            <!-- PRICE -->
+            <div class="filter-section">
+                <h4>ช่วงราคา</h4>
+                <div class="price-range">
+                    <input type="number" id="min-price" class="price-input" placeholder="ใส่ราคาต่ำสุด">
+                    <a>-</a>
+                    <input type="number" id="max-price" class="price-input" placeholder="ใส่ราคาสูงสุด">
+                    <span class="price-unit">บาท</span>
+                </div>
+            </div>
 
-              <!-- ช่วงราคา -->
-              <div class="filter-section">
-                  <h4>ช่วงราคา</h4>
-                  <div class="price-range">
-                      <input type="number" placeholder="ใส่ราคาต่ำสุด" id="min-price" class="price-input">
-                      <a>-</a>
-                      <input type="number" placeholder="ใส่ราคาสูงสุด" id="max-price" class="price-input">
-                      <span class="price-unit">บาท</span>
-                  </div>
-              </div>
+            <!-- STATUS -->
+            <div class="filter-section">
+                <h4>สถานะสินค้า</h4>
+                <div class="status-buttons">
+                    <button class="status-btn" data-status="AVAILABLE">พร้อมจัดส่ง</button>
+                    <button class="status-btn" data-status="PRE_ORDER">PRE-ORDER</button>
+                </div>
+            </div>
 
-              <!-- สถานะสินค้า -->
-              <div class="filter-section">
-                  <h4>สถานะสินค้า</h4>
-                  <div class="status-buttons">
-                      <button class="status-btn" data-status="AVAILABLE">พร้อมจัดส่ง</button>
-                      <button class="status-btn" data-status="PRE_ORDER">PRE-ORDER</button>
-                  </div>
-              </div>
+            <!-- RATING -->
+            <div class="filter-section">
+                <h4>คะแนน</h4>
+                <div class="rating-buttons">
+                    <button class="rating-btn" data-rating="5">5 ⭐</button>
+                    <button class="rating-btn" data-rating="4">4 ⭐</button>
+                    <button class="rating-btn" data-rating="3">3 ⭐</button>
+                    <button class="rating-btn" data-rating="2">2 ⭐</button>
+                    <button class="rating-btn" data-rating="1">1 ⭐</button>
+                </div>
+            </div>
 
-              <!-- คะแนน -->
-              <div class="filter-section">
-                  <h4>คะแนน</h4>
-                  <div class="rating-buttons">
-                      <button class="rating-btn" data-rating="5">5 ⭐</button>
-                      <button class="rating-btn" data-rating="4">4 ⭐</button>
-                      <button class="rating-btn" data-rating="3">3 ⭐</button>
-                      <button class="rating-btn" data-rating="2">2 ⭐</button>
-                      <button class="rating-btn" data-rating="1">1 ⭐</button>
-                  </div>
-              </div>
+            <!-- CONFIRM -->
+            <button class="filter-confirm-btn" id="filter-confirm-button">ตกลง</button>
 
-              <!-- ปุ่มตกลง -->
-              <button class="filter-confirm-btn" id="filter-confirm-button">ตกลง</button>
+        </div>
+    </div>
+</div>
 
-          </div>
-      </div>
-  </div>
 <!-- JS -->
-<script th:src="@{/js/main.js}" defer></script>
-<script th:src="@{/js/search.js}" defer></script>
+<script src="/js/main.js" defer></script>
+<script src="/js/search.js" defer></script>
 
-<!-- Title Setter -->
 <script>
-const titleEl = document.getElementById('page-title');
-const path = window.location.pathname;
-
-if (path.startsWith('/category/')) {
-    const code = path.split('/').pop();
-    const categoryMap = {
-        'SHIRT': 'เสื้อ',
-        'BAG': 'กระเป๋า',
-        'STUDENT_UNIFORM': 'เครื่องแบบนักศึกษา',
-        'GENERAL_PURPOSE': 'ของใช้ทั่วไป',
-        'MEMORABILIA': 'ของที่ระลึก'
+/* SET PAGE TITLE IF /product?category=CODE */
+const params = new URLSearchParams(window.location.search);
+const cat = params.get("category");
+if (cat) {
+    const map = {
+        SHIRT: "เสื้อ",
+        BAG: "กระเป๋า",
+        STUDENT_UNIFORM: "เครื่องแบบนักศึกษา",
+        GENERAL_PURPOSE: "ของใช้ทั่วไป",
+        MEMORABILIA: "ของที่ระลึก"
     };
-    titleEl.textContent = categoryMap[code] || 'รายการสินค้าทั้งหมด';
+    document.getElementById("page-title").textContent = map[cat] || "รายการสินค้า";
 }
 </script>
+
 <script>
-// =========================== CATEGORY DROPDOWN ===========================
-document.addEventListener("DOMContentLoaded", function() {
-    const dropdownToggle = document.querySelector('.dropdown-toggle');
-    const dropdownContent = document.querySelector('.dropdown-content');
-    const overlay = document.querySelector('.overlay');
-
-    if (dropdownToggle) {
-        dropdownToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            dropdownContent.classList.toggle('show');
-            overlay.classList.toggle('show');
-        });
-    }
-
-    if (overlay) {
-        overlay.addEventListener('click', function() {
-            dropdownContent.classList.remove('show');
-            overlay.classList.remove('show');
-        });
-    }
+document.getElementById("filter-clear-button")?.addEventListener("click", () => {
+    document.getElementById("filter-overlay").classList.remove("show");
+    window.location.href = "/buyerTemp";   // 🔥 สำหรับหน้า product.html
 });
 </script>
 
