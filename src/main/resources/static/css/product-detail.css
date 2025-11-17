@@ -50,14 +50,14 @@ body {
 
 
 
-/* กล่องรายละเอียด */
 .product-detail-main {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     gap: 12px;
     padding-right: 10px;
-    grid-template-columns: 0.7fr 1.3fr;
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: break-word;
 }
 
 /* แถบชื่อชุมนุม */
@@ -88,11 +88,14 @@ body {
 
 /* ชื่อสินค้า */
 .product-name {
-    color: #000000;
-    font-weight: 700;
+    color : #1a1a1a;
     font-size: 20px;
-    line-height: 1.5;
+    font-weight: 700;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
 }
+
 
 /* หมวดหมู่ */
 .product-category {
