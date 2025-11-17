@@ -220,7 +220,7 @@ public class PageController {
             model.addAttribute("errorMessage", "สินค้านี้ไม่มีอยู่");
             return "error_page"; // or redirect to a 404 page
         }
-
+        model.addAttribute("og",product.getOrganizationType());
         List<ReviewResponse> reviews = reviewService.getReviewsByProductId(productId);
         model.addAttribute("reviews", reviews);
         if (username == null) {
