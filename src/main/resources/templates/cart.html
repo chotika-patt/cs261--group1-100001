@@ -88,20 +88,15 @@
     <p class="subtitle">รับบริการรับประกันคุณภาพทุกคำสั่งซื้อ</p>
     <button class="pay-btn-top">ชำระเงิน</button>
 
-    <div class="cart-item">
-      <div class="cart-image">รูป</div>
-      <div class="cart-details">
-        <div class="row">
-          <span>ชื่อสินค้า</span>
-          <span class="price">ราคา</span>
-        </div>
-        <div class="row">รายละเอียด</div>
-        <div class="row">
-          <span>คาดการณ์วันที่จะจัดส่ง <small>(จัดส่ง 2-3 วัน)</small></span>
-          <span class="delivery">รับสินค้าด้วยตัวเอง</span>
-        </div>
-      </div>
-    </div>
+      <!-- Cart items rendered by cart.js -->
+      <div id="cart-items"></div>
+
+      <!-- Template shown when cart is empty (hidden by default) -->
+      <template id="empty-cart-template">
+          <div class="empty-cart">
+              <p>ตะกร้าของคุณว่างเปล่า — เริ่มช้อปเลย!</p>
+          </div>
+      </template>
 
     <div class="summary">
       <div class="row">
@@ -234,5 +229,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <script th:src="@{/js/main.js}" defer></script>
 <script th:src="@{/js/search.js}" defer></script>
+<script th:src="@{/js/cart.js}" defer></script>
 </body>
 </html>

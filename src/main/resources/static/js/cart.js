@@ -245,6 +245,11 @@
     });
   }
 
+   qsa('.pay-btn, .pay-btn-top').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+        });
+      });
+
   /* -------------------------
      8) Expose helper and start
      ------------------------- */

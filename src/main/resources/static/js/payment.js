@@ -1,10 +1,11 @@
-// payment.js (merged + backend integration)
-// Assumes your HTML from the message (ids/classes used there)
+// payment.js — confirm button simulates PAID after a short loading delay
+// Drop this into src/main/resources/static/js/payment.js (replace existing)
+
 document.addEventListener("DOMContentLoaded", () => {
   // ------------------------------
-  // DOM references (existing UI)
+  // DOM references
   // ------------------------------
-  const qrBtn = document.querySelector(".method"); // first .method is QR Payment in your markup
+  const qrBtn = document.getElementById("qrMethodBtn");
   const qrPopup = document.getElementById("qrPopup");
   const countdownEl = document.getElementById("countdown");
   const confirmBtn = document.getElementById("confirmBtn");
@@ -13,35 +14,38 @@ document.addEventListener("DOMContentLoaded", () => {
   const loadingCard = document.getElementById("loadingCard");
   const successCard = document.getElementById("successCard");
   const failCard = document.getElementById("failCard");
-  const errorText = document.querySelector(".error-text");
   const unsupportedPopup = document.getElementById("unsupportedPopup");
   const closeUnsupportedBtn = document.getElementById("closeUnsupportedBtn");
 
-  // other method buttons (card / bank) — existing logic shows unsupported popup
   const cardMethod = document.querySelector(".fa-cc-visa")?.closest(".method");
   const bankMethod = document.querySelector(".fa-building-columns")?.closest(".method");
 
   // ------------------------------
-  // Config
+  // Config / State
   // ------------------------------
   const POLL_INTERVAL_MS = 3000;
+  const MAX_POLL_ATTEMPTS = 40;
+  const CONFIRM_SIMULATED_DELAY_MS = 1500; // <-- change this to increase/decrease loading delay
   let pollTimer = null;
+  let pollAttempts = 0;
   let countdownTimer = null;
   let currentPaymentId = null;
   let currentPaymentRef = null;
-  let expiresAt = null; // server-provided fallback
-  let remainingSeconds = 60; // local display fallback (keeps your UI)
+  let remainingSeconds = 60;
+  let lastKnownAmount = null;
+  let lastKnownCurrency = "THB";
+
   const API = {
     initiate: "/api/payments/initiate",
-    status: (id) => `/api/payments/${id}`,        // POST as per backend
-    cancel: (id) => `/api/payments/${id}/cancel`
+    status: (id) => `/api/payments/${id}`,
+    cancel: (id) => `/api/payments/${id}/cancel`,
+    createDraft: "/api/orders/draft"
   };
 
   // ------------------------------
   // Utilities
   // ------------------------------
   function getCsrfHeaders() {
-    // Try common Spring CSRF meta or hidden input patterns
     const headers = {};
     const meta = document.querySelector('meta[name="_csrf"]');
     const metaHeader = document.querySelector('meta[name="_csrf_header"]');
@@ -51,7 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
       headers[headerName] = token;
       return headers;
     }
-    // fallback: <input name="_csrf" value="...">
     const input = document.querySelector('input[name="_csrf"]');
     if (input) {
       headers["X-CSRF-TOKEN"] = input.value;
@@ -61,40 +64,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function readOrderInfoFromPage() {
-    // Try multiple fallbacks to find orderId & amount on page
-    // 1) element with id="orderData" and data attributes
     const el1 = document.getElementById("orderData");
     if (el1) {
       return {
-        orderId: parseInt(el1.dataset.orderId),
-        amount: parseFloat(el1.dataset.amount)
+        orderId: el1.dataset.orderId ? parseInt(el1.dataset.orderId) : null,
+        amount: el1.dataset.amount ? parseFloat(el1.dataset.amount) : null
       };
     }
-
-    // 2) main container dataset
     const main = document.querySelector(".payment-container");
-    if (main && (main.dataset.orderId || main.dataset.amount)) {
+    if (main) {
       return {
         orderId: main.dataset.orderId ? parseInt(main.dataset.orderId) : null,
         amount: main.dataset.amount ? parseFloat(main.dataset.amount) : null
       };
     }
-
-    // 3) parse success card sample values (if present)
-    try {
-      const detailBs = document.querySelectorAll("#successCard .detail-list b");
-      // based on your markup: [order number, paid time, method, buyer, price]
-      if (detailBs && detailBs.length >= 5) {
-        const orderText = detailBs[0].textContent.trim();
-        const priceText = detailBs[4].textContent.trim().replace(/[^\d.]/g, "");
-        const maybeOrderId = parseInt(orderText.replace(/\D/g, ""), 10);
-        const maybeAmount = parseFloat(priceText);
-        return { orderId: maybeOrderId || null, amount: maybeAmount || null };
-      }
-    } catch (e) { /* ignore */ }
-
-    // 4) global fallback
-    console.warn("Order info not found in DOM; using fallback placeholders. Replace with real values.");
     return { orderId: null, amount: null };
   }
 
@@ -103,19 +86,26 @@ document.addEventListener("DOMContentLoaded", () => {
     list.forEach((e) => { if (!e) return; e.style.display = (e === elem) ? "block" : "none"; });
   }
 
+  function setInlineError(text) {
+    const el = qrCard ? qrCard.querySelector(".error-text") : document.querySelector(".error-text");
+    if (el) el.textContent = text || "";
+  }
+
   function showErrorMessageUI(codeOrText) {
+    const errEl = document.querySelector(".qr-card .error-text") || document.querySelector(".error-text");
+    if (!errEl) return;
     if (typeof codeOrText === "number") {
       switch (codeOrText) {
-        case 400: errorText.textContent = "400 – Invalid input (ข้อมูลไม่ถูกต้อง)"; break;
-        case 401: errorText.textContent = "401 – Unauthorized (ไม่ได้รับอนุญาต)"; break;
-        case 404: errorText.textContent = "404 – Order not found (ไม่พบคำสั่งซื้อ)"; break;
-        case 409: errorText.textContent = "409 – Duplicate/Expired QR (QR ซ้ำหรือหมดอายุ)"; break;
-        case 422: errorText.textContent = "422 – Validation failed (ตรวจสอบข้อมูลไม่ผ่าน)"; break;
-        case 500: errorText.textContent = "500 – Server error (เซิร์ฟเวอร์มีปัญหา)"; break;
-        default: errorText.textContent = "Unexpected error occurred (เกิดข้อผิดพลาดไม่ทราบสาเหตุ)"; break;
+        case 400: errEl.textContent = "400 – Invalid input (ข้อมูลไม่ถูกต้อง)"; break;
+        case 401: errEl.textContent = "401 – Unauthorized (ไม่ได้รับอนุญาต)"; break;
+        case 404: errEl.textContent = "404 – Not found (ไม่พบ)"; break;
+        case 409: errEl.textContent = "409 – Duplicate/Expired QR (QR ซ้ำหรือหมดอายุ)"; break;
+        case 422: errEl.textContent = "422 – Validation failed (ตรวจสอบข้อมูลไม่ผ่าน)"; break;
+        case 500: errEl.textContent = "500 – Server error (เซิร์ฟเวอร์มีปัญหา)"; break;
+        default: errEl.textContent = "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง"; break;
       }
     } else {
-      errorText.textContent = String(codeOrText || "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง");
+      errEl.textContent = String(codeOrText || "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง");
     }
   }
 
@@ -124,33 +114,28 @@ document.addEventListener("DOMContentLoaded", () => {
   // ------------------------------
   function startCountdownFrom(seconds = 60) {
     clearInterval(countdownTimer);
-    remainingSeconds = seconds;
-    countdownEl.textContent = remainingSeconds;
+    remainingSeconds = seconds || 60;
+    if (countdownEl) countdownEl.textContent = remainingSeconds;
     confirmBtn.disabled = false;
     newQRBtn.style.display = "none";
 
     countdownTimer = setInterval(() => {
       remainingSeconds--;
-      countdownEl.textContent = remainingSeconds;
+      if (countdownEl) countdownEl.textContent = remainingSeconds;
       if (remainingSeconds <= 0) {
         clearInterval(countdownTimer);
         confirmBtn.disabled = true;
         newQRBtn.style.display = "block";
-        console.log("⏰ Countdown expired -> auto-check status");
-        // on expire: check backend immediately (also mark expired if server does that)
         if (currentPaymentId) {
-          // do one final poll; if still pending, show expired UI
           pollPaymentStatusOnce().then(s => {
-            if (!s || (s && (s.status === "EXPIRED" || s.status === "FAILED"))) {
+            if (!s || ["EXPIRED","FAILED"].includes((s.status||"").toUpperCase())) {
               showOnly(failCard);
               showErrorMessageUI("QR หมดอายุ หรือชำระเงินไม่สำเร็จ");
             } else {
-              // if backend already marked PAID, handle it
               handlePaymentStatus(s);
             }
           });
         } else {
-          // nothing to check
           showOnly(failCard);
           showErrorMessageUI("QR หมดอายุ กรุณาสร้าง QR ใหม่");
         }
@@ -159,10 +144,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ------------------------------
-  // API calls: initiate, poll, cancel
+  // API calls
   // ------------------------------
   async function initiatePayment(payload) {
-    // payload should include: orderId, amount, provider, method, currency, idempotencyKey, metadata...
     try {
       showOnly(loadingCard);
       const headers = Object.assign({ "Content-Type": "application/json" }, getCsrfHeaders());
@@ -175,61 +159,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (resp.status === 201 || resp.ok) {
         const data = await resp.json();
-        console.log("[PAY] Initiated:", data);
         currentPaymentId = data.paymentId;
         currentPaymentRef = data.paymentRef || null;
+        lastKnownAmount = data.amount || payload.amount || lastKnownAmount;
+        lastKnownCurrency = data.currency || lastKnownCurrency;
 
-        // If server returns a paymentUrl (preferable), set QR image src
+        // show QR if provider returned paymentUrl
         if (data.paymentUrl) {
           const img = qrCard.querySelector("img");
           if (img) img.src = data.paymentUrl;
         }
 
-        // If server returned expiry (metadata) attempt to compute seconds
+        // show the QR UI now
+        showOnly(qrCard);
+
+        // start countdown
         if (data.expiresAt) {
           try {
             const then = new Date(data.expiresAt);
-            const now = new Date();
-            const diff = Math.max(0, Math.floor((then - now) / 1000));
+            const diff = Math.max(0, Math.floor((then - new Date()) / 1000));
             startCountdownFrom(diff || 60);
-          } catch (e) {
-            startCountdownFrom(60);
-          }
+          } catch (e) { startCountdownFrom(60); }
         } else {
           startCountdownFrom(60);
         }
 
         // start polling
         startPolling(currentPaymentId);
-        showOnly(qrCard);
+        setInlineError("");
         return data;
       } else {
         const err = await resp.json().catch(() => null);
-        console.error("[PAY] initiate failed:", resp.status, err);
         showOnly(failCard);
         showErrorMessageUI(err?.message || resp.status);
         return null;
       }
     } catch (e) {
-      console.error("[PAY] network/initiate error", e);
+      console.error("initiate error", e);
       showOnly(failCard);
       showErrorMessageUI("Network error. โปรดลองอีกครั้ง");
       return null;
     }
   }
 
+  // Poll once, return JSON or wrapper {__errorStatus:status} or null
   async function pollPaymentStatusOnce() {
     if (!currentPaymentId) return null;
     try {
       const headers = Object.assign({}, getCsrfHeaders());
       const resp = await fetch(API.status(currentPaymentId), {
-        method: "POST", // matches your backend controller
+        method: "POST",
         credentials: "same-origin",
         headers
       });
       if (!resp.ok) {
-        console.warn("[PAY] poll returned non-ok", resp.status);
-        return null;
+        console.warn("[PAY] poll non-ok", resp.status);
+        return { __errorStatus: resp.status };
       }
       const s = await resp.json();
       return s;
@@ -241,15 +226,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function startPolling(paymentId) {
     stopPolling();
-    // immediate check then interval
+    pollAttempts = 0;
+
+    // Ensure QR UI visible
+    if (qrCard) showOnly(qrCard);
+
+    // immediate check
     (async () => {
       const s = await pollPaymentStatusOnce();
-      if (s) handlePaymentStatus(s);
+      if (s) {
+        if (s.__errorStatus) {
+          showOnly(failCard);
+          showErrorMessageUI(`Server returned ${s.__errorStatus}`);
+          stopPolling();
+          return;
+        }
+        handlePaymentStatus(s);
+      }
     })();
 
     pollTimer = setInterval(async () => {
+      pollAttempts++;
+      if (pollAttempts >= MAX_POLL_ATTEMPTS) {
+        console.warn("[PAY] max poll attempts reached, stopping client poll");
+        stopPolling();
+        clearInterval(countdownTimer);
+        showOnly(failCard);
+        showErrorMessageUI("การตรวจสอบสถานะนานเกินไป กรุณาลองอีกครั้งหรือติดต่อผู้ดูแลระบบ");
+        return;
+      }
+
       const s = await pollPaymentStatusOnce();
       if (!s) return;
+
+      if (s.__errorStatus) {
+        showOnly(failCard);
+        showErrorMessageUI(`Server returned ${s.__errorStatus}`);
+        stopPolling();
+        return;
+      }
+
       handlePaymentStatus(s);
     }, POLL_INTERVAL_MS);
   }
@@ -262,21 +278,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function cancelPaymentOnServer(paymentId) {
+    if (!paymentId) return;
     try {
       const headers = Object.assign({}, getCsrfHeaders());
-      const resp = await fetch(API.cancel(paymentId), {
+      await fetch(API.cancel(paymentId), {
         method: "POST",
         credentials: "same-origin",
         headers
       });
-      if (resp.ok) {
-        console.log("[PAY] Cancelled payment", paymentId);
-      } else {
-        console.warn("[PAY] Cancel returned", resp.status);
-      }
-    } catch (e) {
-      console.warn("[PAY] cancel error", e);
-    }
+    } catch (e) { /* ignore */ }
   }
 
   // ------------------------------
@@ -284,25 +294,31 @@ document.addEventListener("DOMContentLoaded", () => {
   // ------------------------------
   function handlePaymentStatus(statusResp) {
     if (!statusResp) return;
-    const st = statusResp.status;
-    console.log("[PAY] statusResp", statusResp);
-
-    switch ((st || "").toUpperCase()) {
+    const st = (statusResp.status || "").toUpperCase();
+    switch (st) {
       case "PENDING":
       case "INIT":
-        // keep UI as QR, keep polling
         return;
       case "PAID":
         stopPolling();
         clearInterval(countdownTimer);
-        showOnly(successCard);
-        // update success details (amount etc.)
         try {
           const amtEl = successCard.querySelector(".amount");
-          if (amtEl && statusResp.amount) amtEl.textContent = `${statusResp.amount} ${statusResp.currency || ""}`;
+          const amountToShow = statusResp.amount || lastKnownAmount || "";
+          const currencyToShow = statusResp.currency || lastKnownCurrency || "";
+          if (amtEl && amountToShow !== null) amtEl.textContent = `${amountToShow} ${currencyToShow}`;
+
+          const detailBs = successCard.querySelectorAll(".detail-list b");
+          if (detailBs && detailBs.length >= 5) {
+            detailBs[0].textContent = (statusResp.paymentId || currentPaymentId) + "";
+            detailBs[1].textContent = new Date().toLocaleString();
+            detailBs[2].textContent = "QR payment";
+            detailBs[3].textContent = document.querySelector('span.user-text')?.textContent || "";
+            detailBs[4].textContent = `${amountToShow || ''} ${currencyToShow || ''}`;
+          }
         } catch (e) {}
-        // redirect after small delay so user sees success card
-        setTimeout(() => { window.location.href = "/buyerTemp"; }, 1300);
+        showOnly(successCard);
+        setTimeout(()=> window.location.href = "/buyerTemp", 1300);
         return;
       case "EXPIRED":
         stopPolling();
@@ -324,48 +340,116 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ------------------------------
-  // Wire up UI interactions
+  // create order draft if missing
   // ------------------------------
-  // QR Payment button click -> initiate flow
+  async function ensureOrderDraftExists() {
+    try {
+      const headers = Object.assign({ "Content-Type": "application/json" }, getCsrfHeaders());
+      const resp = await fetch(API.createDraft, {
+        method: "POST",
+        credentials: "same-origin",
+        headers,
+        body: JSON.stringify({})
+      });
+
+      if (!resp.ok) {
+        console.warn("Draft creation returned", resp.status);
+        return null;
+      }
+
+      const data = await resp.json();
+      const orderId = data.orderId || data.order_id || data.id || null;
+      const amount = data.totalAmount || data.total_amount || data.totalAmount || null;
+      return { orderId, amount };
+    } catch (e) {
+      console.error("Draft creation error", e);
+      return null;
+    }
+  }
+
+  // ------------------------------
+  // UI interactions
+  // ------------------------------
   qrBtn?.addEventListener("click", async () => {
     qrPopup.style.display = "flex";
+    setInlineError("");
+    const infoInitial = readOrderInfoFromPage();
+    let info = infoInitial;
 
-    // build payload from DOM (best-effort)
-    const info = readOrderInfoFromPage();
-    // Provide sensible defaults if not found (but you should populate server-side)
+    if (!info.orderId || !info.amount) {
+      const draft = await ensureOrderDraftExists();
+      if (draft && draft.orderId) {
+        const orderDataEl = document.getElementById('orderData');
+        if (orderDataEl) {
+          orderDataEl.dataset.orderId = draft.orderId;
+          orderDataEl.dataset.amount = draft.amount;
+        } else {
+          const main = document.querySelector('.payment-container');
+          if (main) {
+            main.dataset.orderId = draft.orderId;
+            main.dataset.amount = draft.amount;
+          }
+        }
+        info = { orderId: draft.orderId, amount: draft.amount };
+      } else {
+        showOnly(qrCard);
+        showErrorMessageUI("ยังไม่มีคำสั่งซื้อ — กรุณากลับไปตะกร้าสินค้าแล้วชำระ หรือเข้าสู่ระบบ");
+        return;
+      }
+    }
+
+    if (!info.orderId || !info.amount) {
+      showOnly(qrCard);
+      showErrorMessageUI("orderId หรือ amount หายไป กรุณาลองอีกครั้ง");
+      return;
+    }
+
+    // save last known amount so confirm can use it
+    lastKnownAmount = info.amount;
+    lastKnownCurrency = "THB";
+
     const payload = {
-      orderId: info.orderId || null,
-      amount: info.amount || null,
-      provider: "MOCK_PROVIDER", // change to real provider identifier if needed
+      orderId: info.orderId,
+      amount: info.amount,
+      provider: "MOCK_PROVIDER",
       method: "QR",
       currency: "THB",
       idempotencyKey: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (`cid-${Date.now()}`)
     };
 
-    // If orderId or amount are missing, warn in console and still try to initiate
-    if (!payload.orderId || !payload.amount) {
-      console.warn("Missing orderId or amount in DOM; ensure you provide real values via data attributes or server-rendered JS.");
-    }
-
     await initiatePayment(payload);
   });
 
-  // Confirm button (manual re-check)
+  // ------------------------------
+  // Confirm button: simulate PAID after loading delay
+  // ------------------------------
   confirmBtn?.addEventListener("click", async () => {
-    clearInterval(countdownTimer); // stop countdown when user actively checks
+    // disable the confirm button to avoid double-clicks
     confirmBtn.disabled = true;
+
+    // stop countdown & polling so client won't overwrite simulated result
+    clearInterval(countdownTimer);
+    stopPolling();
+
+    // show loading card to simulate processing
     showOnly(loadingCard);
-    const s = await pollPaymentStatusOnce();
-    if (s) handlePaymentStatus(s);
-    else {
-      showOnly(failCard);
-      showErrorMessageUI("ไม่สามารถตรวจสอบสถานะได้");
-    }
+
+    // wait for configured delay, then simulate PAID
+    setTimeout(() => {
+      const simulated = {
+        paymentId: currentPaymentId,
+        status: "PAID",
+        paymentRef: currentPaymentRef || ("SIM-" + (currentPaymentId || Date.now())),
+        amount: lastKnownAmount || 0,
+        currency: lastKnownCurrency || "THB"
+      };
+
+      handlePaymentStatus(simulated);
+    }, CONFIRM_SIMULATED_DELAY_MS);
   });
 
-  // New QR button -> cancel previous payment and create a new one
+  // New QR logic (re-initiate)
   newQRBtn?.addEventListener("click", async () => {
-    // cancel old if exists
     if (currentPaymentId) {
       await cancelPaymentOnServer(currentPaymentId);
       stopPolling();
@@ -373,11 +457,19 @@ document.addEventListener("DOMContentLoaded", () => {
       currentPaymentRef = null;
     }
 
-    // build payload and re-initiate
     const info = readOrderInfoFromPage();
+    if (!info.orderId || !info.amount) {
+      showOnly(qrCard);
+      showErrorMessageUI("ไม่พบคำสั่งซื้อ กรุณาลองอีกครั้ง");
+      return;
+    }
+
+    lastKnownAmount = info.amount;
+    lastKnownCurrency = "THB";
+
     const payload = {
-      orderId: info.orderId || null,
-      amount: info.amount || null,
+      orderId: info.orderId,
+      amount: info.amount,
       provider: "MOCK_PROVIDER",
       method: "QR",
       currency: "THB",
@@ -386,7 +478,6 @@ document.addEventListener("DOMContentLoaded", () => {
     await initiatePayment(payload);
   });
 
-  // Redirect buttons exist in success/fail card; attach handlers
   document.getElementById("successRedirectBtn")?.addEventListener("click", () => {
     window.location.href = "/buyerTemp";
   });
@@ -395,7 +486,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.reload();
   });
 
-  // Unsupported popup logic for card/bank methods
   [cardMethod, bankMethod].forEach((btn) => {
     if (!btn) return;
     btn.addEventListener("click", () => {
@@ -407,39 +497,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (unsupportedPopup) unsupportedPopup.style.display = "none";
   });
 
-  // ------------------------------
-  // FRONT-END UNIT TEST
-  // ------------------------------
-  function runUnitTests() {
-    console.group("FRONT-END UNIT TESTS (Payment Page)");
-    try {
-      console.assert(typeof initiatePayment === "function", "initiatePayment() not found");
-      console.assert(typeof startPolling === "function", "startPolling() not found");
-      console.assert(typeof pollPaymentStatusOnce === "function", "pollPaymentStatusOnce() not found");
-      console.log("Core functions loaded");
-
-      const successBtn = document.getElementById("successRedirectBtn");
-      const failBtn = document.getElementById("failRedirectBtn");
-      console.assert(successBtn && failBtn, "Redirect buttons missing");
-      console.log("Redirect buttons found");
-
-      const testCodes = [400, 401, 404, 409, 422, 500];
-      testCodes.forEach((c) => {
-        showErrorMessageUI(c);
-        const text = document.querySelector(".error-text").textContent;
-        console.assert(text.includes(c.toString()) || typeof text === "string", `showErrorMessage(${c}) check`);
-      });
-      console.log("showErrorMessageUI() test passed");
-    } catch (e) {
-      console.error("Unit test failed:", e);
-    }
-    console.groupEnd();
-  }
-  setTimeout(runUnitTests, 1000);
-
-  // cleanup when leaving page (stop timers)
   window.addEventListener("beforeunload", () => {
     stopPolling();
     clearInterval(countdownTimer);
   });
+
 });

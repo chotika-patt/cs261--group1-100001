@@ -89,11 +89,12 @@
 
 
 <!--  ส่วนเลือกการชำระเงิน  -->
-<main class="payment-container">
+<main class="payment-container"
+      th:attr="data-order-id=${order != null} ? ${order.orderId} : null, data-amount=${order != null} ? ${order.totalPrice} : null">
     <h1>เลือกวิธีการชำระเงิน</h1>
 
     <div class="payment-box">
-        <button class="method">QR Payment</button>
+        <button class="method" id="qrMethodBtn">QR Payment</button>
 
         <div class="method">
             <button><i class="fa-brands fa-cc-visa"></i></button>
