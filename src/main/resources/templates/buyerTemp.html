@@ -299,7 +299,33 @@ document.getElementById("filter-clear-button")?.addEventListener("click", () => 
     // Redirect ไปหน้า buyerTemp แบบไม่มี filter อะไรติดอยู่
     window.location.href = "/buyerTemp";
 });
+
 </script>
+
+<script>   
+// =========================== CATEGORY DROPDOWN ===========================
+document.addEventListener("DOMContentLoaded", function() {
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    const overlay = document.querySelector('.overlay');
+
+    if (dropdownToggle) {
+        dropdownToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            dropdownContent.classList.toggle('show');
+            overlay.classList.toggle('show');
+        });
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            dropdownContent.classList.remove('show');
+            overlay.classList.remove('show');
+        });
+    }
+});
+</script>  
+
 
 
 </body>
