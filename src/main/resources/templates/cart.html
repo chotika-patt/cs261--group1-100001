@@ -98,19 +98,32 @@
           </div>
       </template>
 
-    <div class="summary">
-      <div class="row">
-        <span>ยอดรวม</span>
-        <span>฿729.0</span>
-      </div>
-      <div class="row small">ค่าจัดส่ง <span>ฟรี</span></div>
-    </div>
+          <!-- Summary -->
+      <div class="summary">
+        <div class="row">
+          <span>ยอดรวมสินค้า</span>
+          <span id="subtotal-text">฿729.0</span>
+        </div>
 
-    <div class="total">
-      <span>ยอดชำระเงินของคุณ</span>
-      <span class="amount">฿729.0</span>
-    </div>
-    <a href="#"><p class="installment">฿729.0/เดือน เป็นเวลา 10 เดือน ดอกเบี้ย 0%</p></a>
+        <div class="row small">
+          ค่าจัดส่ง <span>ฟรี</span>
+        </div>
+
+      </div>
+
+      <!-- Total -->
+      <div class="total">
+        <div class="total-row">
+            <span class="total-label">ยอดชำระเงินของคุณ</span>
+            <span class="amount" id="total-text">฿729.0</span>
+        </div>
+
+        <span class="vat-note">*ราคานี้รวม VAT 7% แล้ว</span>
+      </div>
+
+      <a href="#">
+        <p class="installment" id="installment-text">฿729.0/เดือน เป็นเวลา 10 เดือน ดอกเบี้ย 0%</p>
+      </a>
 
       <button class="pay-btn" onclick="window.location.href='/payment'">ชำระเงิน</button>
   </main>

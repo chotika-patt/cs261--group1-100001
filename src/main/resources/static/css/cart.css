@@ -138,6 +138,7 @@ body {
   font-size: 12px;
   margin-top: 5px;
 }
+/*
 .total {
   display: flex;
   justify-content: space-between;
@@ -145,6 +146,7 @@ body {
   font-size: 16px;
   margin: 20px 0;
 }
+*/
 .total .amount {
   font-size: 20px;
 }
@@ -155,3 +157,32 @@ body {
   text-align: end;
 }
 /*----------------------------------------*/
+
+.total {
+    text-align: left !important; /* เอาชน text-align:center ของ cart-container */
+    margin: 20px 0;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-label {
+    font-weight: bold;
+}
+
+.amount {
+    font-size: 20px;
+}
+
+.vat-note {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;       /* ตัวเล็กลง */
+    color: #777;
+    text-align: left !important; /* บังคับชิดซ้าย */
+}
