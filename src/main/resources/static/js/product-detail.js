@@ -7,6 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Product ID:", productId);
     console.log("Stock:", stock);
 
+    // ⭐ ดึงไซส์ที่ถูกเลือกจากปุ่ม (เพิ่มตรงนี้)
+    function getSelectedSize() {
+        const activeBtn = document.querySelector(".size-btn.active");
+        return activeBtn ? activeBtn.textContent.trim() : null;
+    }
+
     const stockCountEl = document.getElementById("stock-count");
     const stockStatusText = document.getElementById("stock-status-text");
     const addCartBtn = document.querySelector(".add-cart-btn");
@@ -100,7 +106,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     productId: productId,
-                    quantity: Number(qtyInput.value)
+                    quantity: Number(qtyInput.value),
+                    size: getSelectedSize()
                 })
             });
 
@@ -133,7 +140,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     productId: productId,
-                    quantity: Number(qtyInput.value)
+                    quantity: Number(qtyInput.value),
+                    size: getSelectedSize()
                 })
             });
 
