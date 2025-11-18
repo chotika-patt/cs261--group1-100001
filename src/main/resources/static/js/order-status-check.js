@@ -66,6 +66,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       if(colorText != "") colorText = "สี (" + colorText + ")"
       if(sizeText != "" && colorText != "") spaceText = ", "
 
+    
+      let reviewBtnHtml = "";
+  
+      if (mapped === "finish") { 
+           // ส่ง orderId ไปด้วยเพื่อให้รู้ว่ารีวิวออเดอร์ไหน
+           reviewBtnHtml = 
+              <div class="order-actions" style="margin-top: 12px; width: 100%;">
+              <a href="/review?orderId=${order.orderId}" class="btn btn--primary" style="display:block; text-align:center; width:100%; text-decoration: none;">รีวิวสินค้า</a></div>;
+
+      }
       const card = `
         <article class="order-card order-item">
             <div class="order-card__meta">
@@ -79,6 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <div class="product-meta">${sizeText}${spaceText}${colorText} x${order.quantity} <div class="price">฿${order.totalPrice}</div></div>
                 <div class="order-status-line">สถานะคำสั่งซื้อ : <span class="status status--${mapStatus(order)}">${translateStatus(order)}</span></div>
                 </div>
+                 ${reviewBtnHtml} 
             </div>
         </article>
       `;
