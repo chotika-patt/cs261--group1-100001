@@ -127,7 +127,6 @@
 
     <div class="product-header">
         <h1 id="page-title">รายการสินค้าทั้งหมด</h1>
-        <p><a href="/product">ดูทั้งหมด</a></p>
     </div>
 
     <!-- FILTER TAGS -->
@@ -147,7 +146,21 @@
     </div>
 
     <!-- PRODUCT GRID (JS RENDER ONLY — ไม่มี thymeleaf แล้ว) -->
-    <div id="product-grid" class="product-grid"></div>
+    <div class="product-grid">
+            <a th:each="product : ${products}" 
+                th:href="@{'/product_detail/' + ${product.productId}}" 
+                class="product-card-link">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img th:if="${product.main_image != null}" th:src="@{/product_img/{file}(file=${product.main_image})}" alt="Product Image">
+                    </div>
+                    <div class="product-info">
+                        <span class="product-name" th:text="${product.name}">Product Name</span>
+                        <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
+                    </div> 
+                </div>
+            </a>
+        </div>
 
 </div>
 

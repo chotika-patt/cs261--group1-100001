@@ -249,6 +249,8 @@ main {
 /*-------------------------------------------------------*/
 /*ข้อความ แสดงข้อมูลเว็บ*/
 .box-container {
+  padding-bottom: 40px;
+  padding-top: 40px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   max-width: 1400px;
@@ -257,6 +259,8 @@ main {
 }
 
 .box {
+  padding-bottom: 40px;
+  padding-top: 40px;
   display: flex;
   justify-content: center;  
   align-items: center;      
