@@ -106,9 +106,21 @@ public ResponseEntity<?> addProduct(
 
     try {
         Product product = new Product();
+        if(name == null){
+            return ResponseEntity.status(500).body("เกิดข้อผิดพลาด: การุณาใส่ชื่อสินค้า");
+        }
         product.setName(name);
+        if(category == null){
+            return ResponseEntity.status(500).body("เกิดข้อผิดพลาด: การุณาใส่ประเภทสินค้า");
+        }
         product.setCategory(category);
+        if(price < 0 ){
+            return ResponseEntity.status(500).body("เกิดข้อผิดพลาด: การุณากรอกราคาเป็นจำนวนบวก");
+        }
         product.setPrice(price);
+        if(stock < 0){
+            return ResponseEntity.status(500).body("เกิดข้อผิดพลาด: การุณากรอกจำนวนสินค้าเป็นจำนวนเต็มบวก");
+        }
         product.setStock(stock);
         product.setDescription(description);
 

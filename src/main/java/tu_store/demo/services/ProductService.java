@@ -29,7 +29,6 @@ public class ProductService {
     // =============== Add Product ===============
     public Product addProduct(Product product, String username){
         User seller = userRepository.findFirstByUsername(username);
-
         if (seller == null || seller.getRole() != UserRole.SELLER) {
             throw new IllegalArgumentException("Only sellers can add products");
         }

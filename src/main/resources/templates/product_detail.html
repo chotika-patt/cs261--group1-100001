@@ -174,9 +174,7 @@
 <!-- รีวิวสินค้า -->
 <div class="product-review-section">
     <button class="review-toggle" id="toggle-review">
-        ⭐ รีวิวสินค้าและคะแนน 
-        (<span th:text="${#lists.size(reviews)}">0</span> ความคิดเห็น)
-        <i class="fa-solid fa-chevron-down"></i>
+⭐ รีวิวสินค้าและคะแนน (<span th:text="${#lists.size(reviews)}"></span> ความคิดเห็น) <i class="fa-solid fa-chevron-down"></i>
     </button>
 </div>
 
@@ -210,7 +208,6 @@
 
             <!-- Comment -->
             <p class="review-text" th:text="${r.comment != null ? r.comment : '-'}"></p>
-
             <!-- Review Images -->
             <div class="review-images" th:if="${r.imageUrls != null and !#lists.isEmpty(r.imageUrls)}">
                 <img th:each="imgUrl : ${r.imageUrls}" th:src="@{${imgUrl}}" alt="review-image">
