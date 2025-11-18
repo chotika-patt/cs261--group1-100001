@@ -15,380 +15,230 @@
 
 <body>
 <!-- ======= Navbar ด้านบน ======= -->
-  <nav class="nav-top">
-      <div class="right-buttons">
-      <div class="user-menu">
-        <button class="user-btn" id="user-btn">
-          <span class="user-text" th:text="${session.username}">Seller Name</span>
-          <div class="user-icon"><i class="fa-solid fa-user"></i></div>
-        </button>
-        <div class="dropdown" id="user-dropdown">
-          <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
-          <div class="avatar"><i class="fa-solid fa-user"></i></div>
-          <h4 th:text="${username}">ชื่อบัญชีผู้ขาย</h4>
-          <div class="info">
-            <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">seller_email@example.com</span></p>
-            <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">08xxxxxxxx</span></p>
-            <p class="status">
-                <i class="fa-solid"
-                     th:classappend="${verifiedStatus == 'อนุมัติการขายแล้ว'} ? 'fa-circle-check text-green' : 'fa-circle-xmark text-red'"></i>
-                <span>สถานะ : </span>
-                <span th:text="${verifiedStatus}"></span>
-            </p>
-           
+<nav class="nav-top">
+    <div class="right-buttons">
+        <div class="user-menu">
+            <button class="user-btn" id="user-btn">
+                <span class="user-text" th:text="${session.username}">Seller Name</span>
+                <div class="user-icon"><i class="fa-solid fa-user"></i></div>
+            </button>
+            <div class="dropdown" id="user-dropdown">
+                <i class="fa-solid fa-xmark close" id="close-dropdown"></i>
+                <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                <h4 th:text="${username}">ชื่อบัญชีผู้ขาย</h4>
+                <div class="info">
+                    <p><i class="fa-solid fa-envelope"></i> <span th:text="${email}">seller_email@example.com</span></p>
+                    <p><i class="fa-solid fa-phone"></i> <span th:text="${phone}">08xxxxxxxx</span></p>
+                    <p class="status">
+                        <i class="fa-solid"
+                           th:classappend="${verifiedStatus == 'อนุมัติการขายแล้ว'} ? 'fa-circle-check text-green' : 'fa-circle-xmark text-red'"></i>
+                        <span>สถานะ : </span>
+                        <span th:text="${verifiedStatus}"></span>
+                    </p>
 
-          <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+
+                    <button class="logout-btn" id="logout-btn">ออกจากระบบ</button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </nav>
-  <div class="left-logo">
-     <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
-   </div>
+</nav>
+<div class="left-logo">
+    <img th:src="@{/img/Logo.png}" alt="TU Store Logo">
+</div>
 
-  <!-- ======= Navbar ด้านล่าง ======= -->
-  <nav class="nav-bottom">
+<!-- ======= Navbar ด้านล่าง ======= -->
+<nav class="nav-bottom">
     <ul class="menu">
-      <li><a th:href="@{/sellerTemp}">แดชบอร์ด</a></li>
-      <li><a href="#">จัดการสินค้า</a></li>
-      <li><a th:href="@{/sellerOrders}">คำสั่งซื้อ</a></li>
-      <li><a href="#">ตั้งค่าร้านค้า</a></li>
+        <li><a th:href="@{/sellerTemp}">แดชบอร์ด</a></li>
+        <li><a href="#">จัดการสินค้า</a></li>
+        <li><a th:href="@{/sellerOrders}">คำสั่งซื้อ</a></li>
+        <li><a href="#">ตั้งค่าร้านค้า</a></li>
     </ul>
-  </nav>
+</nav>
 <h1 class="page-title">รายละเอียดคำสั่งซื้อ</h1>
 
-    <!-- Card -->
-    <section class="order-detail-card">
-      <div class="order-date">วันที่ทำรายการสั่งซื้อ : <strong>5 - 11 - 2025</strong></div>
+<div class="page-container">
+<!-- Card -->
+<section class="order-detail-card" id="order-card">
+    <div class="order-date">วันที่ทำรายการสั่งซื้อ : <strong id="order-created">—</strong></div>
 
-      <!-- ร้านค้า -->
-      <div class="shop-row">
+    <!-- ร้านค้า -->
+    <div class="shop-row">
         <span class="shop-icon material-symbols-outlined">storefront</span>
-        <span class="shop-name">ชุมนุมเชียร์มหาวิทยาลัยธรรมศาสตร์</span>
-      </div>
-
-      <!-- สรุปรายการสินค้า + ผู้รับ -->
-      <div class="summary-grid">
-    <div class="thumb">
-      <img src="images/polo-thammasat.jpg"/>
+        <span class="shop-name" id="shop-name">ร้านค้า</span>
     </div>
 
-    <div class="summary-content">
-
-      <div class="detail-item">
-        <span class="detail-label">ชื่อสินค้า</span>
-        <span class="detail-value">เสื้อเชียร์งานฟุตบอลสามัคคี จุฬาฯ ธรรมศาสตร์ ปี 2567 - GOLDEN SEED POLO SHIRT</span>
-      </div>
-
-      <div class="detail-item">
-        <span class="detail-label">รายละเอียด</span>
-        <span class="detail-value">ขนาด (M), สี (แดง) x1</span>
-      </div>
-
-      <div class="detail-item">
-        <span class="detail-label">ราคา</span>
-        <span class="detail-value">฿350.00</span>
-      </div>
-
-      <hr class="detail-divider">
-
-      <div class="detail-item">
-        <span class="detail-label">ผู้รับ</span>
-        <span class="detail-value">เดรช เดซส์</span>
-      </div>
-
-      <div class="detail-item">
-        <span class="detail-label">โทร</span>
-        <span class="detail-value">066 111 1111</span>
-      </div>
-
-      <div class="detail-item">
-        <span class="detail-label">ที่อยู่</span>
-        <span class="detail-value">99/99 ซอย 11 ถนนแฟนคลับ ตำบลทดสอบ อำเภอหลงทาง จังหวัดปทุมธานี 12121</span>
-      </div>
-
-    </div>
-    </div>
-      <!-- ช่องทางชำระเงิน -->
-     <div class="payment-box">
-  
-  <div class="detail-item">
-    <span class="detail-label">ช่องทางชำระเงิน</span>
-    <span class="detail-value">พร้อมเพย์</span>
-  </div>
-
-  <div class="detail-item">
-    <span class="detail-label">สถานะการชำระเงิน</span>
-    <span class="detail-value">ยังไม่ชำระเงิน (เมื่อวันที่ 5 - 11 - 2025)</span>
-  </div>
-
-</div>
-
-      <!-- สถานะคำสั่งซื้อ -->
-      <div class="status-steps">
-        <div class="step active">
-          <span class="icon material-symbols-outlined">account_balance_wallet</span>
-          <span class="text">รอการชำระ</span>
+    <!-- สรุปรายการสินค้า + ผู้รับ -->
+    <div class="summary-grid">
+        <div class="thumb">
+            <img id="product-thumb" alt="thumb"/>
         </div>
-        <div class="step">
-          <span class="icon material-symbols-outlined">redeem</span>
-          <span class="text">เตรียมการจัดส่ง</span>
-        </div>
-        <div class="step">
-          <span class="icon material-symbols-outlined">local_shipping</span>
-          <span class="text">ที่ต้องได้รับ</span>
-        </div>
-        <div class="step">
-          <span class="icon material-symbols-outlined">task_alt</span>
-          <span class="text">สำเร็จ</span>
-        </div>
-      </div>
 
-       <section class="seller-actions" data-order-id="001">
-  <div class="seller-actions__row">
-    <div class="seller-actions__label">อัพเดทสถานะ</div>
+        <div class="summary-content">
 
-    <div class="seller-actions__btns">
-      <button class="btn btn-ghost btn-reject" data-choice="REJECT" type="button">
-        ปฏิเสธ
-      </button>
-      <button class="btn btn-solid btn-approve" data-choice="ACCEPT" type="button">
-        ตกลง
-      </button>
-    </div>
-  </div>
+            <div class="detail-item">
+                <span class="detail-label">รายการ</span>
+                <span class="detail-value" id="product-name">—</span>
+            </div>
 
-  <!-- แสดงผลลัพธ์/สถานะแบบสด -->
-  <p class="seller-actions__hint" aria-live="polite"></p>
-  
-</section>
-<!-- กล่องยืนยันการจัดส่ง (ซ่อนตอนโหลดหน้า) -->
-<section class="shipping-panel" hidden>
-  <h4 class="shipping-panel__title">ยืนยันการจัดส่ง</h4>
-  <div class="shipping-grid">
-    <div class="shipping-field">
-      <label>ยืนยันการจัดส่ง</label>
-      <select id="confirm-shipping">
-        <option value="">-- เลือก --</option>
-        <option value="packed">แพ็คของเรียบร้อย</option>
-        <option value="handover">ส่งให้ขนส่งแล้ว</option>
-      </select>
+            <div class="detail-item">
+                <span class="detail-label">รายละเอียด</span>
+                <span class="detail-value" id="product-details">—</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">ราคา</span>
+                <span class="detail-value" id="product-price">—</span>
+            </div>
+
+            <hr class="detail-divider">
+
+            <div class="detail-item">
+                <span class="detail-label">ผู้รับ</span>
+                <span class="detail-value" id="buyer-name">—</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">โทร</span>
+                <span class="detail-value" id="buyer-phone">—</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">ที่อยู่</span>
+                <span class="detail-value" id="buyer-address">—</span>
+            </div>
+
+        </div>
     </div>
-    <div class="shipping-field">
-      <label>ติดตามสถานะการจัดส่ง</label>
-      <select id="tracking-status">
-        <option value="">-- เลือก --</option>
-        <option value="in-transit">กำลังขนส่ง</option>
-        <option value="out-for-delivery">กำลังนำจ่าย</option>
-        <option value="delivered">จัดส่งสำเร็จ</option>
-      </select>
+    <!-- ช่องทางชำระเงิน -->
+    <div class="payment-box">
+        <div class="detail-item">
+            <span class="detail-label">ช่องทางชำระเงิน</span>
+            <span class="detail-value" id="payment-method">—</span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">สถานะการชำระเงิน</span>
+            <span class="detail-value" id="payment-status">—</span>
+        </div>
+
+        <div class="detail-item" style="margin-top:8px">
+            <span class="detail-label" style="font-weight:700">Tracking :</span>
+            <span class="detail-value" id="tracking-number">—</span>
+        </div>
     </div>
-  </div>
-  <button class="btn-confirm" type="button">ยืนยันการจัดส่ง</button>
-</section>
+
+    <!-- สถานะคำสั่งซื้อ -->
+    <div class="status-steps" id="status-steps">
+        <div class="step" data-step="PENDING">
+            <span class="icon material-symbols-outlined">account_balance_wallet</span>
+            <span class="text">รอการชำระ</span>
+        </div>
+        <div class="step" data-step="PREPARING">
+            <span class="icon material-symbols-outlined">redeem</span>
+            <span class="text">เตรียมการจัดส่ง</span>
+        </div>
+        <div class="step" data-step="SHIPPED">
+            <span class="icon material-symbols-outlined">local_shipping</span>
+            <span class="text">ที่ต้องได้รับ</span>
+        </div>
+        <div class="step" data-step="COMPLETED">
+            <span class="icon material-symbols-outlined">task_alt</span>
+            <span class="text">สำเร็จ</span>
+        </div>
+        <div class="step" data-step="CANCELLED">
+            <span class="icon material-symbols-outlined">cancel</span>
+            <span class="text">ยกเลิก</span>
+        </div>
+    </div>
+
+    <section class="seller-actions" id="seller-actions" data-order-id="">
+        <div class="seller-actions__row">
+            <div class="seller-actions__label">อัพเดทสถานะ</div>
+
+            <div class="seller-actions__btns">
+                <button class="btn btn-ghost btn-reject" id="btn-reject" data-choice="REJECT" type="button">
+                    ปฏิเสธ
+                </button>
+                <button class="btn btn-solid btn-approve" id="btn-accept" data-choice="ACCEPT" type="button">
+                    ตกลง
+                </button>
+            </div>
+        </div>
+
+        <!-- แสดงผลลัพธ์/สถานะแบบสด -->
+        <p class="seller-actions__hint" id="seller-hint" aria-live="polite"></p>
 
     </section>
-    <!-- Confirm Overlay -->
+    <!-- กล่องยืนยันการจัดส่ง (ซ่อนตอนโหลดหน้า) -->
+    <section class="shipping-panel" id="shipping-panel" hidden>
+        <h4 class="shipping-panel__title">ยืนยันการจัดส่ง</h4>
+        <div class="shipping-grid">
+            <div class="shipping-field">
+                <label>ยืนยันการจัดส่ง</label>
+                <select id="confirm-shipping">
+                    <option value="">-- เลือก --</option>
+                    <option value="packed">แพ็คของเรียบร้อย</option>
+                    <option value="handover">ส่งให้ขนส่งแล้ว</option>
+                </select>
+            </div>
+            <div class="shipping-field">
+                <label>ติดตามสถานะการจัดส่ง</label>
+                <select id="tracking-status">
+                    <option value="">-- เลือก --</option>
+                    <option value="in-transit">กำลังขนส่ง</option>
+                    <option value="out-for-delivery">กำลังนำจ่าย</option>
+                    <option value="delivered">จัดส่งสำเร็จ</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn-confirm" id="btn-confirm-shipping" type="button">ยืนยันการจัดส่ง</button>
+    </section>
+
+</section>
+<!-- Confirm Overlay -->
 <div id="confirm-overlay" class="confirm-overlay" hidden aria-hidden="true">
-  <div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-desc">
-    <button class="confirm-close" type="button" aria-label="ปิด">&times;</button>
+    <div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-desc">
+        <button class="confirm-close" type="button" aria-label="ปิด">&times;</button>
 
-    <div class="confirm-icon">!</div>
+        <div class="confirm-icon">!</div>
 
-    <h3 id="confirm-title" class="confirm-title">ยืนยันการปฏิเสธออเดอร์</h3>
-    <p id="confirm-desc" class="confirm-desc">คุณต้องการยืนยันการปฏิเสธออเดอร์นี้หรือไม่</p>
+        <h3 id="confirm-title" class="confirm-title">ยืนยันการปฏิเสธออเดอร์</h3>
+        <p id="confirm-desc" class="confirm-desc">คุณต้องการยืนยันการปฏิเสธออเดอร์นี้หรือไม่</p>
 
-    <div class="confirm-actions">
-      <button class="btn-outline" type="button" data-action="cancel">ยกเลิก</button>
-      <button class="btn-solid"   type="button" data-action="ok">ยืนยัน</button>
+        <div class="confirm-actions">
+            <button class="btn-outline" type="button" data-action="cancel">ยกเลิก</button>
+            <button class="btn-solid"   type="button" data-action="ok">ยืนยัน</button>
+        </div>
     </div>
-  </div>
 </div>
 
- <!-- ======= Popup ยืนยันออกจากระบบ ======= -->
-  <div class="logout-modal" id="logout-modal">
+</div>
+
+<!-- ======= Popup ยืนยันออกจากระบบ ======= -->
+<div class="logout-modal" id="logout-modal">
     <div class="modal-content">
-      <i class="fa-solid fa-circle-exclamation"></i>
-      <p>คุณต้องการออกจากระบบหรือไม่</p>
-      <div class="modal-buttons">
-        <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
-        <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
-      </div>
-      <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <p>คุณต้องการออกจากระบบหรือไม่</p>
+        <div class="modal-buttons">
+            <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+            <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+        </div>
+        <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
     </div>
-  </div>
+</div>
 
-  <!-- ======= Popup ออกจากระบบสำเร็จ ======= -->
-  <div class="logout-success" id="logout-success">
+<!-- ======= Popup ออกจากระบบสำเร็จ ======= -->
+<div class="logout-success" id="logout-success">
     <div class="success-content">
-      <i class="fa-solid fa-circle-check"></i>
-      <p>ออกจากระบบสำเร็จแล้ว</p>
+        <i class="fa-solid fa-circle-check"></i>
+        <p>ออกจากระบบสำเร็จแล้ว</p>
     </div>
-  </div>
-<script>
-(() => {
-  /* ===== Confirm Overlay helpers ===== */
-  const overlay  = document.getElementById('confirm-overlay');
-  const btnOk    = overlay?.querySelector('[data-action="ok"]');
-  const btnCancel= overlay?.querySelector('[data-action="cancel"]');
-  const btnClose = overlay?.querySelector('.confirm-close');
-  const titleEl  = overlay?.querySelector('.confirm-title');
-  const descEl   = overlay?.querySelector('.confirm-desc');
+</div>
 
-  let onConfirm = null, lastFocused = null;
-
-  function openConfirm({ title, message, onOk }) {
-    if (!overlay) return;
-    titleEl.textContent = title || 'ยืนยันการดำเนินการ';
-    descEl.textContent  = message || '';
-    onConfirm = typeof onOk === 'function' ? onOk : null;
-    lastFocused = document.activeElement;
-    overlay.hidden = false;
-    overlay.setAttribute('aria-hidden','false');
-    document.body.style.overflow = 'hidden';
-    btnOk?.focus();
-  }
-  function closeConfirm() {
-    overlay.hidden = true;
-    overlay.setAttribute('aria-hidden','true');
-    document.body.style.overflow = '';
-    const fn = onConfirm; onConfirm = null;
-    lastFocused && lastFocused.focus?.();
-    return fn;
-  }
-  btnOk?.addEventListener('click', () => { const fn = closeConfirm(); fn && fn(); });
-  btnCancel?.addEventListener('click', () => closeConfirm());
-  btnClose?.addEventListener('click', () => closeConfirm());
-  overlay?.addEventListener('click', (e)=>{ if(e.target === overlay) closeConfirm(); });
-  document.addEventListener('keydown', (e)=>{ if(!overlay?.hidden && e.key==='Escape') closeConfirm(); });
-
-  /* ===== Seller actions logic (Front-end only) ===== */
-  const root       = document.querySelector('.seller-actions');
-  if (!root) return;
-
-  const approveBtn = root.querySelector('[data-choice="ACCEPT"]');
-  const rejectBtn  = root.querySelector('[data-choice="REJECT"]');
-  const hint       = root.querySelector('.seller-actions__hint');
-  const btnGroup   = root.querySelector('.seller-actions__btns');
-  let acceptClicks = 0;           
-  let wiredShipBtn = false;       
-
-  function setLoading(loading){ [approveBtn, rejectBtn].forEach(b=> b && (b.disabled=!!loading)); }
-  function showHint(msg, kind){
-    if(!hint) return;
-    hint.textContent = msg || '';
-    hint.className = 'seller-actions__hint' + (kind ? ' ' + kind : '');
-  }
-
-  function getOrCreateFullPill(){
-    let panel = root.querySelector('.seller-actions__panel');
-    if (!panel) {
-      panel = document.createElement('div');
-      panel.className='seller-actions__panel';
-      root.appendChild(panel);
-    }
-    let pill = panel.querySelector('.result-pill.result-pill--full');
-    if (!pill) {
-      pill = document.createElement('div');
-      pill.className = 'result-pill result-pill--full';
-      panel.appendChild(pill);
-    }
-    return pill;
-  }
-
-  function setStepsFirstPhase(){
-    const steps = document.querySelectorAll('.status-steps .step');
-    steps.forEach(s => s.classList.remove('is-done','is-current'));
-    if (steps[0]) steps[0].classList.add('is-done');
-    if (steps[1]) steps[1].classList.add('is-current');
-  }
-  function setStepsAllDone(){
-    const steps = document.querySelectorAll('.status-steps .step');
-    steps.forEach(s => { s.classList.add('is-done'); s.classList.remove('is-current'); });
-  }
-
-  function setupShippingPanel() {
-    const ship = document.querySelector('.shipping-panel');
-    if (!ship) return;
-
-    const confirmSel = ship.querySelector('#confirm-shipping');
-    const trackSel   = ship.querySelector('#tracking-status');
-    const btn        = ship.querySelector('.btn-confirm');
-
-    if (wiredShipBtn) return;
-    wiredShipBtn = true;
-
-    btn?.addEventListener('click', () => {
-      const v1 = confirmSel?.value?.trim();
-      const v2 = trackSel?.value?.trim();
-      if (!v1 || !v2) {
-        showHint('กรุณาเลือกข้อมูลให้ครบทั้งสองช่อง', 'error');
-        return;
-      }
-
-      setStepsAllDone();
-      const pill = getOrCreateFullPill();
-      pill.textContent = 'ทำการซื้อขายสินค้าเรียบร้อยแล้ว';
-      ship.hidden = true;
-      btnGroup?.classList.add('is-hidden');
-      showHint('บันทึกการจัดส่งเรียบร้อย', 'success');
-    });
-  }
-
-  function renderAcceptedUI(){
-    acceptClicks += 1;
-
-    if (acceptClicks === 1) {
-      // ครั้งแรก → ปิดปุ่มถาวร
-      btnGroup?.classList.add('is-hidden');
-      setStepsFirstPhase();
-
-      const pill = getOrCreateFullPill();
-      pill.textContent = 'คุณได้ทำการรับออเดอร์นี้แล้ว';
-
-      const ship = document.querySelector('.shipping-panel');
-      if (ship) ship.hidden = false;
-      setupShippingPanel();
-
-      showHint('รับออเดอร์', 'success');
-    } else {
-      // ครั้งที่สอง (ถ้ามีการเรียกซ้ำ)
-      setStepsAllDone();
-      const pill = getOrCreateFullPill();
-      pill.textContent = 'ทำการซื้อขายสินค้าเรียบร้อยแล้ว';
-      const ship = document.querySelector('.shipping-panel');
-      if (ship) ship.hidden = true;
-      btnGroup?.classList.add('is-hidden');
-      showHint('บันทึกแล้ว: สถานะสำเร็จ', 'success');
-    }
-  }
-
-  function sendDecision(decision){
-    setLoading(true);
-    if (decision === 'ACCEPT') {
-      renderAcceptedUI();
-    } else {
-      btnGroup?.classList.add('is-hidden');
-      showHint('คุณได้ปฏิเสธออเดอร์นี้แล้ว', 'error');
-    }
-    setLoading(false);
-  }
-
-  rejectBtn?.addEventListener('click', () => {
-    openConfirm({
-      title: 'ยืนยันการปฏิเสธออเดอร์',
-      message: 'คุณต้องการยืนยันการปฏิเสธออเดอร์นี้หรือไม่',
-      onOk: () => sendDecision('REJECT')
-    });
-  });
-
-  approveBtn?.addEventListener('click', () => sendDecision('ACCEPT'));
-})();
-</script>
-
-
-  <script th:src="@{/js/main.js}" defer></script>
-  <script th:src="@{/js/auth.js}" defer></script>
-  <script th:src="@{/js/sellerTemp.js}" defer></script>
+<script th:src="@{/js/main.js}" defer></script>
+<script th:src="@{/js/auth.js}" defer></script>
+<script th:src="@{/js/sellerTemp.js}" defer></script>
+<script th:src="@{/js/sellerOrders.js}" defer></script>
 </body>
 </html>

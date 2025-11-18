@@ -24,6 +24,9 @@ import tu_store.demo.models.*;
 import tu_store.demo.models.enums.OrderStatus;
 import tu_store.demo.models.enums.ShipmentTrackingStatus;
 import tu_store.demo.repositories.*;
+import tu_store.demo.models.OrderItem;
+import tu_store.demo.models.ShipmentTracking;
+import tu_store.demo.repositories.PaymentRepository;
 
 @Service
 public class OrderService {
@@ -56,6 +59,9 @@ public class OrderService {
 
 
     @Autowired private NotificationService notificationService;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     public Order getOrderByCartId(Long cartId) {
         return orderRepository.findFirstByCartCartId(cartId);
@@ -194,45 +200,104 @@ public class OrderService {
     public SellerOrderResponse createSellerOrderResponse(Order order){
         if(order == null) return null;
         SellerOrderResponse response = new SellerOrderResponse();
+
+        // basic fields
         response.setCreatedAt(order.getCreatedAt());
         response.setOrderId(order.getOrderId());
         response.setTotalPrice(order.getTotalPrice());
         response.setStatus(order.getStatus());
 
-        User buyer = order.getBuyer();
-        if(buyer != null) response.setBuyerId(order.getBuyer().getUser_id());
+        // Shop name (seller's organization or username)
+        if (order.getSeller() != null) {
+            // adapt the getter if your User has different method
+            try {
+                response.setShopName(order.getSeller().getOrganizationType());
+            } catch (Exception ex) {
+                // fallback
+                response.setShopName(order.getSeller().getUsername() != null ? order.getSeller().getUsername() : "ร้านค้า");
+            }
+        }
 
-        ShipmentTracking st = order.getShipmentTracking();
-        if(st != null){
-            response.setTrackingCode(st.getTrackingNumber());
+        // Buyer info
+        if (order.getBuyer() != null) {
+            response.setBuyerId(order.getBuyer().getUser_id());
+            try {
+                // adapt these getters to your User class (full name / phone / address)
+                response.setBuyerName(order.getBuyer().getUsername());
+            } catch (Exception ex) {
+                // safe fallback to id
+                response.setBuyerName("ผู้ใช้ #" + order.getBuyer().getUser_id());
+            }
+            try {
+                response.setBuyerPhone(order.getBuyer().getPhone());
+            } catch (Exception ignored) { /* leave null */ }
+
+            response.setBuyerAddress(null);
         }
-        else{
-            response.setTrackingCode("");
+
+        // Shipment tracking
+        if (order.getShipmentTracking() != null) {
+            response.setTrackingCode(order.getShipmentTracking().getTrackingNumber());
+            response.setShipmentStatus(order.getShipmentTracking().getStatus());
         }
-        
+
+        // Payment info: find a Payment for this order if available
+        try {
+            if (paymentRepository != null) {
+                paymentRepository.findAll().stream()
+                        .filter(p -> p.getOrderId() != null && p.getOrderId().equals(order.getOrderId()))
+                        .findFirst()
+                        .ifPresent(p -> {
+                            response.setPaymentMethod(p.getMethod());
+                            response.setPaymentRef(p.getPaymentRef());
+                            response.setPaymentStatus(p.getStatus());
+                        });
+            }
+        } catch (Exception ex) {
+            // ignore; don't fail the whole response if payments can't be fetched
+            System.err.println("[OrderService] payment lookup failed for order " + order.getOrderId() + " : " + ex.getMessage());
+        }
+
+        // items & quantity & per-item dto
         Integer q = 0;
-
-
         List<SellerOrderItemResponse> items = new ArrayList<>();
-
-        for(OrderItem item : order.getItems()){
-            SellerOrderItemResponse itemDto = orderItemService.createSellerOrderItemResponse(item);
-            items.add(itemDto);
-
-            q = itemDto.getQuantity() + q;
+        if (order.getItems() != null) {
+            for (OrderItem item : order.getItems()){
+                SellerOrderItemResponse itemDto = orderItemService.createSellerOrderItemResponse(item);
+                items.add(itemDto);
+                q = (itemDto.getQuantity() != null ? itemDto.getQuantity() : 0) + q;
+            }
         }
-
         response.setQuantity(q);
         response.setItems(items);
 
+        // Product summary (first item) - try to include product name & image if possible
+        if (order.getItems() != null && !order.getItems().isEmpty()) {
+            OrderItem first = order.getItems().get(0);
+            if (first != null && first.getProduct() != null) {
+                try {
+                    response.setProductName(first.getProduct().getName());
+                } catch (Exception ignored){}
+                try {
+                    response.setProductImageUrl(first.getProduct().getMain_image());
+                } catch (Exception ignored){}
+                try {
+                    // price per product (if available)
+                    response.setProductPrice(first.getTotalPrice());
+                } catch (Exception ignored){}
+            }
+        }
+
         return response;
     }
+
     public SellerOrderResponse createSellerOrderResponseByIdAndUserId(Long id, Long userId){
         Order order = orderRepository.findFirstByOrderIdAndSellerUserId(id, userId);
         if(order == null) return null;
 
         return createSellerOrderResponse(order);
     }
+
     public Page<SellerOrderResponse> getSellerOrderPageResponse(Long clientId, Pageable pageable){
         Page<Order> orders;
 
@@ -240,6 +305,7 @@ public class OrderService {
 
         return orders.map(this::createSellerOrderResponse);
     }
+
     public Page<SellerOrderResponse> getSellerOrderPageResponseWithStatus(Long clientId, String status, Pageable pageable){
         if(status == null) return getSellerOrderPageResponse(clientId, pageable) ;
 

@@ -1,198 +1,213 @@
 package tu_store.demo.controllers;
 
-
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import tu_store.demo.dto.SellerOrderResponse;
+import tu_store.demo.dto.SellerOrderSummaryResponse;
+import tu_store.demo.dto.ShipmentTrackingResponse;
+import tu_store.demo.exception.ApiException;
+import tu_store.demo.models.Order;
+import tu_store.demo.models.enums.OrderStatus;
+import tu_store.demo.models.enums.ShipmentTrackingStatus;
+import tu_store.demo.services.OrderService;
+import tu_store.demo.services.ShipmentTrackingService;
+import tu_store.demo.services.UserService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import tu_store.demo.dto.BuyerOrderResponse;
-import tu_store.demo.dto.ShipmentTrackingResponse;
-import tu_store.demo.dto.OrderDraftResponse;
-import tu_store.demo.dto.SellerOrderResponse;
-import tu_store.demo.dto.SellerOrderSummaryResponse;
-import tu_store.demo.exception.ApiException;
-import tu_store.demo.models.Order;
-import tu_store.demo.models.UserRole;
-import tu_store.demo.models.enums.OrderStatus;
-import tu_store.demo.models.enums.ShipmentTrackingStatus;
-import tu_store.demo.services.CartService;
-import tu_store.demo.services.OrderService;
-import tu_store.demo.services.ShipmentTrackingService;
-import tu_store.demo.services.UserService;
-import org.springframework.http.HttpStatus;
-
-
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/seller/orders")
 public class SellerOrderController {
+
     @Autowired private UserService userService;
-    @Autowired private CartService cartService;
     @Autowired private OrderService orderService;
     @Autowired private ShipmentTrackingService shipmentTrackingService;
 
     @GetMapping("")
-    public ResponseEntity<?> getOrders(
+    public ResponseEntity<?> listOrders(
+            HttpSession session,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String status,
+            @RequestParam(required = false) String dateRange,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int pageSize,
-            @RequestParam(defaultValue = "createdAt:desc") String sort,
-            @RequestParam(required = false) String dateRange,
-            HttpSession session
-    ){
+            @RequestParam(defaultValue = "createdAt:desc") String sort
+    ) {
         Long userId = userService.getUserIdBySession(session);
-        if(userId == null) throw new ApiException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "Please login first.");
+        if (userId == null)
+            throw new ApiException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "Please login first.");
+        if (!userService.isSellerById(userId))
+            throw new ApiException(HttpStatus.FORBIDDEN, "INVALID_ROLE", "User does not have seller permissions.");
 
-        if (!userService.isSellerById(userId)) throw new ApiException(HttpStatus.FORBIDDEN, "INVALID_ROLE"
-        , "User does not have seller permissions.");
-
-        // Convert OrderStatus
+        // status -> OrderStatus
         OrderStatus orderStatusEnum = null;
-        if (status != null && !status.isEmpty()) {
+        if (status != null && !status.isBlank()) {
             try {
-                orderStatusEnum = OrderStatus.valueOf(status); // convert string -> enum
-            } catch (IllegalArgumentException e) {
+                orderStatusEnum = OrderStatus.valueOf(status.trim().toUpperCase());
+            } catch (IllegalArgumentException ex) {
                 throw new ApiException(HttpStatus.BAD_REQUEST, "BAD_REQUEST",
-                        "Invalid status value. Allowed: " + Arrays.toString(OrderStatus.values()));
+                        "Invalid status. Allowed: " + Arrays.toString(OrderStatus.values()));
             }
         }
 
-
-        // Convert dateRange
-        LocalDateTime startDate = null;
-        LocalDateTime endDate = null;
-
-        if (dateRange != null) {
+        // dateRange -> LocalDateTime
+        LocalDateTime startDate = null, endDate = null;
+        if (dateRange != null && !dateRange.isBlank()) {
             String[] parts = dateRange.split(",");
             if (parts.length != 2) {
                 throw new ApiException(HttpStatus.BAD_REQUEST, "BAD_REQUEST",
                         "Invalid dateRange format. Use: yyyy-MM-dd,yyyy-MM-dd");
             }
-
             try {
-                startDate = LocalDate.parse(parts[0]).atStartOfDay();
-                endDate = LocalDate.parse(parts[1]).atTime(23, 59, 59);
-            } catch (DateTimeParseException e) {
+                startDate = LocalDate.parse(parts[0].trim()).atStartOfDay();
+                endDate = LocalDate.parse(parts[1].trim()).atTime(23, 59, 59);
+            } catch (DateTimeParseException ex) {
                 throw new ApiException(HttpStatus.BAD_REQUEST, "BAD_REQUEST",
-                        "Invalid date format. Use: yyyy-MM-dd,yyyy-MM-dd");
+                        "Invalid date format in dateRange. Use: yyyy-MM-dd,yyyy-MM-dd");
             }
         }
 
-        // Convert sort
+        // sort
         String sortField = "createdAt";
         Sort.Direction direction = Sort.Direction.DESC;
-
-        if (sort.contains(":")) {
-            String[] parts = sort.split(":");
-            sortField = parts[0];
-            direction = parts[1].equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        if (sort != null && sort.contains(":")) {
+            String[] sp = sort.split(":");
+            sortField = sp[0].trim();
+            direction = sp[1].trim().equalsIgnoreCase("asc")
+                    ? Sort.Direction.ASC : Sort.Direction.DESC;
         }
-
         Sort sortObj;
         try {
             sortObj = Sort.by(direction, sortField);
-        } catch (IllegalArgumentException e) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "Invalid sort field");
+        } catch (IllegalArgumentException ex) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "BAD_REQUEST",
+                    "Invalid sort field: " + sortField);
         }
 
-        Pageable pageable = PageRequest.of(page, pageSize, sortObj);
-        Page<SellerOrderResponse> orders = orderService.getSellerOrderPageResponseWithFilters(userId, search, orderStatusEnum, startDate, endDate, pageable);
+        Pageable pageable = PageRequest.of(Math.max(0, page), Math.max(1, pageSize), sortObj);
 
-        if(orders.getContent().isEmpty()) return ResponseEntity.status(404).body("Order not found");
+        Page<SellerOrderResponse> pageResult =
+                orderService.getSellerOrderPageResponseWithFilters(
+                        userId, search, orderStatusEnum, startDate, endDate, pageable);
 
-        SellerOrderSummaryResponse summary = orderService.createSellerOrderSummaryResponseBySellerIdWithFilters(userId, search, orderStatusEnum, startDate, endDate);
+        SellerOrderSummaryResponse summary =
+                orderService.createSellerOrderSummaryResponseBySellerIdWithFilters(
+                        userId, search, orderStatusEnum, startDate, endDate);
 
-        Page<SellerOrderResponse> pageWithContentOnly = new PageImpl<>(orders.getContent(), orders.getPageable(), orders.getTotalElements());
+        Map<String, Object> resp = new LinkedHashMap<>();
+        resp.put("summary", summary);
+        resp.put("content", pageResult.getContent());
 
+        Map<String, Object> pageableMeta = new LinkedHashMap<>();
+        pageableMeta.put("page", pageResult.getNumber());
+        pageableMeta.put("size", pageResult.getSize());
+        pageableMeta.put("totalElements", pageResult.getTotalElements());
+        pageableMeta.put("totalPages", pageResult.getTotalPages());
+        pageableMeta.put("last", pageResult.isLast());
+        pageableMeta.put("first", pageResult.isFirst());
+        pageableMeta.put("numberOfElements", pageResult.getNumberOfElements());
+        pageableMeta.put("sort", pageResult.getSort());
+        resp.put("pageable", pageableMeta);
 
-        Map<String, Object> response = new LinkedHashMap<>(); // ใช้ LinkedHashMap เพื่อเก็บลำดับ
-
-        response.put("summary", summary);
-
-        response.put("content", orders.getContent());
-
-        response.put("pageable", orders.getPageable());
-        response.put("last", orders.isLast());
-        response.put("totalPages", orders.getTotalPages());
-        response.put("totalElements", orders.getTotalElements());
-        response.put("size", orders.getSize());
-        response.put("number", orders.getNumber());
-        response.put("sort", orders.getSort());
-        response.put("first", orders.isFirst());
-        response.put("numberOfElements", orders.getNumberOfElements());
-        response.put("empty", orders.isEmpty());
-    
-
-        return ResponseEntity.ok(response);
+        // 200 + content (even empty) → FE handles empty state
+        return ResponseEntity.ok(resp);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOrderById(HttpSession session, @PathVariable Long id){
+    public ResponseEntity<?> getOrder(HttpSession session, @PathVariable Long id) {
         Long userId = userService.getUserIdBySession(session);
-        if(userId == null) throw new ApiException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "Please login first.");
+        if (userId == null)
+            throw new ApiException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "Please login first.");
+        if (!userService.isSellerById(userId))
+            throw new ApiException(HttpStatus.FORBIDDEN, "INVALID_ROLE", "User does not have seller permissions.");
 
-        if (!userService.isSellerById(userId)) throw new ApiException(HttpStatus.FORBIDDEN, "INVALID_ROLE"
-        , "User does not have seller permissions.");
+        SellerOrderResponse dto = orderService.createSellerOrderResponseByIdAndUserId(id, userId);
+        if (dto == null)
+            throw new ApiException(HttpStatus.NOT_FOUND, "NOT_FOUND", "Order not found or not accessible");
 
-        SellerOrderResponse response = orderService.createSellerOrderResponseByIdAndUserId(id, userId);
-        if (response == null) {
-            throw new ApiException(HttpStatus.NOT_FOUND, "NOT FOUND", "Order Not Found");
-        }
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(dto);
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<?> setOrderStatus(HttpSession session, @PathVariable Long id, @RequestBody Map<String, String> body) {
+    public ResponseEntity<?> updateShipmentStatus(
+            HttpSession session,
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body
+    ) {
         Long userId = userService.getUserIdBySession(session);
-        if(userId == null) throw new ApiException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "Please login first.");
-
-        if (!userService.isSellerById(userId)) throw new ApiException(HttpStatus.FORBIDDEN, "INVALID_ROLE"
-        , "User does not have seller permissions.");
-
-        if (!userService.isVerifiedSellerById(userId)) {
-            throw new ApiException(HttpStatus.FORBIDDEN, "UNVERIFIED_SELLER", "Your account has not been verified yet.");
-        }
+        if (userId == null)
+            throw new ApiException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "Please login first.");
+        if (!userService.isSellerById(userId))
+            throw new ApiException(HttpStatus.FORBIDDEN, "INVALID_ROLE", "User does not have seller permissions.");
+        if (!userService.isVerifiedSellerById(userId))
+            throw new ApiException(HttpStatus.FORBIDDEN, "UNVERIFIED_SELLER", "Your account has not been verified for selling.");
 
         Order order = orderService.getOrderById(id);
-        if(order == null) return ResponseEntity.status(404).body("Order not found");
+        if (order == null)
+            throw new ApiException(HttpStatus.NOT_FOUND, "NOT_FOUND", "Order not found.");
+        if (order.getSeller() == null || !Objects.equals(order.getSeller().getUser_id(), userId))
+            throw new ApiException(HttpStatus.FORBIDDEN, "NOT_ALLOWED", "You are not the seller of this order.");
 
-        String status = body.get("newStatus");
-        if (status == null || status.isEmpty()) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "MISSING_NEW_STATUS", "Missing newStatus");
-        }
+        String newStatus = body != null ? body.get("newStatus") : null;
+        if (newStatus == null || newStatus.isBlank())
+            throw new ApiException(HttpStatus.BAD_REQUEST, "MISSING_FIELD", "Missing newStatus");
 
-        ShipmentTrackingStatus orderSTStatusEnum = null;
+        ShipmentTrackingStatus stEnum;
         try {
-            orderSTStatusEnum = ShipmentTrackingStatus.valueOf(status); // convert string -> enum
-        } catch (IllegalArgumentException e) {
+            stEnum = ShipmentTrackingStatus.valueOf(newStatus.trim().toUpperCase());
+        } catch (IllegalArgumentException ex) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "BAD_REQUEST",
-                    "Invalid status value. Allowed: " + Arrays.toString(ShipmentTrackingStatus.values()));
+                    "Invalid shipment status. Allowed: " + Arrays.toString(ShipmentTrackingStatus.values()));
         }
-        
-        if(orderService.updateStatus(order, orderSTStatusEnum) == false) throw new ApiException(
-            HttpStatus.BAD_REQUEST,
-            "INVALID_STATUS_FLOW",
-            "Cannot change order status from " + order.getShipmentTracking().getStatus() + " to " + orderSTStatusEnum
-        );
 
-        return ResponseEntity.ok(shipmentTrackingService.createShipmentTrackingResponse(order.getShipmentTracking()));
+        Boolean ok = orderService.updateStatus(order, stEnum);
+        if (ok == null || !ok) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "INVALID_STATUS_FLOW",
+                    "Cannot change shipment status to " + stEnum);
+        }
+
+        ShipmentTrackingResponse trackingResponse =
+                shipmentTrackingService.createShipmentTrackingResponse(order.getShipmentTracking());
+        return ResponseEntity.ok(trackingResponse);
     }
 
+    @PostMapping("/{id}/decision")
+    public ResponseEntity<?> decideOrder(
+            HttpSession session,
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body
+    ) {
+        Long userId = userService.getUserIdBySession(session);
+        if (userId == null)
+            throw new ApiException(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "Please login first.");
+        if (!userService.isSellerById(userId))
+            throw new ApiException(HttpStatus.FORBIDDEN, "INVALID_ROLE", "User does not have seller permissions.");
+        if (!userService.isVerifiedSellerById(userId))
+            throw new ApiException(HttpStatus.FORBIDDEN, "UNVERIFIED_SELLER",
+                    "Your account has not been verified for selling.");
+
+        String decision = body != null ? body.get("decision") : null;
+        if (decision == null || decision.isBlank())
+            throw new ApiException(HttpStatus.BAD_REQUEST, "MISSING_FIELD", "Missing decision");
+
+        Order order = orderService.getOrderById(id);
+        if (order == null)
+            throw new ApiException(HttpStatus.NOT_FOUND, "NOT_FOUND", "Order not found.");
+        if (order.getSeller() == null || !Objects.equals(order.getSeller().getUser_id(), userId))
+            throw new ApiException(HttpStatus.FORBIDDEN, "NOT_ALLOWED", "You are not the seller of this order.");
+
+        boolean ok = orderService.applySellerDecision(order, decision.toUpperCase(), userId);
+        if (!ok)
+            throw new ApiException(HttpStatus.BAD_REQUEST, "INVALID_OPERATION", "Cannot apply decision");
+
+        SellerOrderResponse dto = orderService.createSellerOrderResponseByIdAndUserId(id, userId);
+        return ResponseEntity.ok(dto);
+    }
 }
