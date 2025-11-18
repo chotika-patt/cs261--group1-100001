@@ -19,6 +19,8 @@ main {
     z-index: 1; 
     display: flex;
     justify-content: center;
+    align-items: center;     
+    padding-bottom: 60px;    
 }
 .page-header-bar h1 {
     margin-top: 60px;
@@ -97,30 +99,32 @@ main {
 
 .status-switch-container {
     display: flex;
-    justify-content: center;
+    justify-content: center; 
     padding-bottom: 0; 
     margin-bottom: 20px;
     border-bottom: 1px solid #f0f0f0;
+    width: 100%;
 }
-
 .status-switch {
     position: relative;
     display: flex;
-    overflow: hidden;
+    justify-content: center;
     align-items: stretch; 
     padding: 0;
     height: 72px; 
     box-sizing: border-box;
+    width: 100%;
+    max-width: 850px; 
 }
 
 .switch-tab {
     position: relative;
-    flex: 1;
+    flex: 1; 
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; 
     height: 100%;
-    padding: 0 80px;
+    padding: 0 20px; 
     margin: 0;
     font-weight: 600;
     font-size: 18px;
@@ -315,12 +319,16 @@ main {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  justify-content: center; 
+  align-items: flex-start; 
+  text-align: left;       
 }
 
 .product-title {
   color: #111;                
   text-decoration: none;       
-  cursor: pointer;             
+  cursor: pointer;   
+  align-self: flex-start;          
   display: inline-block;  
   align-self: start;     
 }
@@ -334,7 +342,9 @@ main {
   font-size: 14px;
   display: flex;
   justify-content: flex-start; 
+  align-items: center;
   gap: 8px;                   
+  width: 100%; 
 }
 
 
@@ -346,6 +356,7 @@ main {
   display: inline-flex;
   align-items: center;      
   justify-content: flex-start; 
+
   gap: 6px;
   white-space: nowrap;
   font-size: 14px;
