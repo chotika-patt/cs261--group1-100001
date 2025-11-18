@@ -18,7 +18,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         else return;
 
         const order = await response.json();;
-
+        let paymentStatusText = ""
+        if(order.status == "PENDING") paymentStatusText = "ยังไม่ชำระเงิน";
+        if(order.status == "PAID" || "COMPLETED") paymentStatusText = "ชำระเงินสำเร็จ";
         
         const shopName = order.shopName ?? "ไม่ทราบชื่อร้าน";
         let sizeText = order.size ?? "";
@@ -31,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const username = document.getElementById("usernameForJS")?.textContent.trim();
         const phone = document.getElementById("phoneForJS")?.textContent.trim();
         const card = `
-            <div class="order-date">วันที่ทำรายการสั่งซื้อ : <strong>5 - 11 - 2025</strong></div>
+            <div class="order-date">วันที่ทำรายการสั่งซื้อ : <strong>19 - 11 - 2025</strong></div>
 
             <!-- ร้านค้า -->
             <div class="shop-row">
@@ -91,7 +93,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         <div class="detail-item">
             <span class="detail-label">สถานะการชำระเงิน</span>
-            <span class="detail-value">ยังไม่ชำระเงิน (เมื่อวันที่ 5 - 11 - 2025)</span>
+            <span class="detail-value">${paymentStatusText} (เมื่อวันที่ 19 - 11 - 2025)</span>
         </div>
 
         </div>
