@@ -114,11 +114,11 @@ public ResponseEntity<?> addProduct(
             return ResponseEntity.status(500).body("เกิดข้อผิดพลาด: การุณาใส่ประเภทสินค้า");
         }
         product.setCategory(category);
-        if(price < 0 ){
+        if(price <= 0 ){
             return ResponseEntity.status(500).body("เกิดข้อผิดพลาด: การุณากรอกราคาเป็นจำนวนบวก");
         }
         product.setPrice(price);
-        if(stock < 0){
+        if(stock <= 0){
             return ResponseEntity.status(500).body("เกิดข้อผิดพลาด: การุณากรอกจำนวนสินค้าเป็นจำนวนเต็มบวก");
         }
         product.setStock(stock);
@@ -234,8 +234,18 @@ public ResponseEntity<?> addProduct(
         // 4️⃣ อัปเดตเฉพาะ field ที่ส่งมา
         if (name != null && !name.isEmpty()) product.setName(name);
         if (category != null) product.setCategory(category);
-        if (price != null) product.setPrice(price);
-        if (stock != null) product.setStock(stock);
+        if (price != null && price >= 0){
+            product.setPrice(price);
+        }else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("❌ Pirce is no less equal than 0");
+        }
+        if (stock != null && stock >= 0){
+            product.setStock(stock);
+        }else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("❌ Stock is no less equal than 0");
+        }
         if (description != null && !description.isEmpty()) product.setDescription(description);
 
         // 5️⃣ อัปโหลดรูปใหม่ (ถ้ามี)
