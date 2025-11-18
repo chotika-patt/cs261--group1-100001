@@ -218,14 +218,32 @@
     // store order id on DOM
     if (refs.sellerActions && data.orderId) refs.sellerActions.setAttribute('data-order-id', data.orderId || '');
 
-    // status UI
-    const shipmentStatus = (data.shipmentStatus || data.trackingStatus || (data.tracking && data.tracking.status) || data.status || 'PENDING');
-    setStatusUI(String(shipmentStatus));
+    // status — prefer shipmentStatus if provided
+    let rawStatus = (data.shipmentStatus || data.trackingStatus || (data.tracking && data.tracking.status) || data.status || 'PENDING');
 
-    if (refs.shippingPanel) {
-      const shouldShow = ['PREPARING','SHIPPED','PAID','PROCESSING'].includes(String(shipmentStatus).toUpperCase()) || String(data.status).toUpperCase() === 'PAID';
-      refs.shippingPanel.hidden = !shouldShow;
+    // normalize and map synonyms so our UI step names match
+    let normalizedStatus = String(rawStatus || '')
+      .toUpperCase()
+      .trim()
+      .replace(/[-\s]+/g, '_');
+
+    // map provider/back-end variants to our step names
+    if (normalizedStatus === 'DELIVERED' || normalizedStatus === 'DELIVER') {
+      normalizedStatus = 'COMPLETED';
     }
+    if (normalizedStatus === 'EXPIRE' || normalizedStatus === 'EXPIRED' ) {
+      normalizedStatus = 'EXPIRED';
+    }
+
+    // update steps using the normalized value
+    setStatusUI(normalizedStatus);
+
+    // show shipping panel only when appropriate
+    if (refs.shippingPanel) {
+      const visibleStatuses = ['PREPARING', 'SHIPPED', 'PAID', 'PROCESSING'];
+      refs.shippingPanel.hidden = !visibleStatuses.includes(normalizedStatus) && String(data.status).toUpperCase() !== 'PAID';
+    }
+
   }
 
 
