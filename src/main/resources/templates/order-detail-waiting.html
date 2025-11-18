@@ -19,6 +19,31 @@
 
 <nav class="nav-bottom" th:replace="~{buyerTemp :: .nav-bottom}"></nav>
 <h1 class="page-title">รายละเอียดคำสั่งซื้อ</h1>
+<!-- LOGOUT MODAL -->
+<div class="logout-modal" id="logout-modal">
+    <div class="modal-content">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <p>คุณต้องการออกจากระบบหรือไม่</p>
+
+        <div class="modal-buttons">
+            <button id="cancel-logout" class="cancel-btn">ยกเลิก</button>
+            <button id="confirm-logout" class="confirm-btn">ยืนยัน</button>
+        </div>
+
+        <i class="fa-solid fa-xmark modal-close" id="close-modal"></i>
+    </div>
+</div>
+
+<div class="logout-success" id="logout-success">
+    <div class="success-content">
+        <i class="fa-solid fa-circle-check"></i>
+        <p>ออกจากระบบสำเร็จแล้ว</p>
+    </div>
+</div>
+
+
+<span id="usernameForJS" th:text="${username}" style="display:none">Guest</span>
+<span id="phoneForJS" th:text="${phone}" style="display:none">0000</span>
 
     <!-- Card -->
     <section class="order-detail-card">
@@ -288,5 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <script th:src="@{/js/main.js}" defer></script>
 <script th:src="@{/js/search.js}" defer></script>
+<script th:src="@{/js/order-detail-waiting.js}" defer></script>
+
 </body>
 </html>
