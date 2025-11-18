@@ -145,22 +145,25 @@
         <h2>ไม่พบสินค้า</h2>
     </div>
 
-    <!-- PRODUCT GRID (JS RENDER ONLY — ไม่มี thymeleaf แล้ว) -->
+    <!-- PRODUCT GRID -->
     <div class="product-grid">
-            <a th:each="product : ${products}" 
-                th:href="@{'/product_detail/' + ${product.productId}}" 
-                class="product-card-link">
-                <div class="product-card">
-                    <div class="product-image">
-                        <img th:if="${product.main_image != null}" th:src="@{/product_img/{file}(file=${product.main_image})}" alt="Product Image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-name" th:text="${product.name}">Product Name</span>
-                        <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
-                    </div> 
+        <a th:each="product : ${products}" 
+           th:href="@{'/product_detail/' + ${product.productId}}" 
+           class="product-card-link"
+           th:attr="data-category=${product.category}">
+            <div class="product-card">
+                <div class="product-image">
+                    <img th:if="${product.main_image != null}" 
+                         th:src="@{/product_img/{file}(file=${product.main_image})}" 
+                         alt="Product Image">
                 </div>
-            </a>
-        </div>
+                <div class="product-info">
+                    <span class="product-name" th:text="${product.name}">Product Name</span>
+                    <span class="product-price" th:text="'฿ ' + ${product.price}">฿ 0.0</span>
+                </div> 
+            </div>
+        </a>
+    </div>
 
 </div>
 
@@ -186,8 +189,6 @@
         </div>
 
         <div class="filter-body">
-            
-
             <!-- PRICE -->
             <div class="filter-section">
                 <h4>ช่วงราคา</h4>
@@ -234,29 +235,53 @@
 <script src="/js/main.js" defer></script>
 <script src="/js/search.js" defer></script>
 
+<!-- ตั้งชื่อหัวข้อ + แยกรายการตาม category -->
 <script>
-/* SET PAGE TITLE IF /product?category=CODE */
-const params = new URLSearchParams(window.location.search);
-const cat = params.get("category");
-if (cat) {
-    const map = {
-        SHIRT: "เสื้อ",
-        BAG: "กระเป๋า",
-        STUDENT_UNIFORM: "เครื่องแบบนักศึกษา",
-        GENERAL_PURPOSE: "ของใช้ทั่วไป",
-        MEMORABILIA: "ของที่ระลึก"
-    };
-    document.getElementById("page-title").textContent = map[cat] || "รายการสินค้า";
-}
+/* SET PAGE TITLE + FILTER PRODUCTS BY ?category=CODE */
+
+document.addEventListener("DOMContentLoaded", () => {
+  const params  = new URLSearchParams(window.location.search);
+  const cat     = params.get("category");
+  const titleEl = document.getElementById("page-title");
+
+  const categoryNameMap = {
+    SHIRT: "เสื้อ",
+    BAG: "กระเป๋า",
+    STUDENT_UNIFORM: "เครื่องแบบนักศึกษา",
+    GENERAL_PURPOSE: "ของใช้ทั่วไป",
+    MEMORABILIA: "ของที่ระลึก"
+  };
+
+  const productCards = document.querySelectorAll(".product-card-link");
+
+  if (cat && categoryNameMap[cat]) {
+    // มี query category → เปลี่ยนหัวข้อ + แสดงเฉพาะสินค้าหมวดนั้น
+    titleEl.textContent = categoryNameMap[cat];
+
+    productCards.forEach(card => {
+      const cardCat = card.dataset.category;
+      if (cardCat !== cat) {
+        card.style.display = "none";
+      }
+    });
+  } else {
+    // ไม่มี query → แสดงทุกชิ้น
+    titleEl.textContent = "รายการสินค้าทั้งหมด";
+    productCards.forEach(card => {
+      card.style.display = "";
+    });
+  }
+});
 </script>
 
 <script>
 document.getElementById("filter-clear-button")?.addEventListener("click", () => {
     document.getElementById("filter-overlay").classList.remove("show");
-    window.location.href = "/buyerTemp";   // 🔥 สำหรับหน้า product.html
+    window.location.href = "/buyerTemp";   // กลับไปหน้ารายการสินค้าทั้งหมด
 });
 </script>
-<!--input validation ฝากย้ายไปไว้ใน search.js ด้วยจ้า-->
+
+<!-- input validation ฝากย้ายไปไว้ใน search.js ภายหลังได้ -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const overlay    = document.getElementById('filter-overlay');
@@ -359,7 +384,6 @@ document.addEventListener('DOMContentLoaded', () => {
   validateFilterInputs();
 });
 </script>
-
 
 </body>
 </html>
