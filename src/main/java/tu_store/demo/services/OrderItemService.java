@@ -38,6 +38,7 @@ public class OrderItemService {
         response.setProductId(item.getProductId());
         response.setQuantity(item.getQuantity());
         response.setTotalPrice(item.getTotalPrice());
+        response.setProductName(item.getProduct().getName());
 
         return response;
     }

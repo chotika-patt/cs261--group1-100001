@@ -10,6 +10,8 @@ public class SellerOrderItemResponse {
 
     private Double totalPrice;
 
+    private String productName;
+
     public SellerOrderItemResponse(){}
 
     public void setProductId(Long productId) {
@@ -35,4 +37,7 @@ public class SellerOrderItemResponse {
     public Double getTotalPrice() {
         return totalPrice;
     }
+
+    public String getProductName() {return productName;}
+    public void setProductName(String productName) {this.productName = productName;}
 }

@@ -123,57 +123,88 @@
   function applyDetailDataToUI(data) {
     if (!refs.orderCard) return;
 
-    // createdAt (backend returns ISO string)
+    // helpers
+    const fmt = (n) => (n == null || isNaN(Number(n))) ? '—' : `฿${Number(n).toFixed(2)}`;
+
+    const items = Array.isArray(data.items) ? data.items : [];
+    // normalize items to objects with name, qty, price, totalPrice
+    const normItems = items.map(it => {
+      const qty = (it.quantity != null) ? Number(it.quantity) : ((it.qty != null) ? Number(it.qty) : 1);
+      const unit = (it.price != null) ? Number(it.price) : (it.unitPrice != null ? Number(it.unitPrice) : null);
+      const total = (it.totalPrice != null) ? Number(it.totalPrice) : (unit != null ? unit * qty : null);
+      const name = it.productName || it.name || (it.product && (it.product.name || it.product.title)) || null;
+      return { name, qty, unit, total, raw: it };
+    });
+
+    // createdAt
     refs.created && (refs.created.textContent = data.createdAt ? formatDate(data.createdAt) : '—');
 
     // shop name
     refs.shopName && (refs.shopName.textContent = data.shopName || (data.shop && data.shop.name) || 'ร้านค้า');
 
-    const hasProductObj = data.product && typeof data.product === 'object';
+    // -------------------------------
+    // รายการ: show Order # (keeps as you had)
+    // -------------------------------
+    refs.productName && (refs.productName.textContent = (data.orderId != null) ? `Order: #${data.orderId}` : (normItems[0] && normItems[0].name) || '—');
 
-    // product details (unchanged fallback behavior)
-    const productDetails = hasProductObj ? (data.product.details || data.product.description) : (data.productDetails || '—');
+    // -------------------------------
+    // รายละเอียด: show item name(s) + qty + (per-item total)
+    // - If multiple items -> show each on its own line
+    // -------------------------------
+    let detailsText = '—';
+    if (normItems.length > 0) {
+      detailsText = normItems
+        .map(it => {
+          // Correct product name priority
+          const name =
+            it.raw?.product?.name ||
+            it.raw?.productName ||
+            it.name ||
+            `สินค้าไม่พบ`;
 
-    // Decide product image as before
-    const productImage = (hasProductObj && data.product.imageUrl) ? data.product.imageUrl :
-                         (data.productImageUrl || (Array.isArray(data.items) && data.items[0] && data.items[0].imageUrl));
+          const qty = it.qty != null ? `${it.qty} ชิ้น` : '— ชิ้น';
+          const total = it.total != null ? `รวม ฿${it.total.toFixed(2)}` : '';
 
-    // PRODUCT NAME: show "Order: #<id>" when available, otherwise fallback to product name
-    let productName = '—';
-    if (data.orderId != null) {
-      productName = `Order: #${data.orderId}`;
-    } else if (hasProductObj) {
-      productName = data.product.name || data.product.title || '—';
-    } else {
-      productName = data.productName || (Array.isArray(data.items) && data.items[0] && (data.items[0].productName || data.items[0].name)) || '—';
+          return `${name}\n  — ${qty}\n  — ${total}`;
+        })
+        .join('\n\n'); // spacing between items
     }
 
-    // PRICE: prefer order totalPrice first, then fallback to product price / item totalPrice
-    let productPriceNum = null;
-    if (data.totalPrice != null) {
-      productPriceNum = Number(data.totalPrice);
-    } else if (hasProductObj && data.product.price != null) {
-      productPriceNum = Number(data.product.price);
-    } else if (typeof data.productPrice === 'number') {
-      productPriceNum = Number(data.productPrice);
-    } else if (Array.isArray(data.items) && data.items[0] && typeof data.items[0].totalPrice === 'number') {
-      productPriceNum = Number(data.items[0].totalPrice);
-    }
-
-    refs.productName && (refs.productName.textContent = productName || '—');
-    refs.productDetails && (refs.productDetails.textContent = (productDetails && productDetails !== '') ? productDetails : '—');
-    refs.productPrice && (refs.productPrice.textContent = (productPriceNum != null) ? `฿${productPriceNum.toFixed(2)}` : '—');
-
-    if (refs.thumb) {
-      if (productImage) {
-        refs.thumb.src = productImage;
-      } else {
-        // keep placeholder or set a neutral placeholder
-        // refs.thumb.src = '/img/placeholder.png';
+    // Fallback if items not present
+    else {
+      const prodObj = data.product && typeof data.product === 'object' ? data.product : null;
+      if (prodObj) {
+        const name = prodObj.name || prodObj.title || '';
+        const desc = prodObj.description || prodObj.details || '';
+        detailsText = [name, desc].filter(Boolean).join(' — ') || '—';
+      } else if (data.productDetails) {
+        detailsText = data.productDetails;
       }
     }
 
-    // buyer info - backend may supply buyerName / buyerPhone
+    refs.productDetails && (refs.productDetails.textContent = detailsText);
+
+    // -------------------------------
+    // ราคา: show order totalPrice if available, otherwise sum item totals
+    // -------------------------------
+    let orderTotal = null;
+    if (data.totalPrice != null && !isNaN(Number(data.totalPrice))) {
+      orderTotal = Number(data.totalPrice);
+    } else {
+      // sum item totals if present
+      const sum = normItems.reduce((acc, it) => acc + (isNaN(it.total) || it.total == null ? 0 : it.total), 0);
+      orderTotal = sum > 0 ? sum : null;
+    }
+    refs.productPrice && (refs.productPrice.textContent = orderTotal != null ? fmt(orderTotal) : '—');
+
+    // -------------------------------
+    // HIDE thumbnail (you asked to remove pic)
+    // -------------------------------
+    if (refs.thumb && refs.thumb.parentElement) {
+      refs.thumb.parentElement.style.display = 'none';
+    }
+
+    // buyer info
     refs.buyerName && (refs.buyerName.textContent = data.buyerName || (data.buyer && (data.buyer.fullName || data.buyer.username)) || '—');
     refs.buyerPhone && (refs.buyerPhone.textContent = data.buyerPhone || (data.buyer && (data.buyer.phone || data.buyer.phoneNumber)) || '—');
     refs.buyerAddress && (refs.buyerAddress.textContent = data.buyerAddress || '—');
@@ -187,11 +218,10 @@
     // store order id on DOM
     if (refs.sellerActions && data.orderId) refs.sellerActions.setAttribute('data-order-id', data.orderId || '');
 
-    // status — prefer shipmentStatus if provided
+    // status UI
     const shipmentStatus = (data.shipmentStatus || data.trackingStatus || (data.tracking && data.tracking.status) || data.status || 'PENDING');
     setStatusUI(String(shipmentStatus));
 
-    // show shipping panel only when appropriate
     if (refs.shippingPanel) {
       const shouldShow = ['PREPARING','SHIPPED','PAID','PROCESSING'].includes(String(shipmentStatus).toUpperCase()) || String(data.status).toUpperCase() === 'PAID';
       refs.shippingPanel.hidden = !shouldShow;
@@ -292,14 +322,146 @@
     }
   }
 
-  // wire detail buttons
+  function initConfirmModal() {
+    const overlay = document.getElementById('confirm-overlay');
+    if (!overlay) {
+      console.warn('confirm-overlay element not found');
+      return;
+    }
+
+    // elements inside modal
+    const dialog = overlay.querySelector('.confirm-dialog');
+    const btnOk = overlay.querySelector('[data-action="ok"]');
+    const btnCancel = overlay.querySelector('[data-action="cancel"]');
+    const btnClose = overlay.querySelector('.confirm-close');
+    const titleEl = overlay.querySelector('#confirm-title');
+    const descEl = overlay.querySelector('#confirm-desc');
+
+    // state
+    let currentOnOk = null;
+    let currentTrigger = null;
+    let isOpen = false;
+
+    // focusable selector for simple trapping
+    const FOCUSABLE = 'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
+
+    function trapKey(e) {
+      if (!isOpen) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeConfirm();
+        return;
+      }
+      if (e.key === 'Tab') {
+        // simple focus trap inside dialog
+        const nodes = Array.from(dialog.querySelectorAll(FOCUSABLE)).filter(n => n.offsetParent !== null);
+        if (!nodes.length) return;
+        const first = nodes[0], last = nodes[nodes.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+
+    function openConfirm({ title = 'ยืนยัน', message = '', onOk = null, trigger = null } = {}) {
+      titleEl.textContent = title;
+      descEl.textContent = message || '';
+      currentOnOk = typeof onOk === 'function' ? onOk : null;
+      currentTrigger = trigger instanceof Element ? trigger : null;
+      overlay.hidden = false;
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      isOpen = true;
+
+      // focus first meaningful control (OK)
+      window.setTimeout(() => {
+        if (btnOk) btnOk.focus();
+        else dialog.focus();
+      }, 60);
+
+      document.addEventListener('keydown', trapKey);
+    }
+
+    async function closeConfirm() {
+      if (!isOpen) return;
+      overlay.hidden = true;
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      isOpen = false;
+      document.removeEventListener('keydown', trapKey);
+
+      // restore focus to trigger if available
+      if (currentTrigger && typeof currentTrigger.focus === 'function') {
+        currentTrigger.focus();
+      }
+      currentOnOk = null;
+      currentTrigger = null;
+    }
+
+    // wired once
+    // OK button: call handler (if returns promise, await it then close)
+    if (btnOk) {
+      btnOk.addEventListener('click', (ev) => {
+        if (!currentOnOk) { closeConfirm(); return; }
+        try {
+          const result = currentOnOk(ev);
+          // if result is a promise, wait for it before closing
+          if (result && typeof result.then === 'function') {
+            btnOk.disabled = true;
+            btnCancel && (btnCancel.disabled = true);
+            result.then(() => {
+              btnOk.disabled = false;
+              btnCancel && (btnCancel.disabled = false);
+              closeConfirm();
+            }).catch(err => {
+              console.error('confirm handler rejected', err);
+              btnOk.disabled = false;
+              btnCancel && (btnCancel.disabled = false);
+              // optionally keep open on error; here we close anyway
+              closeConfirm();
+            });
+          } else {
+            closeConfirm();
+          }
+        } catch (ex) {
+          console.error('confirm handler threw', ex);
+          closeConfirm();
+        }
+      });
+    }
+
+    // Cancel / close buttons
+    if (btnCancel) btnCancel.addEventListener('click', closeConfirm);
+    if (btnClose) btnClose.addEventListener('click', closeConfirm);
+
+    // backdrop click closes
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeConfirm();
+    });
+
+    // expose helpers globally so other code can call openConfirm()
+    window.openConfirm = openConfirm;
+    window.closeConfirm = closeConfirm;
+  }
+
+  // call once during init
+  initConfirmModal();
+
   function wireDetailButtons() {
     refs.btnAccept && refs.btnAccept.addEventListener('click', () => sendDecision('ACCEPT'));
-    refs.btnReject && refs.btnReject.addEventListener('click', () => {
-      // confirm overlay usage
-      const ok = confirm('คุณต้องการยืนยันการปฏิเสธออเดอร์นี้หรือไม่?');
-      if (ok) sendDecision('REJECT');
+
+    refs.btnReject && refs.btnReject.addEventListener('click', (ev) => {
+      // use our modal; pass the button as trigger so focus returns afterwards
+      openConfirm({
+        title: 'ยืนยันการปฏิเสธออเดอร์',
+        message: 'คุณต้องการยืนยันการปฏิเสธออเดอร์นี้หรือไม่',
+        trigger: ev.currentTarget,
+        onOk: () => {
+          // If sendDecision returns a promise (it should for network), return it so modal waits
+          return sendDecision('REJECT');
+        }
+      });
     });
+
     refs.btnConfirmShipping && refs.btnConfirmShipping.addEventListener('click', updateShipmentStatus);
   }
 
