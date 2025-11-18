@@ -622,3 +622,28 @@ body {
 .close-qr-btn:hover {
     color: #000;
 }
+
+.result-card.in-modal,
+.loading-card.in-modal,
+.qr-card.in-modal {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 10010 !important; /* > qrPopup(10000) */
+  margin: 0 !important;
+  max-width: 520px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  transition: transform 220ms ease-out, opacity 180ms;
+  opacity: 1;
+}
+
+#qrPopup {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+  z-index: 10000; /* backdrop level - lower than cards */
+}

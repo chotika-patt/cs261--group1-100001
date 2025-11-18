@@ -127,6 +127,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (currentPaymentId) {
           pollPaymentStatusOnce().then(s => {
             if (!s || ["EXPIRED","FAILED"].includes((s.status||"").toUpperCase())) {
+              if (qrPopup) qrPopup.style.display = 'flex';
+              loadingCard?.classList.remove('in-modal');
+              failCard?.classList.add('in-modal');
               showOnly(failCard);
               showErrorMessageUI("QR หมดอายุ หรือชำระเงินไม่สำเร็จ");
             } else {
@@ -134,6 +137,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           });
         } else {
+          if (qrPopup) qrPopup.style.display = 'flex';
+          loadingCard?.classList.remove('in-modal');
+          failCard?.classList.add('in-modal');
           showOnly(failCard);
           showErrorMessageUI("QR หมดอายุ กรุณาสร้าง QR ใหม่");
         }
@@ -188,12 +194,18 @@ document.addEventListener("DOMContentLoaded", () => {
         return data;
       } else {
         const err = await resp.json().catch(() => null);
+        if (qrPopup) qrPopup.style.display = 'flex';
+        loadingCard?.classList.remove('in-modal');
+        failCard?.classList.add('in-modal');
         showOnly(failCard);
         showErrorMessageUI(err?.message || resp.status);
         return null;
       }
     } catch (e) {
       console.error("initiate error", e);
+      if (qrPopup) qrPopup.style.display = 'flex';
+      loadingCard?.classList.remove('in-modal');
+      failCard?.classList.add('in-modal');
       showOnly(failCard);
       showErrorMessageUI("Network error. โปรดลองอีกครั้ง");
       return null;
@@ -234,6 +246,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const s = await pollPaymentStatusOnce();
       if (s) {
         if (s.__errorStatus) {
+          if (qrPopup) qrPopup.style.display = 'flex';
+          loadingCard?.classList.remove('in-modal');
+          failCard?.classList.add('in-modal');
           showOnly(failCard);
           showErrorMessageUI(`Server returned ${s.__errorStatus}`);
           stopPolling();
@@ -249,6 +264,9 @@ document.addEventListener("DOMContentLoaded", () => {
         console.warn("[PAY] max poll attempts reached, stopping client poll");
         stopPolling();
         clearInterval(countdownTimer);
+        if (qrPopup) qrPopup.style.display = 'flex';
+        loadingCard?.classList.remove('in-modal');
+        failCard?.classList.add('in-modal');
         showOnly(failCard);
         showErrorMessageUI("การตรวจสอบสถานะนานเกินไป กรุณาลองอีกครั้งหรือติดต่อผู้ดูแลระบบ");
         return;
@@ -258,6 +276,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!s) return;
 
       if (s.__errorStatus) {
+        if (qrPopup) qrPopup.style.display = 'flex';
+        loadingCard?.classList.remove('in-modal');
+        failCard?.classList.add('in-modal');
         showOnly(failCard);
         showErrorMessageUI(`Server returned ${s.__errorStatus}`);
         stopPolling();
@@ -302,7 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
         clearInterval(countdownTimer);
         try {
           const amtEl = successCard.querySelector(".amount");
-          const amountToShow = statusResp.amount || lastKnownAmount || "";
+          const amountToShow = statusResp.amount + statusResp.amount * 0.07 || lastKnownAmount + lastKnownAmount * 0.07 || "";
           const currencyToShow = statusResp.currency || lastKnownCurrency || "";
           if (amtEl && amountToShow !== null) amtEl.textContent = `${amountToShow} ${currencyToShow}`;
 
@@ -315,12 +336,20 @@ document.addEventListener("DOMContentLoaded", () => {
             detailBs[4].textContent = `${amountToShow || ''} ${currencyToShow || ''}`;
           }
         } catch (e) {}
+        if (qrPopup) qrPopup.style.display = 'flex';
+
+        loadingCard?.classList.remove('in-modal');
+        successCard?.classList.add('in-modal');
         showOnly(successCard);
-        setTimeout(()=> window.location.href = "/buyerTemp", 1300);
+
+        document.querySelector('.overlay')?.classList.remove('show');
         return;
       case "EXPIRED":
         stopPolling();
         clearInterval(countdownTimer);
+        if (qrPopup) qrPopup.style.display = 'flex';
+        loadingCard?.classList.remove('in-modal');
+        failCard?.classList.add('in-modal');
         showOnly(failCard);
         showErrorMessageUI("QR หมดอายุ กรุณาสร้าง QR ใหม่");
         return;
@@ -328,6 +357,9 @@ document.addEventListener("DOMContentLoaded", () => {
       case "CANCELLED":
         stopPolling();
         clearInterval(countdownTimer);
+        if (qrPopup) qrPopup.style.display = 'flex';
+        loadingCard?.classList.remove('in-modal');
+        failCard?.classList.add('in-modal');
         showOnly(failCard);
         showErrorMessageUI("ชำระเงินไม่สำเร็จ กรุณาลองอีกครั้ง");
         return;
@@ -419,20 +451,20 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ------------------------------
-  // Confirm button: simulate PAID after loading delay, then call server to finalize
+  // Confirm button
   // ------------------------------
   confirmBtn?.addEventListener("click", async () => {
     // disable the confirm button to avoid double-clicks
     confirmBtn.disabled = true;
 
-    // stop countdown & polling so client won't overwrite simulated result
     clearInterval(countdownTimer);
     stopPolling();
 
-    // show loading card to simulate processing
+
+    if (qrPopup) qrPopup.style.display = "flex";
+    loadingCard?.classList.add("in-modal");
     showOnly(loadingCard);
 
-    // wait for configured delay, then simulate PAID and call backend
     setTimeout(async () => {
       const simulated = {
         paymentId: currentPaymentId,
@@ -455,6 +487,9 @@ document.addEventListener("DOMContentLoaded", () => {
           let body = null;
           try { body = await resp.json(); } catch (e) { body = await resp.text().catch(()=>null); }
           console.error("markPaid failed", resp.status, body);
+          if (qrPopup) qrPopup.style.display = 'flex';
+          loadingCard?.classList.remove('in-modal');
+          failCard?.classList.add('in-modal');
           showOnly(failCard);
           showErrorMessageUI(body?.message || "ไม่สามารถยืนยันการชำระเงินได้");
           return;
@@ -464,6 +499,9 @@ document.addEventListener("DOMContentLoaded", () => {
         handlePaymentStatus(simulated);
       } catch (e) {
         console.error("markPaid error", e);
+        if (qrPopup) qrPopup.style.display = 'flex';
+        loadingCard?.classList.remove('in-modal');
+        failCard?.classList.add('in-modal');
         showOnly(failCard);
         showErrorMessageUI("Network error while finalizing payment");
       }
@@ -501,11 +539,17 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("successRedirectBtn")?.addEventListener("click", () => {
+    successCard?.classList.remove('in-modal');
+    loadingCard?.classList.remove('in-modal');
+    if (qrPopup) qrPopup.style.display = 'none';
     window.location.href = "/buyerTemp";
   });
 
   document.getElementById("failRedirectBtn")?.addEventListener("click", () => {
-    window.location.reload();
+      loadingCard?.classList.remove('in-modal');
+      failCard?.classList.remove('in-modal');
+      if (qrPopup) qrPopup.style.display = 'none';
+    window.location.href = "/buyerTemp";
   });
 
   [cardMethod, bankMethod].forEach((btn) => {
