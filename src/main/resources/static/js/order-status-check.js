@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <div class="shop-name">${shopName}</div>
             </div>
             <div class="order-card__body">
-                <div class="product-thumb-box"><div class="icon"><span class="material-symbols-outlined">image</span><a href="order-detail-waiting?orderId=${order.orderId}"><img src="/product_img/${order.imagePath}" alt="รูปสินค้า" style="object-fit: cover;"/></a></div></div>
+                <div class="product-thumb-box"><div class="icon"><span class="material-symbols-outlined">image</span><a href="order-detail-waiting?orderId=${order.orderId}"><img src="/product_img/${order.imagePath}" alt="รูปสินค้า" style="object-fit: cover; padding-top: 43px; width: 143px; height: 149px;"/></a></div></div>
                 <div class="product-info">
                 <div class="product-title"><a href="order-detail-waiting?orderId=${order.orderId}">${order.productName}</a></div>
                 <div class="product-meta">${sizeText}${spaceText}${colorText} x${order.quantity} <div class="price">฿${order.totalPrice}</div></div>
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div class="product-thumb-box" role="img" aria-label="รูปสินค้า (รอการอัปโหลด)">
               <div class="icon" aria-hidden="true">
                 <span class="material-symbols-outlined">image</span>
-                <a href="order-detail-waiting?orderId=${order.orderId}"><img src="/product_img/${order.imagePath}" alt="รูปสินค้า" style="object-fit: cover;" /></a>
+                <a href="order-detail-waiting?orderId=${order.orderId}"><img src="/product_img/${order.imagePath}" alt="รูปสินค้า" style="object-fit: cover; padding-top: 43px; width: 143px; height: 149px;" /></a>
               </div>
             </div>
             <div class="product-info">
