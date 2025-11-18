@@ -273,3 +273,248 @@ body {
   border:1px solid #16A34A; background:#16A34A; color:#fff; font-weight:800;
 }
 .shipping-panel .btn-confirm:hover{ filter:brightness(.95); }
+
+/* ================= Review Form Styles ================= */
+
+.review-form-container {
+    padding: 10px 0;
+}
+
+.review-section {
+    margin-bottom: 24px;
+}
+
+.review-label {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+/* --- Layout แบบแบ่งครึ่ง (คงเดิม) --- */
+.review-row {
+    display: flex;
+    gap: 24px; 
+    align-items: flex-start; 
+}
+
+.review-section.half-col {
+    flex: 1;      
+    width: 50%;   
+    min-width: 0; 
+}
+
+/* --- Star Rating (คงเดิมตามที่คุณตั้งค่ามา Gap 100px) --- */
+.star-rating-input {
+    display: flex;
+    gap: 100px; /* คงค่าเดิม */
+    font-size: 50px; /* คงค่าเดิม */
+    color: #e0e0e0;  
+    cursor: pointer;
+    width: fit-content;
+    margin: 0 auto; /* จัดกึ่งกลาง */
+}
+
+.star-rating-input .star-btn {
+    transition: transform 0.1s;
+}
+
+.star-rating-input .star-btn:hover {
+    transform: scale(1.1);
+}
+
+.star-rating-input .active {
+    color: #FFC107; 
+}
+
+/* --- Textarea (คงเดิม) --- */
+.review-textarea {
+    width: 100%;
+    height: 130px; 
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #374151;
+    resize: none; 
+    box-sizing: border-box;
+    background-color: #f9fafb;
+    transition: all 0.2s;
+}
+
+.review-textarea:focus {
+    outline: none;
+    border-color: #d96a24;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(217, 106, 36, 0.1);
+}
+
+/* --- Image Upload Grid (แก้ไขให้ยืดหดได้) --- */
+.image-upload-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    width: 100%; 
+    transition: all 0.3s ease;
+}
+
+/* สถานะเริ่มต้น: ปุ่มใหญ่เต็มพื้นที่ (เท่า Textarea) */
+.upload-box {
+    width: 100%;        /* กว้างเต็ม */
+    height: 130px;      /* สูงเท่ากล่องข้อความ */
+    border: 2px dashed #cbd5e1;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.3s ease; /* animation ตอนย่อขยาย */
+    background-color: #fff;
+}
+
+/* สถานะมีรูปแล้ว (.has-images): ปุ่มหดเหลือขนาดเล็ก */
+.image-upload-grid.has-images .upload-box {
+    width: 90px;
+    height: 90px;
+    border-color: #d96a24; /* เปลี่ยนสีขอบให้รู้ว่า active */
+    color: #d96a24;
+}
+
+.upload-box:hover {
+    border-color: #d96a24;
+    color: #d96a24;
+    background-color: #fff7ed;
+}
+
+.upload-box i {
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+.upload-box span {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Preview Image Box */
+.preview-img-box {
+    width: 90px;
+    height: 90px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    animation: fadeIn 0.3s; /* รูปเด้งมาแบบนุ่มนวล */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.preview-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.preview-img-box .remove-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.preview-img-box .remove-btn:hover {
+    background: #ef4444; 
+}
+
+/* --- Actions Button (คงเดิม) --- */
+.review-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    gap: 20px;               
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #f3f4f6;
+    width: 100%;
+}
+
+.btn-cancel, .btn-confirm {
+    flex: 1;                
+    max-width: 100%;      
+    padding: 12px 0;         
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;        
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.btn-cancel {
+    background: #fff;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    /* width: 1000px;  <-- ไม่ต้องใส่ก็ได้ ถ้ามี flex: 1 มันจะยืดเต็มพื้นที่เอง */
+}
+
+.btn-cancel:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.btn-confirm {
+    background: linear-gradient(135deg, #d96a24 0%, #b91c1c 100%);
+    color: white;
+    border: none;
+    /* width: 1000px; <-- ไม่ต้องใส่ก็ได้ */
+    box-shadow: 0 2px 4px rgba(217, 106, 36, 0.2);
+}
+
+.btn-confirm:hover {
+    opacity: 0.95;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(217, 106, 36, 0.3);
+}
+
+.btn-confirm:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .review-row {
+        flex-direction: column; 
+        gap: 0;
+    }
+    .review-section.half-col {
+        width: 100%;
+    }
+    .review-textarea {
+        height: auto; 
+    }
+    .upload-box {
+        height: 100px;
+    }
+    /* บนมือถือให้ปุ่มเต็มจอ */
+    .btn-cancel, .btn-confirm {
+        max-width: none; 
+    }
+}

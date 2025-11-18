@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="th" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Review Order - TU Store</title>
+  <link rel="icon" type="image/png" href="/img/Logo.png">
+
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/order-status.css}">
+  <link rel="stylesheet" th:href="@{/css/order-detail.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>
+
+<body>
+  <nav class="nav-top" th:replace="~{buyerTemp :: .nav-top}"></nav>
+  <div class="left-logo" th:replace="~{buyerTemp :: .left-logo}"></div>
+  <nav class="nav-bottom" th:replace="~{buyerTemp :: .nav-bottom}"></nav>
+
+  <h1 class="page-title">เขียนรีวิวสินค้า</h1>
+
+  <section class="order-detail-card">
+
+      <div class="shop-row">
+        <span class="shop-icon material-symbols-outlined">storefront</span>
+        <span class="shop-name">ชุมนุมเชียร์มหาวิทยาลัยธรรมศาสตร์</span>
+      </div>
+
+      <div class="summary-grid">
+        <div class="thumb">
+          <img src="images/polo-thammasat.jpg" alt="Product Image"/>
+        </div>
+
+        <div class="summary-content">
+          <div class="detail-item">
+            <span class="detail-label">ชื่อสินค้า</span>
+            <span class="detail-value">เสื้อเชียร์งานฟุตบอลสามัคคี จุฬาฯ ธรรมศาสตร์ ปี 2567 - GOLDEN SEED POLO SHIRT</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">รายละเอียด</span>
+            <span class="detail-value">ขนาด (M), สี (แดง) x1</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">ราคา</span>
+            <span class="detail-value">฿350.00</span>
+          </div>
+        </div>
+      </div>
+
+      <hr class="detail-divider">
+
+      <form class="review-form-container" action="/api/reviews/submit" method="POST" enctype="multipart/form-data">
+          
+          <div class="review-section">
+              <label class="review-label">ให้คะแนนสินค้านี้</label>
+              <div class="star-rating-input">
+                  <i class="fa-regular fa-star star-btn" data-value="1"></i>
+                  <i class="fa-regular fa-star star-btn" data-value="2"></i>
+                  <i class="fa-regular fa-star star-btn" data-value="3"></i>
+                  <i class="fa-regular fa-star star-btn" data-value="4"></i>
+                  <i class="fa-regular fa-star star-btn" data-value="5"></i>
+                  <input type="hidden" id="rating-value" name="rating" value="0" required>
+              </div>
+          </div>
+
+          <div class="review-section">
+              <label class="review-label">ความคิดเห็น</label>
+              <textarea class="review-textarea" name="comment" rows="5" placeholder="บอกเล่าประสบการณ์การใช้งานสินค้า..."></textarea>
+          </div>
+
+          <div class="review-section">
+              <label class="review-label">เพิ่มรูปภาพสินค้า</label>
+              <div class="image-upload-grid" id="image-upload-grid">
+                  <div class="upload-box" onclick="document.getElementById('review-img-input').click()">
+                      <i class="fa-solid fa-plus"></i>
+                      <span>เพิ่มรูป</span>
+                      <input type="file" id="review-img-input" name="images" accept="image/*" multiple hidden onchange="handleImageUpload(this)">
+                  </div>
+                  </div>
+          </div>
+
+          <div class="review-actions">
+              <button type="button" class="btn-cancel" onclick="history.back()">ยกเลิก</button>
+              <button type="submit" class="btn-confirm">ยืนยันรีวิว</button>
+          </div>
+
+      </form>
+      </section>
+
+  <script th:src="@{/js/main.js}" defer></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        /* --- 1. จัดการคะแนนดาว --- */
+        const stars = document.querySelectorAll('.star-btn');
+        const ratingInput = document.getElementById('rating-value');
+
+        function updateStarDisplay(value) {
+            stars.forEach((s, i) => {
+                s.classList.remove('fa-regular', 'fa-solid', 'active');
+                if (i < value) {
+                    s.classList.add('fa-solid', 'active'); // ดาวเต็ม
+                } else {
+                    s.classList.add('fa-regular'); // ดาวว่าง
+                }
+            });
+        }
+
+        stars.forEach((star, index) => {
+            // Hover: โชว์ดาวตามที่ชี้
+            star.addEventListener('mouseover', () => updateStarDisplay(index + 1));
+            
+            // Mouseout: กลับไปโชว์ค่าที่เลือกไว้
+            star.addEventListener('mouseout', () => updateStarDisplay(ratingInput.value));
+            
+            // Click: บันทึกค่า
+            star.addEventListener('click', () => {
+                ratingInput.value = index + 1;
+                updateStarDisplay(index + 1);
+            });
+        });
+    });
+
+    /* --- 2. จัดการอัปโหลดและ Preview รูป --- */
+    function handleImageUpload(input) {
+        const grid = document.getElementById('image-upload-grid');
+        const uploadBtn = grid.querySelector('.upload-box'); // หาปุ่ม upload เพื่อแทรกข้างหน้า
+
+        if (input.files) {
+            Array.from(input.files).forEach(file => {
+                if (!file.type.startsWith('image/')) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const div = document.createElement('div');
+                    div.className = 'preview-img-box';
+                    div.innerHTML = `
+                        <img src="${e.target.result}" alt="preview">
+                        <div class="remove-btn" onclick="this.parentElement.remove()">
+                            <i class="fa-solid fa-xmark"></i>
+                        </div>
+                    `;
+                    // แทรกรูปใหม่ 'ก่อน' ปุ่ม Upload เสมอ
+                    grid.insertBefore(div, uploadBtn);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        // Reset input เพื่อให้เลือกรูปเดิมซ้ำได้ถ้าต้องการ
+        input.value = ''; 
+    }
+  </script>
+</body>
+</html>
