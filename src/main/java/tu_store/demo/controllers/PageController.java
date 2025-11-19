@@ -390,6 +390,24 @@ public class PageController {
 
         return "payment"; // ✅ ต้องมีไฟล์ชื่อ 'payment.html' อยู่ใน 'src/main/resources/templates/'
     }
+     @GetMapping("/review")
+        public String showReviewPage(@RequestParam(required = false) Long orderId, Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return "redirect:/login"; 
+        }
+        User user = userService.findByUsername(username);
+        if (user == null || user.getRole() != UserRole.CLIENT) {
+            return "redirect:/";
+        }
+        model.addAttribute("username", username);
+        model.addAttribute("email", session.getAttribute("email"));
+        model.addAttribute("phone", session.getAttribute("phone"));
+        if (orderId != null) {
+            model.addAttribute("orderId", orderId);
+        }
+        return "review"; 
+    }
 
 
 }

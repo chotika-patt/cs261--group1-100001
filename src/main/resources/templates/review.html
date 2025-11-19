@@ -1,155 +1,231 @@
 <!DOCTYPE html>
-<html lang="th" xmlns:th="http://www.thymeleaf.org">
+<html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
   <title>Review Order - TU Store</title>
-  <link rel="icon" type="image/png" href="/img/Logo.png">
 
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
-  <link rel="stylesheet" th:href="@{/css/order-status.css}">
-  <link rel="stylesheet" th:href="@{/css/order-detail.css}">
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/order-status.css">
+  <link rel="stylesheet" href="/css/order-detail.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 </head>
 
 <body>
-  <nav class="nav-top" th:replace="~{buyerTemp :: .nav-top}"></nav>
-  <div class="left-logo" th:replace="~{buyerTemp :: .left-logo}"></div>
-  <nav class="nav-bottom" th:replace="~{buyerTemp :: .nav-bottom}"></nav>
+  <!-- navbar -->
+  <nav class="nav-top"></nav>
+  <div class="left-logo"></div>
+  <nav class="nav-bottom"></nav>
 
   <h1 class="page-title">เขียนรีวิวสินค้า</h1>
 
   <section class="order-detail-card">
 
-      <div class="shop-row">
-        <span class="shop-icon material-symbols-outlined">storefront</span>
-        <span class="shop-name">ชุมนุมเชียร์มหาวิทยาลัยธรรมศาสตร์</span>
+    <!-- ชื่อร้าน -->
+    <div class="shop-row">
+      <span class="shop-icon material-symbols-outlined">storefront</span>
+      <span class="shop-name">กำลังโหลด...</span>
+    </div>
+
+    <div class="summary-grid">
+      <!-- รูปสินค้า -->
+      <div class="thumb">
+        <img class="product-image" src="" alt="Product"/>
       </div>
 
-      <div class="summary-grid">
-        <div class="thumb">
-          <img src="images/polo-thammasat.jpg" alt="Product Image"/>
+      <div class="summary-content">
+        <!-- ชื่อสินค้า -->
+        <div class="detail-item">
+          <span class="detail-label">ชื่อสินค้า</span>
+          <span class="detail-value product-name">กำลังโหลด...</span>
         </div>
 
-        <div class="summary-content">
-          <div class="detail-item">
-            <span class="detail-label">ชื่อสินค้า</span>
-            <span class="detail-value">เสื้อเชียร์งานฟุตบอลสามัคคี จุฬาฯ ธรรมศาสตร์ ปี 2567 - GOLDEN SEED POLO SHIRT</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">รายละเอียด</span>
-            <span class="detail-value">ขนาด (M), สี (แดง) x1</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">ราคา</span>
-            <span class="detail-value">฿350.00</span>
+        <!-- ขนาด/สี/จำนวน -->
+        <div class="detail-item">
+          <span class="detail-label">รายละเอียด</span>
+          <span class="detail-value detail-info">กำลังโหลด...</span>
+        </div>
+
+        <!-- ราคา -->
+        <div class="detail-item">
+          <span class="detail-label">ราคา</span>
+          <span class="detail-value detail-price">กำลังโหลด...</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="detail-divider">
+
+    <!-- แบบฟอร์มรีวิว -->
+    <form class="review-form-container"
+      action="/api/review"
+      method="POST"
+      enctype="multipart/form-data">
+
+    <input type="hidden" id="orderIdInput" name="orderId" />
+<input type="hidden" id="productIdInput" name="productId" />
+
+
+      <!-- คะแนน -->
+      <div class="review-section">
+        <label class="review-label">ให้คะแนนสินค้านี้</label>
+        <div class="star-rating-input">
+          <i class="fa-regular fa-star star-btn" data-value="1"></i>
+          <i class="fa-regular fa-star star-btn" data-value="2"></i>
+          <i class="fa-regular fa-star star-btn" data-value="3"></i>
+          <i class="fa-regular fa-star star-btn" data-value="4"></i>
+          <i class="fa-regular fa-star star-btn" data-value="5"></i>
+          <input type="hidden" id="rating-value" name="rating" value="0" required>
+        </div>
+      </div>
+
+      <!-- ความคิดเห็น -->
+      <div class="review-section">
+        <label class="review-label">ความคิดเห็น</label>
+        <textarea class="review-textarea" name="comment" rows="5"
+                  placeholder="บอกเล่าประสบการณ์การใช้งานสินค้า..."></textarea>
+      </div>
+
+      <!-- อัปโหลดรูป -->
+      <div class="review-section">
+        <label class="review-label">เพิ่มรูปภาพสินค้า</label>
+        <div class="image-upload-grid" id="image-upload-grid">
+          <div class="upload-box" onclick="document.getElementById('review-img-input').click()">
+            <i class="fa-solid fa-plus"></i>
+            <span>เพิ่มรูป</span>
+            <input type="file" id="review-img-input" name="images" accept="image/*"
+                   multiple hidden onchange="handleImageUpload(this)">
           </div>
         </div>
       </div>
 
-      <hr class="detail-divider">
+      <!-- ปุ่ม -->
+      <div class="review-actions">
+        <button type="button" class="btn-cancel" onclick="history.back()">ยกเลิก</button>
+        <button type="submit" class="btn-confirm">ยืนยันรีวิว</button>
+      </div>
+    </form>
 
-      <form class="review-form-container" action="/api/reviews/submit" method="POST" enctype="multipart/form-data">
-          
-          <div class="review-section">
-              <label class="review-label">ให้คะแนนสินค้านี้</label>
-              <div class="star-rating-input">
-                  <i class="fa-regular fa-star star-btn" data-value="1"></i>
-                  <i class="fa-regular fa-star star-btn" data-value="2"></i>
-                  <i class="fa-regular fa-star star-btn" data-value="3"></i>
-                  <i class="fa-regular fa-star star-btn" data-value="4"></i>
-                  <i class="fa-regular fa-star star-btn" data-value="5"></i>
-                  <input type="hidden" id="rating-value" name="rating" value="0" required>
-              </div>
-          </div>
+  </section>
 
-          <div class="review-section">
-              <label class="review-label">ความคิดเห็น</label>
-              <textarea class="review-textarea" name="comment" rows="5" placeholder="บอกเล่าประสบการณ์การใช้งานสินค้า..."></textarea>
-          </div>
+  <!-- main.js -->
+  <script src="/js/main.js" defer></script>
 
-          <div class="review-section">
-              <label class="review-label">เพิ่มรูปภาพสินค้า</label>
-              <div class="image-upload-grid" id="image-upload-grid">
-                  <div class="upload-box" onclick="document.getElementById('review-img-input').click()">
-                      <i class="fa-solid fa-plus"></i>
-                      <span>เพิ่มรูป</span>
-                      <input type="file" id="review-img-input" name="images" accept="image/*" multiple hidden onchange="handleImageUpload(this)">
-                  </div>
-                  </div>
-          </div>
+ <script>
+/* ============================================================
+   โหลดข้อมูล order + product จาก API แล้วเติมลงหน้า
+   ============================================================ */
+document.addEventListener("DOMContentLoaded", async () => {
 
-          <div class="review-actions">
-              <button type="button" class="btn-cancel" onclick="history.back()">ยกเลิก</button>
-              <button type="submit" class="btn-confirm">ยืนยันรีวิว</button>
-          </div>
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get("orderId");
+  const productId = params.get("productId");
 
-      </form>
-      </section>
+  if (!orderId || !productId) {
+      console.error("Missing orderId or productId");
+      return;
+  }
 
-  <script th:src="@{/js/main.js}" defer></script>
-  
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        /* --- 1. จัดการคะแนนดาว --- */
-        const stars = document.querySelectorAll('.star-btn');
-        const ratingInput = document.getElementById('rating-value');
+  try {
+      // Load order
+      const orderRes = await fetch(`/api/orders/${orderId}`);
+      const order = await orderRes.json();
 
-        function updateStarDisplay(value) {
-            stars.forEach((s, i) => {
-                s.classList.remove('fa-regular', 'fa-solid', 'active');
-                if (i < value) {
-                    s.classList.add('fa-solid', 'active'); // ดาวเต็ม
-                } else {
-                    s.classList.add('fa-regular'); // ดาวว่าง
-                }
-            });
-        }
+      // Load product
+      const productRes = await fetch(`/api/products/${productId}`);
+      const product = await productRes.json();
 
-        stars.forEach((star, index) => {
-            // Hover: โชว์ดาวตามที่ชี้
-            star.addEventListener('mouseover', () => updateStarDisplay(index + 1));
-            
-            // Mouseout: กลับไปโชว์ค่าที่เลือกไว้
-            star.addEventListener('mouseout', () => updateStarDisplay(ratingInput.value));
-            
-            // Click: บันทึกค่า
-            star.addEventListener('click', () => {
-                ratingInput.value = index + 1;
-                updateStarDisplay(index + 1);
-            });
-        });
+      // ----- Fill UI -----
+      document.querySelector(".shop-name").textContent =
+          order.shopName ?? "ไม่พบข้อมูลร้านค้า";
+
+      document.querySelector(".product-image").src =
+          `/product_img/${order.imagePath}`;
+
+      document.querySelector(".product-name").textContent = product.name;
+
+      document.querySelector(".detail-info").textContent =
+          `ขนาด (${order.size}), สี (${order.color}) × ${order.quantity}`;
+
+      document.querySelector(".detail-price").textContent =
+          `฿${order.totalPrice}`;
+
+      // ----- hidden input (สำหรับ submit form) -----
+      document.getElementById("orderIdInput").value = order.orderId;
+      document.getElementById("productIdInput").value = product.productId;
+
+  } catch (err) {
+      console.error("โหลดข้อมูลรีวิวล้มเหลว:", err);
+  }
+});
+
+
+/* ============================================================
+   ระบบกดดาว (Star Rating)
+   ============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+  const stars = document.querySelectorAll(".star-btn");
+  const ratingInput = document.getElementById("rating-value");
+
+  function updateStars(value) {
+      stars.forEach((star, index) => {
+          if (index < value) {
+            star.classList.remove("fa-regular");
+            star.classList.add("fa-solid", "active");
+          } else {
+            star.classList.remove("fa-solid", "active");
+            star.classList.add("fa-regular");
+          }
+      });
+  }
+
+  stars.forEach((star, index) => {
+      // hover
+      star.addEventListener("mouseover", () => updateStars(index + 1));
+
+      // mouse out
+      star.addEventListener("mouseout", () => updateStars(ratingInput.value));
+
+      // click
+      star.addEventListener("click", () => {
+          ratingInput.value = index + 1;
+          updateStars(index + 1);
+      });
+  });
+});
+
+
+/* ============================================================
+   ระบบ Upload + Preview รูปภาพ
+   ============================================================ */
+function handleImageUpload(input) {
+    const grid = document.getElementById("image-upload-grid");
+    const uploadBox = grid.querySelector(".upload-box");
+
+    Array.from(input.files).forEach(file => {
+        if (!file.type.startsWith("image/")) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const imgBox = document.createElement("div");
+            imgBox.classList.add("preview-img-box");
+            imgBox.innerHTML = `
+                <img src="${e.target.result}" alt="preview">
+                <div class="remove-btn" onclick="this.parentElement.remove()">
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+            `;
+            grid.insertBefore(imgBox, uploadBox);
+        };
+        reader.readAsDataURL(file);
     });
 
-    /* --- 2. จัดการอัปโหลดและ Preview รูป --- */
-    function handleImageUpload(input) {
-        const grid = document.getElementById('image-upload-grid');
-        const uploadBtn = grid.querySelector('.upload-box'); // หาปุ่ม upload เพื่อแทรกข้างหน้า
+    // reset เพื่อให้เลือกไฟล์ซ้ำได้
+    input.value = "";
+}
+</script>
 
-        if (input.files) {
-            Array.from(input.files).forEach(file => {
-                if (!file.type.startsWith('image/')) return;
 
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const div = document.createElement('div');
-                    div.className = 'preview-img-box';
-                    div.innerHTML = `
-                        <img src="${e.target.result}" alt="preview">
-                        <div class="remove-btn" onclick="this.parentElement.remove()">
-                            <i class="fa-solid fa-xmark"></i>
-                        </div>
-                    `;
-                    // แทรกรูปใหม่ 'ก่อน' ปุ่ม Upload เสมอ
-                    grid.insertBefore(div, uploadBtn);
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-        // Reset input เพื่อให้เลือกรูปเดิมซ้ำได้ถ้าต้องการ
-        input.value = ''; 
-    }
-  </script>
 </body>
 </html>

@@ -429,3 +429,21 @@ main {
   .product-title { font-size: 14px; }
   .btn { padding: 6px 10px; font-size: 13px; }
 }
+.review-btn-box {
+  margin-top: 10px;
+}
+
+.review-btn {
+  display: inline-block;
+  padding: 6px 14px;
+  background-color: var(--tu-red, #c62828);
+  color: white;
+  font-size: 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.review-btn:hover {
+  background-color: #a41f1f;
+}
